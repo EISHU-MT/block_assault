@@ -37,7 +37,7 @@ local to_assign_each_team = {
 }
 
 for team, contents in pairs(bs.team) do
-	bs.team[team] = to_assign_each_team
+	bs.team[team] = table.copy(to_assign_each_team)
 	bs.team[team].color = bs.team_data[team].color
 	bs.team[team].color_code = bs.team_data[team].code
 end
