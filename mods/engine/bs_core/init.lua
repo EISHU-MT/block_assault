@@ -94,10 +94,12 @@ function bs.allocate_to_team(to_allocate, team)
 			
 			player:set_pos(maps.current_map.teams[team])
 			player:set_hp(20)
+			return true
 		end
 	else
 		SendError(to_allocate, "Unable to allocate you in "..team..", map system not started.")
 		core.log("error", "Unable to allocate player in team \""..team.."\". There are not loaded map")
+		return false
 	end
 end
 
@@ -163,7 +165,6 @@ bs.login_menu = "formspec_version[6]" ..
 	"image_button[9.1,5.5;4.5,3.5;quit.png;exit;Disconnect;false;false]"
 
 function bs.auto_allocate_team(player)
-	print("aaaa")
 	if not bs.is_playing[Name(player)] and bs.spectator[Name(player)] ~= true then
 		if #maps.current_map.teams == 2 then
 			if bs.team.red.count > bs.team.blue.count then
@@ -201,21 +202,31 @@ local c = core.colorize
 minetest.register_on_player_receive_fields(function(player, formname, fields)
 	if formname == "core:menu" then
 		if fields.red then
-			bs.allocate_to_team(player, "red")
-			core.close_formspec(Name(player), "core:menu")
+			local response = bs.allocate_to_team(player, "red")
+			if response == true then
+				core.close_formspec(Name(player), "core:menu")
+			end
 		elseif fields.blue then
-			bs.allocate_to_team(player, "blue")
-			core.close_formspec(Name(player), "core:menu")
+			local response = bs.allocate_to_team(player, "blue")
+			if response == true then
+				core.close_formspec(Name(player), "core:menu")
+			end
 		elseif fields.yellow then
 			if #maps.current_map.teams > 2 then
-				bs.allocate_to_team(player, "yellow")
+				local response = bs.allocate_to_team(player, "yellow")
+				if response == true then
+					core.close_formspec(Name(player), "core:menu")
+				end
 				core.close_formspec(Name(player), "core:menu")
 			else
 				core.chat_send_player(Name(player), c("#FF0000", "-!- Current map dont support 2+ teams map."))
 			end
 		elseif fields.green then
 			if #maps.current_map.teams > 2 then
-				bs.allocate_to_team(player, "green")
+				local response = bs.allocate_to_team(player, "green")
+				if response == true then
+					core.close_formspec(Name(player), "core:menu")
+				end
 				core.close_formspec(Name(player), "core:menu")
 			else
 				core.chat_send_player(Name(player), c("#FF0000", "-!- Current map dont support 2+ teams map."))
