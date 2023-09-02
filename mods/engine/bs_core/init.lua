@@ -185,16 +185,20 @@ function bs.auto_allocate_team(player)
 end
 
 local function on_login(player)
-	if config.LoadOnLoginMenu then
-		core.after(10, bs.auto_allocate_team, Player(player))
-		core.show_formspec(Name(player), "core:menu", bs.login_menu)
+	if config.RegisterInitialFunctions.join then
+		if config.LoadOnLoginMenu then
+			core.after(10, bs.auto_allocate_team, Player(player))
+			core.show_formspec(Name(player), "core:menu", bs.login_menu)
+		end
 	end
 end
 
 bs.show_menu_and_expire = on_login
 
 local function on_leave(player)
-	bs.unallocate_team(player)
+	if config.RegisterInitialFunctions.leave then
+		bs.unallocate_team(player)
+	end
 end
 
 local c = core.colorize
