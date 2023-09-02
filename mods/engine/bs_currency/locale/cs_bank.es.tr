@@ -1,0 +1,26 @@
+# textdomain: cs_buying
+#
+# Made by EISHU
+#
+
+# Main Menu
+Grenades=Granadas
+Pistols=Pistolas
+Snipers=Francotiradores
+Armor=Armadura
+Shotguns=Escopetas
+Ammo=Carga
+
+# Main Menu Opts
+Exit of the game=Salir del juego
+Total money:=Dinero:
+Shop & Menu=Menu & Compras
+Exit=Salir
+The Shop has been expired on new match will be available again=El menu de compras ha expirado, intentalo mas tarde.
+Exiting of the game.....=Saliendo Del juego...
+
+# Essentials
+By Buying = Por comprar 
+
+# Armor
+Armor Protection: helmet+armor=Proteccion: casco+armadura
