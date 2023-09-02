@@ -42,18 +42,30 @@ minetest.register_entity("bs_playertag:name", {
 		makes_footstep_sound = false,
 		static_save = false,
 	},
-	attachedto = "",
-	on_step = function(self)
-		if (self.attachedto == "") then self.object:remove() end
-		if not bs.get_team(self.attachedto) or bs.get_team(self.attachedto) == "" then
-			self.object:remove()
-		end
-	end
+	is_nametag = true
 })
 
 local function add(player, team)
 	-- The hiding nametag is handled by core
 	if not team then return end
+	
+	local objs = player:get_children()
+	local selected_obj
+	for _, obj in pairs(objs) do
+		local ent = obj:get_luaentity()
+		if ent then
+			if ent.is_nametag then
+				selected_obj = obj
+				break
+			end
+		end
+	end
+	if selected_obj then
+		if team ~= "" or team then
+			return -- Dont make a new nametag.
+		end
+	end
+	
 	local entity = core.add_entity(Player(player):get_pos(), "bs_playertag:name")
 	local texture = "tag_bg.png"
 	local x = math.floor(134 - ((player:get_player_name():len() * 11) / 2))
@@ -92,18 +104,23 @@ local function on_join_team(name, team)
 end
 
 local function on_step()
-	for name, obj in pairs(player_tags.objs) do
-		if bs.get_team(name) and bs.get_team(name) ~= "" then
-			--player_tags.objs[name]:remove()
-			player_tags.objs[name] = nil
-			return
-		end
-		for _, name2 in pairs(core.get_connected_names()) do
-			if name == name2 then
-				return
+	for _, player in pairs(core.get_connected_players()) do
+		local objs = player:get_children()
+		local selected_obj
+		for _, obj in pairs(objs) do
+			local ent = obj:get_luaentity()
+			if ent then
+				if ent.is_nametag then
+					selected_obj = obj
+					break
+				end
 			end
 		end
-		obj:remove()
+		if selected_obj then
+			if bs.get_team(player) == "" or not bs.get_team(player) then
+				selected_obj:remove()
+			end
+		end
 	end
 end
 
