@@ -3,7 +3,7 @@ if config.UseDefaultMatchEngine then
 		core.after(0.5, function()
 			for team, data in pairs(bs.team) do
 				for name in pairs(data.players) do
-					bs.allocate_to_team(name, team, true)
+					bs.allocate_to_team(name, "", true, true)
 				end
 			end
 		end)
