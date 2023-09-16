@@ -35,7 +35,7 @@ function maps.new_map()
 		maps.current_map = def
 		maps.update_env()
 		
-		maps.current_map.teams[""] = vector.new()
+		--maps.current_map.teams[""] = vector.new()
 		
 		core.set_node(def.teams.blue, {name="air"})
 		core.set_node(def.teams.red, {name="air"})
