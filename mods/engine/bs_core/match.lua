@@ -19,7 +19,9 @@ function bs_match.reset_rounds()
 end
 
 function bs_match.finish_match(winner)
-	annouce.winner(winner)
+	if config.AnnouceWinner then
+		annouce.winner(winner)
+	end
 	RunCallbacks(bs_match.cbs.OnEndMatch, winner)
 	if bs_match.current_rounds - 1 >= 1 then
 		bs_match.current_rounds = bs_match.current_rounds - 1
@@ -52,9 +54,10 @@ end
 -- CALLBACKS
 --
 
-for name_of_callback in pairs(bs_match.cbs) do
-	bs_match["register_"..name_of_callback] = function(function_to_run) table.insert(bs_match.cbs[name_of_callback], function_to_run) end
-end
+bs_match["register_SecondOnEndMatch"] = function(function_to_run) table.insert(bs_match.cbs.SecondOnEndMatch, function_to_run) end
+bs_match["register_OnMatchStart"] = function(function_to_run) table.insert(bs_match.cbs.OnMatchStart, function_to_run) end
+bs_match["register_OnNewMatches"] = function(function_to_run) table.insert(bs_match.cbs.SecondOnEndMatch, function_to_run) end
+bs_match["register_OnEndMatch"] = function(function_to_run) table.insert(bs_match.cbs.OnEndMatch, function_to_run) end
 
 --
 -- FUNCTIONS CALL
