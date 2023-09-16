@@ -106,16 +106,96 @@ function Exists(thing)
 	return default_opt or newest__opt
 end
 
+function GetConfig(type_of_config, name, fallback)
+	if type_of_config == "boolean" then
+		return core.settings:get_bool(name, fallback)
+	elseif type_of_config == "number" then
+		return tonumber(core.settings:get(name, fallback))
+	elseif type_of_config == "string" then
+		return tostring(core.settings:get(name, fallback))
+	end
+	return nil
+end
 
+local positions = {
+	vector.new(1, 0, 0),
+	vector.new(0, 0, 1),
+	vector.new(0, 1, 0),
+	vector.new(1, 0, 1),
+	vector.new(1, 1, 0),
+	vector.new(1, 1, 1),
+	vector.new(0, 1, 1),
+	vector.new(0, 0, 0)
+}
 
+local function sum(p1, p2)
+	return vector.add(p1, p2)
+end
 
+function CheckPos(pos)
+	local node = core.get_node(pos)
+	if node.name ~= "air" then
+		for _, position in pairs(positions) do
+			local vector_to_use = sum(pos, position)
+			local Cnode = core.get_node(vector_to_use)
+			if Cnode.name == "air" then
+				return vector_to_use
+			end
+		end
+		return vector.new(pos.x, pos.y + 2, pos.z)
+	else
+		return pos
+	end
+end
 
+RadiusToArea = function(center, r)
+	return {
+		x = center.x - r,
+		y = center.y - r,
+		z = center.z - r
+	}, {
+		x = center.x + r,
+		y = center.y + r,
+		z = center.z + r
+	}
+end
 
+function GetFloorPos(pos)
+	local floor_to_sum = 0
+	local pos2 = table.copy(pos)
+	repeat
+		pos2 = vector.add(pos2, vector.new(0,1,0))
+		local Cnode = core.get_node(pos2)
+	until Cnode.name == "air"
+	return pos2
+end
 
+function IsTableEmpty(table_to_check)
+	if #table_to_check <= 0 then
+		return true
+	end
+	return false
+end
 
+function GetFirstIndex(data)
+	if type(data) == "table" then
+		return data[1]
+	elseif type(data) == "string" then
+		return data
+	else
+		return tostring(data)
+	end
+end
 
-
-
+function CountTable(to_index) -- Some tables dont return his counted things, like #table = table = { red = {}. blue = {} } returns 0
+	if to_index and type(to_index) == "table" then
+		local i = 0
+		for _ in pairs(to_index) do 
+			i = i + 1 -- Count table contents in i
+		end
+		return i -- return i
+	end
+end
 
 
 
