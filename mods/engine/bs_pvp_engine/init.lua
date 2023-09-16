@@ -182,16 +182,19 @@ PvpCallbacks.RegisterFunction(function(data)
 		if PvpMode.Mode == 1 then
 			if CountTable(maps.current_map.teams) == 2 then
 				local players_index = bs.get_team_players_index(data.teams.died)
-				print("aaaa")
-				if players_index < 1 then
-					bs_match.finish_match(GetFirstIndex(bs.enemy_team(data.teams.died)))
-					print("mamaguevi")
-				end
+				core.after(0.3, function(data)
+					local players_index = bs.get_team_players_index(data.teams.died)
+					if players_index <= 0 then
+						bs_match.finish_match(GetFirstIndex(bs.enemy_team(data.teams.died)))
+					end
+				end, data)
 			else
-				local players_index = bs.get_team_players_index(data.teams.died)
-				if players_index < 1 then
-					bs.destroy_team(data.teams.died)
-				end
+				core.after(0.3, function(data)
+					local players_index = bs.get_team_players_index(data.teams.died)
+					if players_index <= 0 then
+						bs.destroy_team(data.teams.died)
+					end
+				end, data)
 			end
 		end
 	end
