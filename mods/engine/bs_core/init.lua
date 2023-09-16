@@ -2,8 +2,9 @@
 	BulletStorm Engine
 --]]
 _OID = "BlockAssault" -- To be overriden by modes
-_V  = "Beta V0.1"
+_V  = "Beta V0.5"
 _ID = "BlockAssault" -- Real engine name
+C = CountTable
 bs = {
 	team = {
 		red = {},
@@ -43,7 +44,7 @@ for team, contents in pairs(bs.team) do
 end
 
 function bs.enemy_team(team)
-	if #maps.current_map.teams == 2 then -- Is it a 2 team map
+	if C(maps.current_map.teams) == 2 then -- Is it a 2 team map
 		if team == "red" then
 			return "blue"
 		elseif team == "blue" then
@@ -57,6 +58,15 @@ function bs.enemy_team(team)
 			end
 		end
 		return teams
+	end
+end
+
+function bs.destroy_team(team) -- Only used for 4 team map
+	if C(maps.current_map.teams) > 2 then
+		local players = table.copy(bs.team[team].players)
+		for name in pairs(players) do
+			bs.allocate_to_spectator(name)
+		end
 	end
 end
 
@@ -80,19 +90,19 @@ function bs.get_team(to_index)
 	end
 end
 
-function bs.allocate_to_team(to_allocate, team)
-	if maps.theres_loaded_map then
+function bs.allocate_to_team(to_allocate, team, force) -- Applying this function again to a applied player dont crash
+	if maps.theres_loaded_map or force then
 		local player = Player(to_allocate)
 		local name = Name(to_allocate)
 		if bs.team[team] then
 			bs.team[team].players[name] = true
-			bs.team[team].count = #bs.team[team].players
+			bs.team[team].count = C(bs.team[team].players)
 			bs.player_team[name] = team
 			bs.is_playing[name] = true
+			bs.spectator[name] = nil
 			RunCallbacks(bs.cbs.OnAssignTeam, player, team)
 			AddPrivs(player, {fly=false, fast=false, noclip=false, teleport=false})
-			
-			player:set_pos(maps.current_map.teams[team])
+			SpawnPlayerAtRandomPosition(player, team)
 			player:set_hp(20)
 			return true
 		end
@@ -103,13 +113,39 @@ function bs.allocate_to_team(to_allocate, team)
 	end
 end
 
+function bs.get_team_players(team)
+	if bs.team[team] then
+		local players = {}
+		for name, value in pairs(bs.team[team].players) do
+			if bs.spectator[name] ~= true then
+				table.insert(players, name)
+			end
+		end
+		return players
+	end
+end
+
+
+
+function bs.get_team_players_index(team)
+	if bs.team[team] then
+		local players = {}
+		for name, value in pairs(bs.team[team].players) do
+			if bs.spectator[name] ~= true then
+				table.insert(players, name)
+			end
+		end
+		return C(players), players
+	end
+end
+
 function bs.unallocate_team(to_allocate)
 	local player = Player(to_allocate)
 	local name = Name(to_allocate)
 	local team = bs.get_team(name)
 	if bs.team[team] then
 		bs.team[team].players[name] = false
-		bs.team[team].count = #bs.team[team].players
+		bs.team[team].count = C(bs.team[team].players)
 		bs.player_team[name] = nil
 		bs.is_playing[name] = false
 		RunCallbacks(bs.cbs.OnAssignTeam, player, "")
@@ -120,7 +156,7 @@ function bs.allocate_to_spectator(to_allocate, died)
 	if maps.theres_loaded_map then
 		local player = Player(to_allocate)
 		local name = Name(to_allocate)
-		player:set_properties({textures = {"blank.png"}})
+		player:set_properties({textures = {"blank.png"}, pointable = false})
 		player:set_hp(20)
 		player:set_armor_groups({immortal=1})
 		Inv(player):set_list("main", {})
@@ -147,6 +183,9 @@ config = {
 	ResetPlayerMoneyOnEndRounds = true,
 	UseEngineCurrency = true,
 	OverridePlayersSkinForTeams = true,
+	UseDefaultMatchEngine = true,
+	UsePvpMatchEngine = {bool = true, func = function() end},
+	AnnouceWinner = true,
 }
 
 bs.login_menu = "formspec_version[6]" ..
@@ -166,7 +205,7 @@ bs.login_menu = "formspec_version[6]" ..
 
 function bs.auto_allocate_team(player)
 	if not bs.is_playing[Name(player)] and bs.spectator[Name(player)] ~= true then
-		if #maps.current_map.teams == 2 then
+		if C(maps.current_map.teams) == 2 then
 			if bs.team.red.count > bs.team.blue.count then
 				bs.allocate_to_team(player, "red")
 			elseif bs.team.blue.count > bs.team.red.count then
@@ -216,7 +255,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 				core.close_formspec(Name(player), "core:menu")
 			end
 		elseif fields.yellow then
-			if #maps.current_map.teams > 2 then
+			if C(maps.current_map.teams) > 2 then
 				local response = bs.allocate_to_team(player, "yellow")
 				if response == true then
 					core.close_formspec(Name(player), "core:menu")
@@ -226,7 +265,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 				core.chat_send_player(Name(player), c("#FF0000", "-!- Current map dont support 2+ teams map."))
 			end
 		elseif fields.green then
-			if #maps.current_map.teams > 2 then
+			if C(maps.current_map.teams) > 2 then
 				local response = bs.allocate_to_team(player, "green")
 				if response == true then
 					core.close_formspec(Name(player), "core:menu")
@@ -237,6 +276,9 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 			end
 		elseif fields.spect then
 			bs.allocate_to_spectator(player, false)
+			core.close_formspec(Name(player), "core:menu")
+		elseif fields.exit then
+			core.disconnect_player(Name(player), "Disconnected from GUI")
 		end
 	end
 end)
