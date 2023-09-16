@@ -28,12 +28,12 @@ FriendShootCallbacks = {
 	Callbacks = {}
 }
 
-PlayersKills = {}
+PlayerKills = {}
 
-bs.cbs.OnAssignTeam[1 + #bs.cbs.OnAssignTeam] = function(thing, team)
+bs.cbs.OnAssignTeam[1 + CountTable(bs.cbs.OnAssignTeam)] = function(thing, team)
 	if team ~= "" then
 		local player = Player(thing)
-		PlayersKills[Name(player)] = {kills = 0, deaths = 0}
+		PlayerKills[Name(player)] = {kills = 0, deaths = 0}
 	end
 end
 
@@ -177,6 +177,25 @@ PvpCallbacks.RegisterFunction(function(data)
 		data.died:set_hp(20)
 	end
 end, "PvP Engine")
+PvpCallbacks.RegisterFunction(function(data)
+	if config.UsePvpMatchEngine.bool then
+		if PvpMode.Mode == 1 then
+			if CountTable(maps.current_map.teams) == 2 then
+				local players_index = bs.get_team_players_index(data.teams.died)
+				print("aaaa")
+				if players_index < 1 then
+					bs_match.finish_match(GetFirstIndex(bs.enemy_team(data.teams.died)))
+					print("mamaguevi")
+				end
+			else
+				local players_index = bs.get_team_players_index(data.teams.died)
+				if players_index < 1 then
+					bs.destroy_team(data.teams.died)
+				end
+			end
+		end
+	end
+end, "Match Shared Function")
 
 -- Register everything
 core.register_on_punchplayer(on_punchplayer)
