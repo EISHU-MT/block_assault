@@ -143,7 +143,7 @@ function DO_ANIMATION(player, animation, dtime)
 		
 	else
 		if IsRechargingGun(player) then
-			rotate_bone(player, "Arm_Left", {x = (60), y = 35, z = -8})
+			rotate_bone(player, "Arm_Left", {x = (65), y = 35, z = -8})
 		else
 			if is_advancing(control) then
 				rotate_bone(player, "Arm_Left", {x = -55 * sin,       y = 0, z = 0})
