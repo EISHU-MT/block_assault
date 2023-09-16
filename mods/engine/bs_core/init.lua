@@ -70,8 +70,43 @@ function bs.destroy_team(team) -- Only used for 4 team map
 	end
 end
 
+function bs.is_valid_team(team, from_map)
+	if from_map then
+		if C(maps.current_map.teams) == 2 then
+			if team == "red" then
+				return true
+			elseif team == "blue" then
+				return true
+			end
+			return false
+		else
+			if team == "red" then
+				return true
+			elseif team == "blue" then
+				return true
+			elseif team == "yellow" then
+				return true
+			elseif team == "green" then
+				return true
+			end
+			return false
+		end
+	else
+		if team == "red" then
+			return true
+		elseif team == "blue" then
+			return true
+		elseif team == "yellow" then
+			return true
+		elseif team == "green" then
+			return true
+		end
+		return false
+	end
+end
+
 function bs.get_team_color(team, type_to_return)
-	if team and type_to_return then
+	if (team and bs.is_valid_team(team)) and type_to_return then
 		if type_to_return == "string" then
 			return bs.team[team or ""].color
 		elseif type_to_return == "number" then
@@ -88,23 +123,48 @@ function bs.get_team(to_index)
 	else
 		return ""
 	end
+	return ""
 end
 
-function bs.allocate_to_team(to_allocate, team, force) -- Applying this function again to a applied player dont crash
+function bs.allocate_to_team(to_allocate, team, force, use_dead_table) -- Applying this function again to a applied player dont crash
 	if maps.theres_loaded_map or force then
 		local player = Player(to_allocate)
 		local name = Name(to_allocate)
-		if bs.team[team] then
-			bs.team[team].players[name] = true
-			bs.team[team].count = C(bs.team[team].players)
-			bs.player_team[name] = team
-			bs.is_playing[name] = true
-			bs.spectator[name] = nil
-			RunCallbacks(bs.cbs.OnAssignTeam, player, team)
-			AddPrivs(player, {fly=false, fast=false, noclip=false, teleport=false})
-			SpawnPlayerAtRandomPosition(player, team)
-			player:set_hp(20)
-			return true
+		if use_dead_table then
+			if bs.died[name] then
+				team = bs.died[name]
+			end
+			if bs.team[team] then
+				bs.team[team].players[name] = true
+				bs.team[team].count = C(bs.team[team].players)
+				bs.player_team[name] = team
+				bs.is_playing[name] = true
+				bs.spectator[name] = nil
+				RunCallbacks(bs.cbs.OnAssignTeam, player, team)
+				player:set_armor_groups({immortal=0,fleshy=100})
+				AddPrivs(player, {fly=false, fast=false, noclip=false, teleport=false})
+				SpawnPlayerAtRandomPosition(player, team)
+				player:set_hp(20)
+				bs.died[name] = nil
+				ResetSkin(player)
+				return true
+			end
+		else
+			if bs.team[team] then
+				bs.team[team].players[name] = true
+				bs.team[team].count = C(bs.team[team].players)
+				bs.player_team[name] = team
+				bs.is_playing[name] = true
+				bs.spectator[name] = nil
+				RunCallbacks(bs.cbs.OnAssignTeam, player, team)
+				player:set_armor_groups({immortal=0,fleshy=100})
+				AddPrivs(player, {fly=false, fast=false, noclip=false, teleport=false})
+				SpawnPlayerAtRandomPosition(player, team)
+				player:set_hp(20)
+				bs.died[name] = nil
+				ResetSkin(player)
+				return true
+			end
 		end
 	else
 		SendError(to_allocate, "Unable to allocate you in "..team..", map system not started.")
