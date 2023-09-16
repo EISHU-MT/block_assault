@@ -41,10 +41,6 @@ end
 function annouce.winner(team)
 	if team and skill then
 		local color = bs.get_team_color(team, "number")
-		
-		if type(discord) == "table" then
-			discord.send("**"..annouce.transform(team).." Wins!**")
-		end
 		annouce.publish_to_players(annouce.transform(team).." wins!", color)
 	end
 	
