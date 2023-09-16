@@ -39,7 +39,7 @@ function annouce.transform(str)
 end
 
 function annouce.winner(team)
-	if team and skill then
+	if team then
 		local color = bs.get_team_color(team, "number")
 		annouce.publish_to_players(annouce.transform(team).." wins!", color)
 	end
