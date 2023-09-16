@@ -49,23 +49,6 @@ local function add(player, team)
 	-- The hiding nametag is handled by core
 	if not team then return end
 	
-	local objs = player:get_children()
-	local selected_obj
-	for _, obj in pairs(objs) do
-		local ent = obj:get_luaentity()
-		if ent then
-			if ent.is_nametag then
-				selected_obj = obj
-				break
-			end
-		end
-	end
-	if selected_obj then
-		if team ~= "" or team then
-			return -- Dont make a new nametag.
-		end
-	end
-	
 	local entity = core.add_entity(Player(player):get_pos(), "bs_playertag:name")
 	local texture = "tag_bg.png"
 	local x = math.floor(134 - ((player:get_player_name():len() * 11) / 2))
@@ -117,8 +100,12 @@ local function on_step()
 			end
 		end
 		if selected_obj then
-			if bs.get_team(player) == "" or not bs.get_team(player) then
+			if bs.spectator[Name(player)] then
 				selected_obj:remove()
+			end
+		else
+			if bs.spectator[Name(player)] ~= true and bs.is_playing[Name(player)] then
+				add(player, bs.get_team(player))
 			end
 		end
 	end
@@ -127,6 +114,6 @@ end
 --core.register_on_joinplayer(on_join_player)
 core.register_globalstep(on_step)
 core.register_on_leaveplayer(on_leave_player)
-bs.cbs.register_OnAssignTeam(on_join_team)
+--bs.cbs.register_OnAssignTeam(on_join_team)
 
 
