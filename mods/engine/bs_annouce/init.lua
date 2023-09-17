@@ -1,31 +1,42 @@
 annouce = {}
-function make_dissapear_mess()
-	for name, value in pairs(annouce.huds) do
-		if name then
-			local player = Player(name)
-			local pname  = Name(name)
-			if player then
-				player:hud_remove(value)
+function make_dissapear_mess(ID)
+	for name, data in pairs(annouce.huds) do
+		if Player(name) then
+			for id_to_remove, contents in pairs(data) do
+				if id_to_remove == ID then
+					Player(name):hud_remove(contents)
+					annouce.huds[name][ID] = nil
+				end
 			end
 		end
 	end
 end
 
+minetest.register_on_joinplayer(function(player)
+	annouce.huds[Name(player)] = {}
+end)
+
+minetest.register_on_leaveplayer(function(player)
+	annouce.huds[Name(player)] = nil
+end)
+
 function annouce.publish_to_players(msg, colored)
+	local ID = FormRandomString(10)
 	for ee, player in pairs(core.get_connected_players()) do
 		if player then
-			annouce.huds[Name(player)] = player:hud_add({
-			hud_elem_type = "text",
-			scale = {x = 100.6, y = 20.6},
-			position = {x = 0.485, y = 0.21},
-			offset = {x = 30, y = 100},
-			size = {x = 2},
-			alignment = {x = 0, y = -1},
-			text = msg,
-			number = colored,
+			annouce.huds[Name(player)][ID] = player:hud_add({
+				hud_elem_type = "text",
+				scale = {x = 100.6, y = 20.6},
+				position = {x = 0.485, y = 0.21},
+				offset = {x = 30, y = 100},
+				size = {x = 2},
+				alignment = {x = 0, y = -1},
+				text = msg,
+				number = colored,
 			})
 		end
 	end
+	return ID
 end
 
 annouce.huds = {}
@@ -41,8 +52,9 @@ end
 function annouce.winner(team)
 	if team then
 		local color = bs.get_team_color(team, "number")
-		annouce.publish_to_players(annouce.transform(team).." wins!", color)
+		local id = annouce.publish_to_players(annouce.transform(team).." wins!", color)
+		core.after(2, make_dissapear_mess, id)
 	end
 	
-	core.after(5, make_dissapear_mess)
+	
 end
