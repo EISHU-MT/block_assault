@@ -33,6 +33,7 @@ end
 
 function bs_timer.pause(m)
 	time = default_timer
+	bs_match.match_is_started = false
 end
 
 bs_timer.color = 0xFFFFFF
@@ -52,8 +53,8 @@ local function reg_glb(dtime)
 				bs_match.match_is_started = true
 				RunCallbacks(bs_match.cbs.OnMatchStart)
 				bs_timer.color = 0xFFFFFF
-				annouce.publish_to_players("Match Starts now!", 0xFFFFFF)
-				core.after(1.5, make_dissapear_mess)
+				local id = annouce.publish_to_players("Match Starts now!", 0xFFFFFF)
+				core.after(1.5, make_dissapear_mess, id)
 				time = 300
 			end
 		end
