@@ -1,3 +1,6 @@
+--
+-- - CENTRAL -
+--
 function maps.update_core()
 	for name, def in pairs(maps.reg_maps) do
 		if name and def then
@@ -77,40 +80,4 @@ function maps.get_name_of_pos(pos)
 	return "--"
 end
 
-minetest.register_node("bs_maps:ign", {
-	description = "Ignore Node.", 
-	drawtype = "airlike",
-	paramtype = "light",
-	sunlight_propagates = true,
-	walkable     = true,
-	pointable    = false,
-	diggable     = false,
-	buildable_to = false,
-	air_equivalent = true,
-	groups = {immortal = 1},
-})
-minetest.register_node("bs_maps:stone", {
-	description = "Wall Stone\n ONLY USE IN BARRIERS", 
-	tiles = {"bound.png"},
-	paramtype = "light",
-	sunlight_propagates = true,
-	walkable     = true,
-	pointable    = true,
-	diggable     = false,
-	buildable_to = false,
-	air_equivalent = true,
-	groups = {immortal = 1},
-})
-minetest.register_node("bs_maps:ind_glass", {
-	description = "Wall Glass\n ONLY USE IN BARRIERS\n ", 
-	tiles = {"wall.png"},
-	paramtype = "light",
-	sunlight_propagates = true,
-	walkable     = true,
-	pointable    = true,
-	diggable     = false,
-	buildable_to = false,
-	air_equivalent = true,
-	groups = {immortal = 1},
-})
 
