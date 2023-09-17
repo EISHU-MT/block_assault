@@ -7,7 +7,7 @@ set_animation = interpretor.sa
 is_pointing = {}
 
 local function is_advancing(control)
-	return control.up or control.down
+	return control.up or control.down or control.left or control.right
 end
 
 local function request_player_data(player)
@@ -44,6 +44,11 @@ local function check_onwalk_conflicts(player)
 	end
 end
 
+local abs = math.abs
+local deg = math.deg
+local basepos = vector.new(0, 6.35, 0)
+local lastdir = {}
+
 
 local function only_first_argument(func, ...)
 	local toreturn = func(...)
@@ -57,6 +62,8 @@ end
 local function get_pitch_deg(player)
 	return math.deg(player:get_look_vertical())
 end
+
+local last_arm_dir = {}
 
 function DO_ANIMATION(player, animation, dtime)
 	local control = player:get_player_control()
@@ -112,17 +119,23 @@ function DO_ANIMATION(player, animation, dtime)
 		end
 	end
 	
+	local pname = player:get_player_name()
+	local ldeg = -deg(player:get_look_vertical() or 0)
+	if abs((lastdir[pname] or 0) - ldeg) > 4 then
+		lastdir[pname] = ldeg
+	end
+	
 	if IsPointing(player) then -- Pointing
-		rotate_bone(player, "Head", {x = 0, y = 6, z = 6.5})
+		rotate_bone(player, "Head", {x = ldeg, y = 6, z = 6.5})
 	else
-		rotate_bone(player, "Head", {x = 0, y = 0, z = 0})
+		rotate_bone(player, "Head", {x = ldeg, y = 0, z = 0})
 	end
 	
 	if control.LMB then
 		if IsPointing(player) then -- Pointing
 			rotate_bone(player, "Arm_Right", {x = 10 * rarm_sin + pitch, y = 1, z = 0})
 		else
-			rotate_bone(player, "Arm_Right", {x = 10 * rarm_sin + pitch, y = math.random(0, 4), z = 0})
+			rotate_bone(player, "Arm_Right", {x = 10 * rarm_sin + pitch, y = 0, z = 0})
 		end
 	else
 		if IsPointing(player) then -- Pointing
