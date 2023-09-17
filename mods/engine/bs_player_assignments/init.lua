@@ -9,8 +9,18 @@ function SetTeamSkin(index, team)
 	end
 end
 
-if config.OverridePlayersSkinForTeams then
-	bs.cbs.register_OnAssignTeam(function(index, team)
-		SetTeamSkin(index, team)
-	end)
+local function repeater()
+	if config.OverridePlayersSkinForTeams then
+		for _, player in pairs(core.get_connected_players()) do
+			if skinsdb then
+				player:set_properties({textures = "blank.png"})
+			else
+				if bs.get_team(player) ~= "" and not player:get_properties().textures[1]:match("_overlay") then
+					SetTeamSkin(player, bs.get_team(player))
+				end
+			end
+		end
+	end
 end
+
+core.register_globalstep(repeater)
