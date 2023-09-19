@@ -77,6 +77,7 @@ bank.player_add_value(player, amount)
 
 --]]
 function CheckPlayer(name)
+	name = Name(name)
 	for _, p in pairs(core.get_connected_players()) do
 		local pname = p:get_player_name()
 		if pname == name then
@@ -142,7 +143,7 @@ minetest.register_chatcommand("rm_value", {
 	params = "<amount>",
 	privs = {bank = true},
 	func = function(name, param)
-		bank.rm_player_value(name, param or 1)
+		bank.rm_player_value(name, tonumber(param or 1))
 	end,
 })
 
