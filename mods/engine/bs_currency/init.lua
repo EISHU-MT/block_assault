@@ -55,8 +55,8 @@ playerv = {}
 playerv.money = bank.player[player].money
 end
 function bank.return_val(player)
-	if player and bank.player and bank.player[player] and bank.player[player].money then
-		return bank.player[player].money
+	if player and bank.player and bank.player[Name(player)] and bank.player[Name(player)].money then
+		return bank.player[Name(player)].money
 	end
 end
 -- Add money, can be added by killing or bounties
