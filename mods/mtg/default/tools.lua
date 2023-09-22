@@ -313,6 +313,7 @@ minetest.register_tool("default:axe_diamond", {
 
 minetest.register_tool("default:sword_wood", {
 	description = S("Wooden Sword"),
+	on_pickup = Shop.GetWeapon,
 	inventory_image = "default_tool_woodsword.png",
 	tool_capabilities = {
 		full_punch_interval = 1,
@@ -328,6 +329,7 @@ minetest.register_tool("default:sword_wood", {
 
 minetest.register_tool("default:sword_stone", {
 	description = S("Stone Sword"),
+	on_pickup = Shop.GetWeapon,
 	inventory_image = "default_tool_stonesword.png",
 	tool_capabilities = {
 		full_punch_interval = 1.2,
@@ -343,6 +345,7 @@ minetest.register_tool("default:sword_stone", {
 
 minetest.register_tool("default:sword_bronze", {
 	description = S("Bronze Sword"),
+	on_pickup = Shop.GetWeapon,
 	inventory_image = "default_tool_bronzesword.png",
 	tool_capabilities = {
 		full_punch_interval = 0.8,
@@ -359,6 +362,7 @@ minetest.register_tool("default:sword_bronze", {
 minetest.register_tool("default:sword_steel", {
 	description = S("Steel Sword"),
 	inventory_image = "default_tool_steelsword.png",
+	on_pickup = Shop.GetWeapon,
 	tool_capabilities = {
 		full_punch_interval = 0.8,
 		max_drop_level=1,
@@ -373,6 +377,7 @@ minetest.register_tool("default:sword_steel", {
 
 minetest.register_tool("default:sword_mese", {
 	description = S("Mese Sword"),
+	on_pickup = Shop.GetWeapon,
 	inventory_image = "default_tool_mesesword.png",
 	tool_capabilities = {
 		full_punch_interval = 0.7,
@@ -388,6 +393,7 @@ minetest.register_tool("default:sword_mese", {
 
 minetest.register_tool("default:sword_diamond", {
 	description = S("Diamond Sword"),
+	on_pickup = Shop.GetWeapon,
 	inventory_image = "default_tool_diamondsword.png",
 	tool_capabilities = {
 		full_punch_interval = 0.7,
