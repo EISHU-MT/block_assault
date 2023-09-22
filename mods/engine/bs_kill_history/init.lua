@@ -154,4 +154,4 @@ PvpCallbacks.RegisterFunction(function(data)
 		killer_name = Name(data.killer)
 	end
 	KillHistory.add(killer_name, Name(data.victim), image)
-end)
+end, "BA.S Kill History System")
