@@ -99,13 +99,13 @@ local function on_step()
 				end
 			end
 		end
-		if selected_obj then
-			if bs.spectator[Name(player)] then
-				selected_obj:remove()
-			end
-		else
+		if not selected_obj then
 			if bs.spectator[Name(player)] ~= true and bs.is_playing[Name(player)] then
 				add(player, bs.get_team(player))
+			end
+		else
+			if bs.spectator[Name(player)] then
+				selected_obj:remove()
 			end
 		end
 	end
