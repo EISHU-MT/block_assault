@@ -42,6 +42,26 @@ minetest.register_entity("bs_playertag:name", {
 		makes_footstep_sound = false,
 		static_save = false,
 	},
+	on_step = function(self)
+		local attached = self.object:get_attach()
+		if not attached then
+			self.object:remove()
+		else
+			if bs.is_playing[Name(attached)] then
+				if bs.spectator[Name(attached)] then
+					self.object:remove()
+				else
+					--correct
+				end
+			else
+				if bs.spectator[Name(attached)] then
+					self.object:remove()
+				else
+					self.object:remove()
+				end
+			end
+		end
+	end,
 	is_nametag = true
 })
 
