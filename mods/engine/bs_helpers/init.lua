@@ -24,7 +24,8 @@ function FindItem(player, item)
             --local units = #list
             for i, string in pairs(list) do
                 if string:get_name() == str2:get_name() then
-                    return true, "success_true"
+                    local count = string:get_count()
+                    return true, "success_true", count
                 end
                 
             end
@@ -197,10 +198,32 @@ function CountTable(to_index) -- Some tables dont return his counted things, lik
 	end
 end
 
+function GetIndex(table_to_index, number)
+	-- Usually this is used to controll tables which has {["example"]} and not {[1]}
+	local to_count = 0
+	for d1, d2 in pairs(table_to_index) do
+		to_count = to_count + 1
+		if to_count == number then
+			return d1, d2
+		end
+	end
+end
 
+function ReturnOnlyNames(table_to_convert)
+	local to_return = {}
+	for name in pairs(table_to_convert) do
+		table.insert(to_return, name)
+	end
+	return to_return
+end
 
-
-
+function TransformTextReadable(str)
+	local asus = string.sub(str, 1, 1)
+	local usus = string.sub(str, 2)
+	local isus = string.upper(asus)
+	local esus = isus..usus
+	return esus
+end
 
 
 
