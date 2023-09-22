@@ -16,7 +16,7 @@ end
 -- Add money to players when they join
 minetest.register_on_joinplayer(function(player)
 local playername={name=player:get_player_name()}
-bank.player[playername.name] = {money = 200}
+bank.player[playername.name] = {money = 10}
 end)
 minetest.register_on_leaveplayer(function(player)
 local playere = player:get_player_name()  
