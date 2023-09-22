@@ -31,10 +31,9 @@ function maps.place_map(map_def)
 end
 
 function maps.new_map()
-	core.after(2, function()
+	core.after(0.5, function()
 		local def = maps.select_map()
 		maps.place_map(def)
-		RunCallbacks(maps.on_load, def)
 		maps.current_map = def
 		maps.update_env()
 		
@@ -48,6 +47,9 @@ function maps.new_map()
 		end
 		
 		maps.theres_loaded_map = true
+		core.after(1, function(def)
+			RunCallbacks(maps.on_load, def)
+		end, def)
 	end)
 end
 
