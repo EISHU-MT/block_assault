@@ -210,11 +210,19 @@ end
 
 minetest.register_node("bs_shop:trading_table", {
 	description = "Trading Table",
-	drawtype = "mesh",
-	mesh = "table.obj",
-	tiles = {"table.png"},
+	drawtype = "nodebox",
+	tiles = {"default_wood.png"},
 	paramtype = "light",
-	visual_scale = 0.5,
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{ -0.4, -0.5, -0.4, -0.3, 0.4, -0.3 }, -- foot 1
+			{ 0.3, -0.5, -0.4, 0.4, 0.4, -0.3 }, -- foot 2
+			{ -0.4, -0.5, 0.3, -0.3, 0.4, 0.4 }, -- foot 3
+			{ 0.3, -0.5, 0.3, 0.4, 0.4, 0.4 }, -- foot 4
+			{ -0.5, 0.4, -0.5, 0.5, 0.5, 0.5 } -- table top
+		}
+	},
 	sunlight_propagates = true,
 	walkable = true,
 	pointable = true,
