@@ -83,8 +83,8 @@ do
 end
 
 PvpCallbacks.RegisterFunction(function(data)
-	local victim = data.died
-	local killer = data.killer
+	local victim = Name(data.died)
+	local killer = Name(data.killer)
 	if victim and victim ~= "" then
 		stats.deaths.add_to(victim)
 		if killer and killer ~= "" then
