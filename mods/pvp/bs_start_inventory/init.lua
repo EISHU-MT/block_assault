@@ -5,6 +5,12 @@ GiveToolsItems = {
 
 bs.cbs.register_OnAssignTeam(function(player, team)
 	if team ~= "" then
+		if Player(player) and Inv(player) then
+			--correct
+		else
+			core.log("error", "[BA.S Start Inventory] Attempt of crash locked!, attempt to index offline player!")
+			return
+		end
 		if config.ClearPlayerInv.bool then
 			Inv(player):set_list("main", {})
 			if config.ClearPlayerInv.set_new_inventory_after_inventory_reset then
