@@ -246,6 +246,8 @@ config = {
 	UseDefaultMatchEngine = true,
 	UsePvpMatchEngine = {bool = true, func = function() end},
 	AnnouceWinner = true,
+	GiveDefaultTools = {bool = true, pistol = true, sword = true},
+	ClearPlayerInv = {bool = true, maintain_last_inventory = false, set_new_inventory_after_inventory_reset = true},
 }
 
 bs.login_menu = "formspec_version[6]" ..
