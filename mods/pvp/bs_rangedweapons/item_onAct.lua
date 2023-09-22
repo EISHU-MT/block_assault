@@ -16,6 +16,7 @@ end
 local function onR(itemstack, placer, pointed_thing)
 	local player = placer
 	if rangedweapons.pointing[Name(player)] and bs_match.match_is_started == false then
+		rangedweapons.pointing_weapon[Name(placer)] = nil
 		player:hud_change(scope_huds[Name(placer)], "text", "rangedweapons_empty_icon.png")
 		player:hud_change(scope_huds[Name(placer)], "scale", {x=2,y=2})
 		
@@ -42,9 +43,10 @@ local function onR(itemstack, placer, pointed_thing)
 			speed = physics.speed + 0.5,
 		})
 	end
+	
 	if bs_match.match_is_started == false then return end
 	
-	if player:hud_get(scope_huds[Name(placer)]) and (not rangedweapons.pointing[Name(player)] or rangedweapons.pointing[Name(player)] == false ) then
+	if player:hud_get(scope_huds[Name(placer)]) and (not rangedweapons.pointing[Name(player)]) then
 		
 		if itemstack:get_name() == "rangedweapons:awp" or itemstack:get_name() == "rangedweapons:svd" or itemstack:get_name() == "rangedweapons:m200" then
 			player:hud_change(scope_huds[Name(placer)], "text", "rangedweapons_scopehud.png")
@@ -55,6 +57,7 @@ local function onR(itemstack, placer, pointed_thing)
 				wield_item = false,
 			})
 		else
+			rangedweapons.pointing_weapon[Name(placer)] = itemstack:get_name()
 			player:hud_change(scope_huds[Name(placer)], "text", "rangedweapons_scopehud_minimal.png")
 			player:hud_change(scope_huds[Name(placer)], "scale", {x=0.1,y=0.1})
 			player:hud_set_flags({
@@ -81,6 +84,7 @@ local function onR(itemstack, placer, pointed_thing)
 		
 		rangedweapons.pointing[Name(player)] = true
 	elseif player:hud_get(scope_huds[Name(placer)]) and rangedweapons.pointing[Name(player)] then
+		rangedweapons.pointing_weapon[Name(placer)] = nil
 		player:hud_change(scope_huds[Name(placer)], "text", "rangedweapons_empty_icon.png")
 		player:hud_change(scope_huds[Name(placer)], "scale", {x=2,y=2})
 		
@@ -109,17 +113,74 @@ local function onR(itemstack, placer, pointed_thing)
 	end
 end
 
-local function onuse(item, player, pt)
-	--rangedweapons_shoot_gun(item, player)
+local function calculateWeaponPrice(accuracy, dps, velocity)
+	local ACCURACY_WEIGHT = 0.4
+	local DPS_WEIGHT = 0.3
+	local VELOCITY_WEIGHT = 0.3
+	local normalizedAccuracy = accuracy / 100
+	local normalizedDPS = dps / 1000
+	local normalizedVelocity = velocity / 200
+	local weaponPrice = ACCURACY_WEIGHT * normalizedAccuracy + DPS_WEIGHT * normalizedDPS + VELOCITY_WEIGHT * normalizedVelocity
+	weaponPrice = weaponPrice * 200  -- Adjust as needed
+	weaponPrice = math.max(1, weaponPrice)
+	return math.floor(weaponPrice)  -- Round down to an integer
 end
+
+local types = {
+	--Rifle
+	["rangedweapons:m16"] =        "rifle",
+	["rangedweapons:scar"] =       "rifle",
+	["rangedweapons:svd"] =        "rifle",
+	["rangedweapons:ak47"] =       "rifle",
+	["rangedweapons:g36"] =        "rifle",
+	["rangedweapons:awp"] =        "rifle",
+	["rangedweapons:m200"] =       "rifle",
+	--Shotguns
+	["rangedweapons:remington"] =  "shotgun",
+	["rangedweapons:spas12"] =     "shotgun",
+	["rangedweapons:benelli"] =    "shotgun",
+	["rangedweapons:jackhammer"] = "shotgun",
+	["rangedweapons:aa12"] =       "shotgun",
+	--SMGs
+	["rangedweapons:kriss_sv"] =   "smg",
+	["rangedweapons:tmp"] =        "smg",
+	["rangedweapons:tec9"] =       "smg",
+	["rangedweapons:uzi"] =        "smg",
+	--Pistols
+	["rangedweapons:deagle"] =     "pistol",
+	["rangedweapons:glock17"] =    "pistol",
+	["rangedweapons:luger"] =      "pistol",
+	["rangedweapons:m1991"] =      "pistol",
+	["rangedweapons:beretta"] =    "pistol",
+	["rangedweapons:makarov"] =    "pistol",
+}
+
+local snipers = {
+	["rangedweapons:awp"] =    true,
+	["rangedweapons:svd"] =    true,
+	["rangedweapons:m200"] =   true,
+}
+
 
 local function on_load()
 	for name, def in pairs(core.registered_tools) do
 		if name:find("rangedweapon") and def.RW_gun_capabilities then
-			def.on_rightclick = onR
-			def.on_secondary_use = onR --osu = def.on_secondary_use
-			def.on_use = on_use
+			--def.on_rightclick = onR
+			def.on_secondary_use = onR
+			def.on_pickup = Shop.GetWeapon -- Should override everything....
 			core.registered_tools[name] = def --core.override_item(name, def)
+			
+			if types[name] then
+				Shop.RegisterWeapon(ItemStack(name):get_short_description(), {
+					item_name = name,
+					price = calculateWeaponPrice(def.RW_gun_capabilities.gun_accuracy, def.RW_gun_capabilities.gun_damage.fleshy, def.RW_gun_capabilities.gun_velocity),
+					icon = def.inventory_image,
+					type = types[name],
+					uses_ammo = true,
+					ammo_item_string = def.RW_gun_capabilities.suitable_ammo[1][1],
+					ammo_item_count = def.RW_gun_capabilities.suitable_ammo[1][2] * 90,
+				})
+			end
 		end
 	end
 end
@@ -133,11 +194,29 @@ rangedweapons.ammo_names = {}
 rangedweapons.reload_delays = {}
 rangedweapons.cooldown = {}
 rangedweapons.aux_delay = {}
-
+rangedweapons.pointing_weapon = {}
 
 
 local function on_step(dt)
 	for _, player in pairs(core.get_connected_players()) do
+		
+		
+		local cancel_pointing_act = false
+		local item_obj
+		
+		if rangedweapons.pointing[Name(player)] then
+			local hand_item = player:get_wielded_item()
+			if hand_item:get_name():match("rangedweapons") then
+				cancel_pointing_act = false
+				item_obj = hand_item
+			else
+				cancel_pointing_act = true
+			end
+		end
+		
+		if cancel_pointing_act then
+			onR(item_obj, player)
+		end
 		
 		-- Monitor
 		if not rangedweapons.cooldown[Name(player)] then
@@ -181,14 +260,16 @@ local function on_step(dt)
 				
 				
 				if controls.dig then -- Dont shoot if player is recharging his gun
-					if player:get_wielded_item():get_definition().RW_gun_capabilities and player:get_wielded_item():get_definition().RW_gun_capabilities.automatic_gun and player:get_wielded_item():get_definition().RW_gun_capabilities.automatic_gun > 0 then
-						rangedweapons_shoot_gun(item, player)
-						--player:set_wielded_item(item)
-					else
-						if rangedweapons.already_shot[Name(player)] ~= true then
+					if bs_match.match_is_started then
+						if player:get_wielded_item():get_definition().RW_gun_capabilities and player:get_wielded_item():get_definition().RW_gun_capabilities.automatic_gun and player:get_wielded_item():get_definition().RW_gun_capabilities.automatic_gun > 0 then
 							rangedweapons_shoot_gun(item, player)
 							--player:set_wielded_item(item)
-							rangedweapons.already_shot[Name(player)] = true
+						else
+							if rangedweapons.already_shot[Name(player)] ~= true then
+								rangedweapons_shoot_gun(item, player)
+								--player:set_wielded_item(item)
+								rangedweapons.already_shot[Name(player)] = true
+							end
 						end
 					end
 				else
