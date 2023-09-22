@@ -59,7 +59,7 @@ local function onR(itemstack, placer, pointed_thing)
 		else
 			rangedweapons.pointing_weapon[Name(placer)] = itemstack:get_name()
 			player:hud_change(scope_huds[Name(placer)], "text", "rangedweapons_scopehud_minimal.png")
-			player:hud_change(scope_huds[Name(placer)], "scale", {x=0.1,y=0.1})
+			player:hud_change(scope_huds[Name(placer)], "scale", {x=0.15,y=0.15})
 			player:hud_set_flags({
 				crosshair = false,
 			})
