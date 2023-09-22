@@ -248,6 +248,8 @@ config = {
 	AnnouceWinner = true,
 	GiveDefaultTools = {bool = true, pistol = true, sword = true},
 	ClearPlayerInv = {bool = true, maintain_last_inventory = false, set_new_inventory_after_inventory_reset = true},
+	EnableStatsForPlayers = true, -- New feature
+	UseScoreSystem = true,
 }
 
 bs.login_menu = "formspec_version[6]" ..
