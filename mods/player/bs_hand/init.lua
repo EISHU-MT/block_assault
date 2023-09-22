@@ -205,7 +205,7 @@ minetest.register_entity("wield3d:wield_entity", wield_entity)
 
 minetest.register_item("wield3d:hand", {
 	type = "none",
-	wield_image = "knife.png",
+	wield_image = "blank.png",
 })
 
 bs.cbs.register_OnAssignTeam(function(player, team)
