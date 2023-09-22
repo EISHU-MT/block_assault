@@ -143,7 +143,7 @@ PvpCallbacks.RegisterFunction(function(data)
 	elseif type(data.killer) == "userdata" then
 		-- Extreme code beggining
 		local hand_item = data.killer:get_wielded_item()
-		local desc = hand_item:get_description()
+		local desc = hand_item:get_definition()
 		if desc.RW_gun_capabilities then
 			image = desc.RW_gun_capabilities.gun_icon.."^[transformFX"
 		else
@@ -153,5 +153,5 @@ PvpCallbacks.RegisterFunction(function(data)
 		end
 		killer_name = Name(data.killer)
 	end
-	KillHistory.add(killer_name, Name(data.victim), image)
+	KillHistory.add(killer_name, Name(data.died), image)
 end, "BA.S Kill History System")
