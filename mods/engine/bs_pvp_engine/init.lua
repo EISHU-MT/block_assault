@@ -146,7 +146,7 @@ local function on_hpchange(player, hp, reason)
 					end
 				elseif reason.type == "fall" or reason.type == "node_damage" or reason.type == "drown" then
 					PlayerKills[Name(player)].deaths = PlayerKills[Name(player)].deaths + 1
-					RunCallbacks(PvpCallbacks.Callbacks, {died = player, killer = "suicide", teams = {died = bs.get_team(player), killer = nil}})
+					RunCallbacks(PvpCallbacks.Callbacks, {died = player, killer = reason.type, teams = {died = bs.get_team(player), killer = nil}})
 					local response = PvpMode.ThirdModeFunction(player, reason.object)
 					if response == true then
 						bs.allocate_to_spectator(player, true)
