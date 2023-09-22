@@ -89,7 +89,7 @@ end
 
 function bank.player_add_value(player, amount)
 	if CheckPlayer(player) and bank.player[Name(player)] then
-		core.chat_send_player(Name(player), core.colorize("#14FF14","You received $"..tostring(amount.."+")))
+		core.chat_send_player(Name(player), core.colorize("#14FF14","You received $"..tostring(amount).."+"))
 		if bank.player[Name(player)].money then
 			bank.player[Name(player)].money = bank.player[Name(player)].money + amount
 		end
