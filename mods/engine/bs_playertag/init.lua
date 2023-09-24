@@ -108,6 +108,11 @@ end
 
 local function on_step()
 	for _, player in pairs(core.get_connected_players()) do
+		player:set_nametag_attributes({
+			text = " ",
+			bgcolor = 0x00000,
+		})
+		
 		local objs = player:get_children()
 		local selected_obj
 		for _, obj in pairs(objs) do
