@@ -67,6 +67,14 @@ end
 
 --This function should handle "FriendShoot" feature.
 local function on_punchplayer(player, hitter, _,_,_, damage)
+	
+	-- Should dont hit other players when match inst started
+	if config.DontPunchPlayerWhileMatchNotStarted then
+		if bs_match.match_is_started == false then
+			return true
+		end
+	end
+	
 	local HitterTeam = bs.get_team(hitter)
 	local VictimTeam = bs.get_team(player)
 	if HitterTeam == VictimTeam then
