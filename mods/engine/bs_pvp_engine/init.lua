@@ -115,6 +115,9 @@ local function on_hpchange(player, hp, reason)
 						PlayerKills[Name(player)].deaths = PlayerKills[Name(player)].deaths + 1
 						PlayerKills[Name(hitter)].kills = PlayerKills[Name(hitter)].kills + 1
 						RunCallbacks(PvpCallbacks.Callbacks, {died = player, killer = hitter, teams = {died = bs.get_team(player), killer = bs.get_team(hitter)}})
+						if config.GiveMoneyToKillerPlayer.bool then
+							bank.player_add_value(Name(player), config.GiveMoneyToKillerPlayer.amount)
+						end
 						player:set_pos(maps.current_map.teams[bs.get_team(player)])
 					end
 				elseif reason.type == "fall" or reason.type == "node_damage" or reason.type == "drown" then
@@ -134,6 +137,9 @@ local function on_hpchange(player, hp, reason)
 						PlayerKills[Name(player)].deaths = PlayerKills[Name(player)].deaths + 1
 						PlayerKills[Name(hitter)].kills = PlayerKills[Name(hitter)].kills + 1
 						RunCallbacks(PvpCallbacks.Callbacks, {died = player, killer = hitter, teams = {died = bs.get_team(player), killer = bs.get_team(hitter)}})
+						if config.GiveMoneyToKillerPlayer.bool then
+							bank.player_add_value(Name(player), config.GiveMoneyToKillerPlayer.amount)
+						end
 						local response = PvpMode.ThirdModeFunction(player, reason.object)
 						if response == true then
 							bs.allocate_to_spectator(player, true)
@@ -147,6 +153,9 @@ local function on_hpchange(player, hp, reason)
 				elseif reason.type == "fall" or reason.type == "node_damage" or reason.type == "drown" then
 					PlayerKills[Name(player)].deaths = PlayerKills[Name(player)].deaths + 1
 					RunCallbacks(PvpCallbacks.Callbacks, {died = player, killer = reason.type, teams = {died = bs.get_team(player), killer = nil}})
+					if config.GiveMoneyToKillerPlayer.bool then
+						bank.player_add_value(Name(player), config.GiveMoneyToKillerPlayer.amount)
+					end
 					local response = PvpMode.ThirdModeFunction(player, reason.object)
 					if response == true then
 						bs.allocate_to_spectator(player, true)
