@@ -2,7 +2,7 @@
 	BulletStorm Engine
 --]]
 _OID = "BlockAssault" -- To be overriden by modes
-_V  = "Beta V1.6"
+_V  = "Beta V2.0"
 _ID = "BlockAssault" -- Real engine name
 C = CountTable
 bs = {
