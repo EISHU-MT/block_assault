@@ -252,6 +252,7 @@ config = {
 	UseScoreSystem = true,
 	IsDefaultGame = true, -- Only this is true when the game has not modified settings (As here "config") else this is modified.
 	GiveMoneyToKillerPlayer = {bool = true, amount = 10},
+	DontPunchPlayerWhileMatchNotStarted = true,
 }
 
 bs.login_menu = "formspec_version[6]" ..
