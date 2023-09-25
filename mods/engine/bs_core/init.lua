@@ -250,6 +250,8 @@ config = {
 	ClearPlayerInv = {bool = true, maintain_last_inventory = false, set_new_inventory_after_inventory_reset = true},
 	EnableStatsForPlayers = true, -- New feature
 	UseScoreSystem = true,
+	IsDefaultGame = true, -- Only this is true when the game has not modified settings (As here "config") else this is modified.
+	GiveMoneyToKillerPlayer = {bool = true, amount = 10},
 }
 
 bs.login_menu = "formspec_version[6]" ..
