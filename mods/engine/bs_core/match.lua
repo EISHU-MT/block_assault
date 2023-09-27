@@ -57,7 +57,7 @@ end
 
 bs_match["register_SecondOnEndMatch"] = function(function_to_run) table.insert(bs_match.cbs.SecondOnEndMatch, function_to_run) end
 bs_match["register_OnMatchStart"] = function(function_to_run) table.insert(bs_match.cbs.OnMatchStart, function_to_run) end
-bs_match["register_OnNewMatches"] = function(function_to_run) table.insert(bs_match.cbs.SecondOnEndMatch, function_to_run) end
+bs_match["register_OnNewMatches"] = function(function_to_run) table.insert(bs_match.cbs.OnNewMatches, function_to_run) end
 bs_match["register_OnEndMatch"] = function(function_to_run) table.insert(bs_match.cbs.OnEndMatch, function_to_run) end
 
 --

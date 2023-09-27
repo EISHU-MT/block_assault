@@ -1,6 +1,6 @@
 bshud = {
-	red = 0,
-	blue = 0,
+	["red"] = 0,
+	["blue"] = 0,
 }
 rhud_round = {}
 bhud_round = {}
