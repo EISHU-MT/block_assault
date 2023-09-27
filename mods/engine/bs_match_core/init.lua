@@ -14,7 +14,18 @@ local function to_use()
 	end)
 end
 
+local function to_use_two()
+	core.after(0.5, function()
+		for team, data in pairs(bs.team) do
+			for name in pairs(data.players) do
+				bs.allocate_to_team(name, "", true, true)
+				SpawnPlayerAtRandomPosition(Player(name), team)
+			end
+		end
+	end)
+end
+
 if config.UseDefaultMatchEngine then
 	bs_match.register_SecondOnEndMatch(to_use)
-	bs_match.register_OnMatchStart(to_use)
+	bs_match.register_OnMatchStart(to_use_two)
 end
