@@ -133,7 +133,6 @@ function Shop.BuyWeaponFor(player, weapon_data)
 	if not weapon_data then
 		return false
 	end
-	print(player, weapon_data)
 	-- First of all, resolve the player info
 	player = Player(player)
 	local name = Name(player)
