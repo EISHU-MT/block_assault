@@ -14,7 +14,7 @@ bs = {
 	},
 	team_data = {
 		red = {color = "#FF0000", code = 0xFF0000},
-		blue = {color = "#0000FF", code = 0x0000FF},
+		blue = {color = "#4E4EFF", code = 0x4E4EFF},
 		yellow = {color = "#FFFF00", code = 0xFFFF00},
 		green = {color = "#00FF00", code = 0x00FF00},
 	},
