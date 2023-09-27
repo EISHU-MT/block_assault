@@ -253,6 +253,7 @@ config = {
 	IsDefaultGame = true, -- Only this is true when the game has not modified settings (As here "config") else this is modified.
 	GiveMoneyToKillerPlayer = {bool = true, amount = 10},
 	DontPunchPlayerWhileMatchNotStarted = true,
+	GameClass = "BA Hunt & Kill", -- Classic game of BA.S (Builtin)
 }
 
 bs.login_menu = "formspec_version[6]" ..
