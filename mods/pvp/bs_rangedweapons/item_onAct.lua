@@ -161,6 +161,13 @@ local snipers = {
 	["rangedweapons:m200"] =   true,
 }
 
+rangedweapons.weapon_types = {}
+for weapon_name, weapon_type in pairs(types) do
+	if not rangedweapons.weapon_types[weapon_type] then
+		rangedweapons.weapon_types[weapon_type] = {}
+	end
+	table.insert(rangedweapons.weapon_types[weapon_type], weapon_name)
+end
 
 local function on_load()
 	for name, def in pairs(core.registered_tools) do
