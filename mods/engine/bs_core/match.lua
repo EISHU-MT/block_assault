@@ -38,7 +38,7 @@ function bs_match.finish_match(winner)
 				bs.show_menu_and_expire(player)
 				if config.ResetPlayerMoneyOnEndRounds then
 					if bank.player[Name(player)].money then
-						bank.player[Name(player)].money = 200 -- Reset his money
+						bank.player[Name(player)].money = 10 -- Reset his money
 					end
 				end
 			end
@@ -47,6 +47,7 @@ function bs_match.finish_match(winner)
 		end
 		RunCallbacks(bs_match.cbs.OnNewMatches)
 		bs_match.reset_rounds()
+		RunCallbacks(bs_match.cbs.SecondOnEndMatch)
 	end
 end
 
