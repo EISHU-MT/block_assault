@@ -27,7 +27,7 @@ function bs_match.finish_match(winner)
 		bs_match.current_rounds = bs_match.current_rounds - 1
 		bs_match.match_is_started = false
 		for name in pairs(bs.team[winner].players) do
-			bank.player_add_value(name, 50)
+			bank.player_add_value(name, 20)
 		end
 		RunCallbacks(bs_match.cbs.SecondOnEndMatch)
 	else
