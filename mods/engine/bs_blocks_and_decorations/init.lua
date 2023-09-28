@@ -1,12 +1,28 @@
-minetest.register_node(":bas:fillblock", {
-	description = ("FillBlock\nBA.S Block\nUsed to fill free space in non-walkable area"),
-	tiles = {"fillnode.png"},
+minetest.register_node(":bas:wall_block", {
+	description = ("Wall of maps\nBA.S Block\nUsed to fill free space in non-walkable area"),
+	tiles = {"walls.png"},
+	is_ground_content = false,
+	groups = {cracky = 2},
+})
+
+minetest.register_node(":bas:ceiling_block", {
+	description = ("Ceiling Block for maps\nBA.S Block\nUsed to fill free space in non-walkable area"),
+	tiles = {"fillblock.png"},
 	is_ground_content = false,
 	groups = {cracky = 2},
 	sunlight_propagates = true,
 	paramtype = "light",
 	drawtype = "glasslike_framed",
-	sounds = default.node_sound_stone_defaults(),
+})
+
+minetest.register_node(":bas:fillblock", {
+	description = ("FillBlock\nBA.S Block\nUsed to fill free space in non-walkable area"),
+	tiles = {"fillblock.png"},
+	is_ground_content = false,
+	groups = {cracky = 2},
+	sunlight_propagates = true,
+	paramtype = "light",
+	drawtype = "glasslike_framed",
 })
 
 minetest.register_node(":bas:kill", {
