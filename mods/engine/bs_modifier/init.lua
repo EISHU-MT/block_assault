@@ -24,6 +24,6 @@ end
 
 function SpawnPlayerAtRandomPosition(player, team)
 	if player and Name(player) then
-		player:set_pos(CheckPos(do_check_upper_pos(CheckPos(vector_random(maps.current_map.teams[team], 3)))))
+		player:set_pos(CheckPos(do_check_upper_pos(CheckPos(vector_random(maps.current_map.teams[team], 1)))))
 	end
 end
