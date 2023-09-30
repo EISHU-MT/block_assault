@@ -114,9 +114,9 @@ minetest.register_on_joinplayer(function(player)
 	update_kill_list_hud(player)
 end)
 
-function KillHistory.add(killer, victim, weapon_image, comment)
+function KillHistory.add(killer, victim, weapon_image, comment, color)
 	add_kill(
-		{text = killer, color = bs.get_team_color(bs.get_team(killer), "number") or 0xFFF},
+		{text = killer, color = color or bs.get_team_color(bs.get_team(killer), "number")},
 		weapon_image or "hand_kill.png",
 		{text = victim .. (comment or ""), color = bs.get_team_color(bs.get_team(victim), "number") or 0xFFF}
 	)
@@ -129,16 +129,20 @@ PvpCallbacks.RegisterFunction(function(data)
 	-- First of all, load images and killer/player data.
 	local image = "hand_kill.png"
 	local killer_name = ""
+	local color
 	if type(data.killer) == "string" then -- Think that was a suicide attempt
 		if data.killer == "fall" then
 			image = "fall.png"
 			killer_name = "(fell)"
+			color = 0x00FFFF
 		elseif data.killer == "node_damage" then
 			image = "suicide.png"
 			killer_name = "(by block)"
+			color = 0x00FFFF
 		elseif data.killer == "drown" then
 			image = "bubble.png"
 			killer_name = "(drowned)"
+			color = 0x00FFFF
 		end
 	elseif type(data.killer) == "userdata" then
 		-- Extreme code beggining
@@ -153,5 +157,5 @@ PvpCallbacks.RegisterFunction(function(data)
 		end
 		killer_name = Name(data.killer)
 	end
-	KillHistory.add(killer_name, Name(data.died), image)
+	KillHistory.add(killer_name, Name(data.died), image, "", color)
 end, "BA.S Kill History System")
