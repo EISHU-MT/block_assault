@@ -101,15 +101,19 @@ local function on_hpchange(player, hp, reason)
 						-- This is handled in on_punchplayer
 						core.log("action", "Player "..Name(player).." punched his teammate "..Name(hitter))
 					else
-						PlayerKills[Name(player)].deaths = PlayerKills[Name(player)].deaths + 1
-						PlayerKills[Name(hitter)].kills = PlayerKills[Name(hitter)].kills + 1
-						RunCallbacks(PvpCallbacks.Callbacks, {died = player, killer = hitter, teams = {died = bs.get_team(player), killer = bs.get_team(hitter)}})
-						bs.allocate_to_spectator(player, true)
+						if PlayerKills[Name(player)] and PlayerKills[Name(hitter)] then
+							PlayerKills[Name(player)].deaths = PlayerKills[Name(player)].deaths + 1
+							PlayerKills[Name(hitter)].kills = PlayerKills[Name(hitter)].kills + 1
+							RunCallbacks(PvpCallbacks.Callbacks, {died = player, killer = hitter, teams = {died = bs.get_team(player), killer = bs.get_team(hitter)}})
+							bs.allocate_to_spectator(player, true)
+						end
 					end
 				elseif reason.type == "fall" or reason.type == "node_damage" or reason.type == "drown" then
-					PlayerKills[Name(player)].deaths = PlayerKills[Name(player)].deaths + 1
-					RunCallbacks(PvpCallbacks.Callbacks, {died = player, killer = "suicide", teams = {died = bs.get_team(player), killer = nil}})
-					bs.allocate_to_spectator(player, true)
+					if PlayerKills[Name(player)] then
+						PlayerKills[Name(player)].deaths = PlayerKills[Name(player)].deaths + 1
+						RunCallbacks(PvpCallbacks.Callbacks, {died = player, killer = "suicide", teams = {died = bs.get_team(player), killer = nil}})
+						bs.allocate_to_spectator(player, true)
+					end
 				end
 			elseif PvpMode.Mode == 2 then
 				if reason.object then
@@ -120,18 +124,22 @@ local function on_hpchange(player, hp, reason)
 						-- This is handled in on_punchplayer
 						core.log("action", "Player "..Name(player).." punched his teammate "..Name(hitter))
 					else
-						PlayerKills[Name(player)].deaths = PlayerKills[Name(player)].deaths + 1
-						PlayerKills[Name(hitter)].kills = PlayerKills[Name(hitter)].kills + 1
-						RunCallbacks(PvpCallbacks.Callbacks, {died = player, killer = hitter, teams = {died = bs.get_team(player), killer = bs.get_team(hitter)}})
-						if config.GiveMoneyToKillerPlayer.bool then
-							bank.player_add_value(Name(player), config.GiveMoneyToKillerPlayer.amount)
+						if PlayerKills[Name(player)] and PlayerKills[Name(hitter)] then
+							PlayerKills[Name(player)].deaths = PlayerKills[Name(player)].deaths + 1
+							PlayerKills[Name(hitter)].kills = PlayerKills[Name(hitter)].kills + 1
+							RunCallbacks(PvpCallbacks.Callbacks, {died = player, killer = hitter, teams = {died = bs.get_team(player), killer = bs.get_team(hitter)}})
+							if config.GiveMoneyToKillerPlayer.bool then
+								bank.player_add_value(Name(player), config.GiveMoneyToKillerPlayer.amount)
+							end
+							player:set_pos(maps.current_map.teams[bs.get_team(player)])
 						end
-						player:set_pos(maps.current_map.teams[bs.get_team(player)])
 					end
 				elseif reason.type == "fall" or reason.type == "node_damage" or reason.type == "drown" then
-					PlayerKills[Name(player)].deaths = PlayerKills[Name(player)].deaths + 1
-					RunCallbacks(PvpCallbacks.Callbacks, {died = player, killer = "suicide", teams = {died = bs.get_team(player), killer = nil}})
-					player:set_pos(maps.current_map.teams[bs.get_team(player)])
+					if PlayerKills[Name(player)] then
+						PlayerKills[Name(player)].deaths = PlayerKills[Name(player)].deaths + 1
+						RunCallbacks(PvpCallbacks.Callbacks, {died = player, killer = "suicide", teams = {died = bs.get_team(player), killer = nil}})
+						player:set_pos(maps.current_map.teams[bs.get_team(player)])
+					end
 				end
 			elseif PvpMode.Mode == 3 then
 				if reason.object then
@@ -142,9 +150,28 @@ local function on_hpchange(player, hp, reason)
 						-- This is handled in on_punchplayer
 						core.log("action", "Player "..Name(player).." punched his teammate "..Name(hitter))
 					else
+						if PlayerKills[Name(player)] and PlayerKills[Name(hitter)] then
+							PlayerKills[Name(player)].deaths = PlayerKills[Name(player)].deaths + 1
+							PlayerKills[Name(hitter)].kills = PlayerKills[Name(hitter)].kills + 1
+							RunCallbacks(PvpCallbacks.Callbacks, {died = player, killer = hitter, teams = {died = bs.get_team(player), killer = bs.get_team(hitter)}})
+							if config.GiveMoneyToKillerPlayer.bool then
+								bank.player_add_value(Name(player), config.GiveMoneyToKillerPlayer.amount)
+							end
+							local response = PvpMode.ThirdModeFunction(player, reason.object)
+							if response == true then
+								bs.allocate_to_spectator(player, true)
+							elseif response == false then
+								player:set_pos(maps.current_map.teams[bs.get_team(player)])
+								player:set_hp(20) -- This is here because this is not handled by 1st callback function
+							else
+								error("\nPvP Engine:\nOn getting response of ThirdModeFunction:\nCannot find boolean in response.\n")
+							end
+						end
+					end
+				elseif reason.type == "fall" or reason.type == "node_damage" or reason.type == "drown" then
+					if PlayerKills[Name(player)] then
 						PlayerKills[Name(player)].deaths = PlayerKills[Name(player)].deaths + 1
-						PlayerKills[Name(hitter)].kills = PlayerKills[Name(hitter)].kills + 1
-						RunCallbacks(PvpCallbacks.Callbacks, {died = player, killer = hitter, teams = {died = bs.get_team(player), killer = bs.get_team(hitter)}})
+						RunCallbacks(PvpCallbacks.Callbacks, {died = player, killer = reason.type, teams = {died = bs.get_team(player), killer = nil}})
 						if config.GiveMoneyToKillerPlayer.bool then
 							bank.player_add_value(Name(player), config.GiveMoneyToKillerPlayer.amount)
 						end
@@ -157,21 +184,6 @@ local function on_hpchange(player, hp, reason)
 						else
 							error("\nPvP Engine:\nOn getting response of ThirdModeFunction:\nCannot find boolean in response.\n")
 						end
-					end
-				elseif reason.type == "fall" or reason.type == "node_damage" or reason.type == "drown" then
-					PlayerKills[Name(player)].deaths = PlayerKills[Name(player)].deaths + 1
-					RunCallbacks(PvpCallbacks.Callbacks, {died = player, killer = reason.type, teams = {died = bs.get_team(player), killer = nil}})
-					if config.GiveMoneyToKillerPlayer.bool then
-						bank.player_add_value(Name(player), config.GiveMoneyToKillerPlayer.amount)
-					end
-					local response = PvpMode.ThirdModeFunction(player, reason.object)
-					if response == true then
-						bs.allocate_to_spectator(player, true)
-					elseif response == false then
-						player:set_pos(maps.current_map.teams[bs.get_team(player)])
-						player:set_hp(20) -- This is here because this is not handled by 1st callback function
-					else
-						error("\nPvP Engine:\nOn getting response of ThirdModeFunction:\nCannot find boolean in response.\n")
 					end
 				end
 			end
