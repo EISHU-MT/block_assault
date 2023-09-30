@@ -17,9 +17,9 @@ local function repeater()
 			if skinsdb then
 				player:set_properties({textures = "blank.png"})
 			else
-				if bs.get_team(player) ~= "" and not player:get_properties().textures[1]:match("_overlay") then
+				if bs.get_player_team_css(player) ~= "" and not player:get_properties().textures[1]:match("_overlay") then
 					SetTeamSkin(player, bs.get_team(player))
-				elseif bs.get_team(player) == "" then
+				elseif bs.get_player_team_css(player) == "" then
 					player:set_properties({textures = "blank.png"})
 				end
 			end
