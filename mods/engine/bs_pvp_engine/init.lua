@@ -68,9 +68,20 @@ end
 --This function should handle "FriendShoot" feature.
 local function on_punchplayer(player, hitter, _,_,_, damage)
 	
+	if bs.spectator[Name(hitter)] or bs.spectator[Name(player)] then -- Dont allow spectators do damage.
+		return true
+	end
+	
 	-- Should dont hit other players when match inst started
 	if config.DontPunchPlayerWhileMatchNotStarted then
 		if bs_match.match_is_started == false then
+			
+			hud_events.new(hitter, {
+				text = "You cant do damage to others player while in no match.",
+				color = "warning",
+				quick = true,
+			})
+			
 			return true
 		end
 	end
