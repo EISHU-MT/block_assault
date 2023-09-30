@@ -185,7 +185,19 @@ function bs.get_team_players(team)
 	end
 end
 
-
+function bs.get_player_team_css(to_index)
+	local name = Name(to_index)
+	if bs.is_playing[name] then
+		if bs.spectator[name] then
+			return ""
+		else
+			return bs.player_team[name]
+		end
+	else
+		return ""
+	end
+	return ""
+end
 
 function bs.get_team_players_index(team)
 	if bs.team[team] then
@@ -204,10 +216,11 @@ function bs.unallocate_team(to_allocate)
 	local name = Name(to_allocate)
 	local team = bs.get_team(name)
 	if bs.team[team] then
-		bs.team[team].players[name] = false
+		bs.team[team].players[name] = nil
 		bs.team[team].count = C(bs.team[team].players)
 		bs.player_team[name] = nil
-		bs.is_playing[name] = false
+		bs.is_playing[name] = nil
+		bs.died[name] = nil
 		RunCallbacks(bs.cbs.OnAssignTeam, player, "")
 	end
 end
