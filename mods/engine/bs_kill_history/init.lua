@@ -51,7 +51,7 @@ local function update_hud_line(player, idx, new)
 		if new then
 			if phud then
 				hud:change(player, hname, {
-					text = (new[i].text or new[i]),
+					text = (new[i].text or new[i] or ""),
 					color = new[i].color or 0xFFF
 				})
 			else
