@@ -28,6 +28,7 @@ function bs_match.finish_match(winner)
 		bs_match.match_is_started = false
 		for name in pairs(bs.team[winner].players) do
 			bank.player_add_value(name, 20)
+			score.add_score_to(name, 30)
 		end
 		RunCallbacks(bs_match.cbs.SecondOnEndMatch)
 	else
@@ -39,6 +40,7 @@ function bs_match.finish_match(winner)
 				if config.ResetPlayerMoneyOnEndRounds then
 					if bank.player[Name(player)].money then
 						bank.player[Name(player)].money = 10 -- Reset his money
+						score.add_score_to(name, 5)
 					end
 				end
 			end
