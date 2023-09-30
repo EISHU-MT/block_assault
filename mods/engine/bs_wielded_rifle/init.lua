@@ -91,7 +91,7 @@ local function on_join(id, team)
 	if team ~= "" then
 		-- Check if the player dont had the same entity
 		local player = Player(id)
-		for i, obj in pairs(player:get_children()) do
+		for i, obj in pairs(player:get_children() or {}) do
 			if obj:get_luaentity() then
 				local ent = obj:get_luaentity()
 				if ent.animated_rifle then
