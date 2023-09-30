@@ -46,7 +46,7 @@ end
 
 function Randomise(conditionn, etable) -- Primary AI (Only had table parser with random and `IF`)
 	if type(etable) == "table" then
-		local numb = #etable
+		local numb = CountTable(etable)
 		local selected = math.random(#etable)
 		return etable[selected] or ""
 	end
