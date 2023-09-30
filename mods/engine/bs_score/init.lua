@@ -83,7 +83,7 @@ end
 local function empty() end
 
 do -- Now, define.
-	if score.enable_current_status then
+	if config.UseScoreSystem then
 		score.get_score_of = check
 		score.add_score_to = sum
 		score.get_storedDA = get_data
@@ -97,3 +97,11 @@ do -- Now, define.
 		score.raw_modifyTO = empty
 	end
 end
+
+-- Callbacks
+
+PvpCallbacks.RegisterFunction(function(data)
+	if type(data.killer) ~= "string" then
+		score.add_score_to(data.killer, 20)
+	end
+end, "Score System")
