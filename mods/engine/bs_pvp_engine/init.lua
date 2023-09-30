@@ -111,7 +111,7 @@ local function on_hpchange(player, hp, reason)
 				elseif reason.type == "fall" or reason.type == "node_damage" or reason.type == "drown" then
 					if PlayerKills[Name(player)] then
 						PlayerKills[Name(player)].deaths = PlayerKills[Name(player)].deaths + 1
-						RunCallbacks(PvpCallbacks.Callbacks, {died = player, killer = "suicide", teams = {died = bs.get_team(player), killer = nil}})
+						RunCallbacks(PvpCallbacks.Callbacks, {died = player, killer = reason.type, teams = {died = bs.get_team(player), killer = nil}})
 						bs.allocate_to_spectator(player, true)
 					end
 				end
@@ -137,7 +137,7 @@ local function on_hpchange(player, hp, reason)
 				elseif reason.type == "fall" or reason.type == "node_damage" or reason.type == "drown" then
 					if PlayerKills[Name(player)] then
 						PlayerKills[Name(player)].deaths = PlayerKills[Name(player)].deaths + 1
-						RunCallbacks(PvpCallbacks.Callbacks, {died = player, killer = "suicide", teams = {died = bs.get_team(player), killer = nil}})
+						RunCallbacks(PvpCallbacks.Callbacks, {died = player, killer = reason.type, teams = {died = bs.get_team(player), killer = nil}})
 						player:set_pos(maps.current_map.teams[bs.get_team(player)])
 					end
 				end
