@@ -49,10 +49,14 @@ function annouce.transform(str)
 	return esus
 end
 
-function annouce.winner(team)
-	if team then
+function annouce.winner(team, str)
+	if team and not str then
 		local color = bs.get_team_color(team, "number")
 		local id = annouce.publish_to_players(annouce.transform(team).." wins!", color)
+		core.after(2, make_dissapear_mess, id)
+	elseif team and str then
+		local color = bs.get_team_color(team, "number")
+		local id = annouce.publish_to_players(annouce.transform(team)..str, color)
 		core.after(2, make_dissapear_mess, id)
 	end
 	
