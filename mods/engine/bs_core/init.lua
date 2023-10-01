@@ -108,12 +108,16 @@ end
 function bs.get_team_color(team, type_to_return)
 	if (team and bs.is_valid_team(team)) and type_to_return then
 		if type_to_return == "string" then
-			return bs.team[team or ""].color
+			return bs.team[team or ""].color or "#FFFFFF"
 		elseif type_to_return == "number" then
-			return bs.team[team or ""].color_code
+			return bs.team[team or ""].color_code or 0xFFFFFF
 		end
 	end
-	return ""
+	if type_to_return == "string" then
+		return "#FFFFFF"
+	elseif type_to_return == "number" then
+		return 0xFFFFFF
+	end
 end
 
 function bs.get_team(to_index)
