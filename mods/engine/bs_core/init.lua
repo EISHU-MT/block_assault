@@ -288,6 +288,20 @@ bs.login_menu = "formspec_version[6]" ..
 	"image_button[9.1,2;4.5,3.5;team_null_color.png;spect;No team;false;false]" ..
 	"image_button[9.1,5.5;4.5,3.5;quit.png;exit;Disconnect;false;false]"
 
+function bs.send_to_team(team, msg)
+	if bots then
+		local players = bs_old.get_team_players(team)
+		for _, player in pairs(players) do
+			core.chat_send_player(bs_old.Name(player), core.colorize(bs.get_team_color(team, "string"), msg))
+		end
+	else
+		local players = bs.get_team_players(team)
+		for _, player in pairs(players) do
+			core.chat_send_player(Name(player), core.colorize(bs.get_team_color(team, "string"), msg))
+		end
+	end
+end
+
 function bs.auto_allocate_team(player)
 	if not bs.is_playing[Name(player)] and bs.spectator[Name(player)] ~= true then
 		if C(maps.current_map.teams) == 2 then
@@ -374,6 +388,25 @@ end
 if config.RegisterInitialFunctions.leave then
 	minetest.register_on_leaveplayer(on_leave)
 end
+
+core.register_chatcommand("t", {
+	params = "<msg>",
+	description = "Send a private message to your team",
+	privs = {shout=true},
+	func = function(name, params)
+		if bots then
+			local player_team = bs_old.get_player_team_css(name)
+			if player_team ~= "" then
+				bs.send_to_team(player_team, "### <"..name.."> "..params)
+			end
+		else
+			local player_team = bs.get_player_team_css(name)
+			if player_team ~= "" then
+				bs.send_to_team(player_team, "### <"..name.."> "..params)
+			end
+		end
+	end
+})
 
 -- Now load other files...
 dofile(bs.modpath..DIR_DELIM.."callbacks.lua")
