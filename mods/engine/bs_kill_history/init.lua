@@ -77,7 +77,7 @@ local function update_kill_list_hud(player)
 end
 
 local globalstep_timer = 0
-local function add_kill(x, y, z)
+local function KillHistory.RawAdd(x, y, z)
 	table.insert(kill_list, 1, {x, y, z})
 
 	if #kill_list > HUD_LINES then
@@ -115,7 +115,7 @@ minetest.register_on_joinplayer(function(player)
 end)
 
 function KillHistory.add(killer, victim, weapon_image, comment, color)
-	add_kill(
+	KillHistory.RawAdd(
 		{text = killer, color = color or bs.get_team_color(bs.get_team(killer), "number")},
 		weapon_image or "hand_kill.png",
 		{text = victim .. (comment or ""), color = bs.get_team_color(bs.get_team(victim), "number") or 0xFFF}
