@@ -77,7 +77,7 @@ local function update_kill_list_hud(player)
 end
 
 local globalstep_timer = 0
-local function KillHistory.RawAdd(x, y, z)
+function KillHistory.RawAdd(x, y, z)
 	table.insert(kill_list, 1, {x, y, z})
 
 	if #kill_list > HUD_LINES then
