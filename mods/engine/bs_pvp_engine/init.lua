@@ -99,7 +99,7 @@ local function on_punchplayer(player, hitter, _,_,_, damage)
 	end
 end
 
-local function on_hpchange(player, hp, reason)
+function OnPlayerGetHurt(player, hp, reason)
 	local damage = get_damage_from_hp(hp)
 	if config.PvpEngine.enable then
 		if player:get_hp() - damage <= 0 then
@@ -242,7 +242,9 @@ end, "Match Shared Function")
 
 -- Register everything
 core.register_on_punchplayer(on_punchplayer)
-core.register_on_player_hpchange(on_hpchange)
+core.register_on_player_hpchange(function(...)
+	OnPlayerGetHurt(...)
+end)
 
 
 
