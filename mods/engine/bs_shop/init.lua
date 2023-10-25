@@ -183,7 +183,7 @@ function Shop.GetWeapon(item, player, data)
 	for i, itemstack in pairs(Inv(player):get_list("main")) do
 		local item_name = itemstack:get_name()
 		local detected_weapon = Shop.IdentifyWeapon(item_name)
-		if detected_weapon.type == weapon_data.type then
+		if weapon_data and detected_weapon and detected_weapon.type == weapon_data.type then
 			detected_conflict_weapon = detected_weapon
 		end
 	end
