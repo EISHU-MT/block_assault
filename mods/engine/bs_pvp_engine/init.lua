@@ -66,7 +66,7 @@ local function get_damage_from_hp(damage)
 end
 
 --This function should handle "FriendShoot" feature.
-local function on_punchplayer(player, hitter, _,_,_, damage)
+function OnPunchPlayer(player, hitter, _,_,_, damage)
 	
 	if bs.spectator[Name(hitter)] or bs.spectator[Name(player)] then -- Dont allow spectators do damage.
 		return true
@@ -241,7 +241,9 @@ PvpCallbacks.RegisterFunction(function(data)
 end, "Match Shared Function")
 
 -- Register everything
-core.register_on_punchplayer(on_punchplayer)
+core.register_on_punchplayer(function(...)
+	OnPunchPlayer(...)
+end)
 core.register_on_player_hpchange(function(...)
 	OnPlayerGetHurt(...)
 end)
