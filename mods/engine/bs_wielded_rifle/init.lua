@@ -91,16 +91,18 @@ local function on_join(id, team)
 	if team ~= "" then
 		-- Check if the player dont had the same entity
 		local player = Player(id)
-		for i, obj in pairs(player:get_children() or {}) do
-			if obj:get_luaentity() then
-				local ent = obj:get_luaentity()
-				if ent.animated_rifle then
-					obj:remove() -- May it is useless
+		if player then
+			for i, obj in pairs(player:get_children() or {}) do
+				if obj:get_luaentity() then
+					local ent = obj:get_luaentity()
+					if ent.animated_rifle then
+						obj:remove() -- May it is useless
+					end
 				end
 			end
+			
+			core.add_entity(player:get_pos(), "bs_shop:animated_rifle"):set_attach(player, "", vector.new(-0.9, 9, -1.6), vector.new(0,0,-45))
 		end
-		
-		core.add_entity(player:get_pos(), "bs_shop:animated_rifle"):set_attach(player, "", vector.new(-0.9, 9, -1.6), vector.new(0,0,-45))
 	end
 end
 
