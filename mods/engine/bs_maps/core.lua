@@ -31,8 +31,10 @@ function maps.place_map(map_def)
 end
 
 function maps.new_map()
+	core.log("action", "Searching a map for the game....")
 	core.after(0.5, function()
 		local def = maps.select_map()
+		--print(dump(def))
 		maps.place_map(def)
 		maps.current_map = def
 		maps.update_env()

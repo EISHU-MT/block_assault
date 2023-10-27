@@ -27,6 +27,7 @@ function maps.emerge_with_callbacks(name, pos1, pos2, callback, progress)
 		progress = progress,
 	}
 	minetest.emerge_area(pos1, pos2, emergeblocks_callback, context)
+	--callback()
 end
 --[[Skybox
 local function update_skybox(player)
