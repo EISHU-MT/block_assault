@@ -175,6 +175,7 @@ function bs.allocate_to_team(to_allocate, team, force, use_dead_table) -- Applyi
 		core.log("error", "Unable to allocate player in team \""..team.."\". There are not loaded map")
 		return false
 	end
+	
 end
 
 function bs.get_team_players(team)

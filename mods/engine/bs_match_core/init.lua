@@ -2,7 +2,7 @@ local function to_use()
 	core.after(0.5, function()
 		for team, data in pairs(bs.team) do
 			for name in pairs(data.players) do
-				bs.allocate_to_team(name, "", true, true)
+				bs.allocate_to_team(name, bs.died[name], true, true)
 				SpawnPlayerAtRandomPosition(Player(name), team)
 			end
 		end
@@ -18,7 +18,7 @@ local function to_use_two()
 	core.after(0.5, function()
 		for team, data in pairs(bs.team) do
 			for name in pairs(data.players) do
-				bs.allocate_to_team(name, "", true, true)
+				bs.allocate_to_team(name, bs.died[name], true, true)
 				SpawnPlayerAtRandomPosition(Player(name), team)
 			end
 		end
