@@ -67,6 +67,7 @@ function bs.destroy_team(team) -- Only used for 4 team map
 		for name in pairs(players) do
 			bs.allocate_to_spectator(name)
 		end
+		bs.team[team].state = "neutral"
 	end
 end
 
