@@ -22,6 +22,7 @@ local function to_use_two()
 				SpawnPlayerAtRandomPosition(Player(name), team)
 			end
 		end
+		bs.died = {}
 	end)
 end
 
