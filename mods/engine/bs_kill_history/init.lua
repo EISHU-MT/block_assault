@@ -146,16 +146,32 @@ PvpCallbacks.RegisterFunction(function(data)
 		end
 	elseif type(data.killer) == "userdata" then
 		-- Extreme code beggining
-		local hand_item = data.killer:get_wielded_item()
-		local desc = hand_item:get_definition()
-		if desc.RW_gun_capabilities then
-			image = desc.RW_gun_capabilities.gun_icon.."^[transformFX"
+		if data.killer:is_player() then
+			local hand_item = data.killer:get_wielded_item()
+			local desc = hand_item:get_definition()
+			if desc.RW_gun_capabilities then
+				image = desc.RW_gun_capabilities.gun_icon.."^[transformFX"
+			else
+				if desc.inventory_image and desc.inventory_image ~= "" then
+					image = desc.inventory_image
+				end
+			end
+			killer_name = Name(data.killer)
 		else
-			if desc.inventory_image and desc.inventory_image ~= "" then
-				image = desc.inventory_image
+			local ent = data.killer:get_luaentity()
+			if ent.bot_name then
+				local hand_item = ItemStack(bots.in_hand_weapon[ent.bot_name])
+				local desc = hand_item:get_definition()
+				if desc.RW_gun_capabilities then
+					image = desc.RW_gun_capabilities.gun_icon.."^[transformFX"
+				else
+					if desc.inventory_image and desc.inventory_image ~= "" then
+						image = desc.inventory_image
+					end
+				end
+				killer_name = ent.bot_name
 			end
 		end
-		killer_name = Name(data.killer)
 	end
 	KillHistory.add(killer_name, Name(data.died), image, "", color)
 end, "BA.S Kill History System")
