@@ -382,7 +382,7 @@ end
 local gunMeta = itemstack:get_meta()
 local playerMeta = player:get_meta()
 
-if rangedweapons.bullets[Name(player)] > 0 and rangedweapons.cooldown[Name(player)] <= 0 then
+if rangedweapons.bullets[Name(player)] and rangedweapons.cooldown[Name(player)] and rangedweapons.bullets[Name(player)] > 0 and rangedweapons.cooldown[Name(player)] <= 0 then
 
 rangedweapons.cooldown[Name(player)] = gun_cooldown
 
