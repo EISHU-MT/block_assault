@@ -503,7 +503,9 @@ end
 
 local function update_health(player)
 	local hp_max = player:get_properties().hp_max
-	hb.change_hudbar(player, "health", player:get_hp(), hp_max)
+	if bs.spectator[Name(player)] ~= true then
+		hb.change_hudbar(player, "health", player:get_hp(), hp_max)
+	end
 end
 
 -- update built-in HUD bars
@@ -511,17 +513,21 @@ local function update_hud(player)
 	if not player_exists(player) then return end
 	if minetest.settings:get_bool("enable_damage") then
 		if hb.settings.forceload_default_hudbars then
-			hb.unhide_hudbar(player, "health")
+			if bs.spectator[Name(player)] ~= true then
+				hb.unhide_hudbar(player, "health")
+			end
 		end
 		--air
 		local breath_max = player:get_properties().breath_max
 		local breath = player:get_breath()
 		
-		if breath >= breath_max and hb.settings.autohide_breath == true then
-			hb.hide_hudbar(player, "breath")
-		else
-			hb.unhide_hudbar(player, "breath")
-			hb.change_hudbar(player, "breath", math.min(breath, breath_max), breath_max)
+		if bs.spectator[Name(player)] ~= true then
+			if breath >= breath_max and hb.settings.autohide_breath == true then
+				hb.hide_hudbar(player, "breath")
+			else
+				hb.unhide_hudbar(player, "breath")
+				hb.change_hudbar(player, "breath", math.min(breath, breath_max), breath_max)
+			end
 		end
 		--health
 		update_health(player)
@@ -533,7 +539,9 @@ end
 
 minetest.register_on_player_hpchange(function(player)
 	if hb.players[player:get_player_name()] ~= nil then
-		update_health(player)
+		if bs.spectator[Name(player)] ~= true then
+			update_health(player)
+		end
 	end
 end)
 
