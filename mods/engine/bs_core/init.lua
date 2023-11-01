@@ -63,11 +63,13 @@ end
 
 function bs.destroy_team(team) -- Only used for 4 team map
 	if C(maps.current_map.teams) > 2 then
-		local players = table.copy(bs.team[team].players)
-		for name in pairs(players) do
-			bs.allocate_to_spectator(name)
+		if bs.team[team].state ~= "alive" then
+			local players = table.copy(bs.team[team].players)
+			for name in pairs(players) do
+				bs.allocate_to_spectator(name)
+			end
+			bs.team[team].state = "neutral"
 		end
-		bs.team[team].state = "neutral"
 	end
 end
 
@@ -147,7 +149,7 @@ function bs.allocate_to_team(to_allocate, team, force, use_dead_table) -- Applyi
 				bs.spectator[name] = nil
 				RunCallbacks(bs.cbs.OnAssignTeam, player, team)
 				player:set_armor_groups({immortal=0,fleshy=100})
-				AddPrivs(player, {fly=false, fast=false, noclip=false, teleport=false})
+				AddPrivs(player, {fly=nil, fast=nil, noclip=nil, teleport=nil})
 				SpawnPlayerAtRandomPosition(player, team)
 				player:set_hp(20)
 				bs.died[name] = nil
@@ -163,7 +165,7 @@ function bs.allocate_to_team(to_allocate, team, force, use_dead_table) -- Applyi
 				bs.spectator[name] = nil
 				RunCallbacks(bs.cbs.OnAssignTeam, player, team)
 				player:set_armor_groups({immortal=0,fleshy=100})
-				AddPrivs(player, {fly=false, fast=false, noclip=false, teleport=false})
+				AddPrivs(player, {fly=nil, fast=nil, noclip=nil, teleport=nil})
 				SpawnPlayerAtRandomPosition(player, team)
 				player:set_hp(20)
 				bs.died[name] = nil
@@ -240,9 +242,10 @@ function bs.allocate_to_spectator(to_allocate, died)
 		player:set_armor_groups({immortal=1})
 		Inv(player):set_list("main", {})
 		AddPrivs(player, {fly=true, fast=true, noclip=true, teleport=true})
+		bs.is_playing[name] = false
 		bs.spectator[name] = true
 		if died then
-			bs.died[name] = bs.get_team(name)
+			bs.died[name] = bs.player_team[name]
 		end
 	else
 		SendError(to_allocate, "Unable to allocate you in spectators, map system not started.")
