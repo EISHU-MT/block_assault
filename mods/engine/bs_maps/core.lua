@@ -43,9 +43,15 @@ function maps.new_map()
 		
 		core.set_node(def.teams.blue, {name="air"})
 		core.set_node(def.teams.red, {name="air"})
+		
+		bs.team.red.state = "alive"
+		bs.team.blue.state = "alive"
+		
 		if def.teams.yellow and def.teams.green then
 			core.set_node(def.teams.yellow, {name="air"})
 			core.set_node(def.teams.green, {name="air"})
+			bs.team.yellow.state = "alive"
+			bs.team.green.state = "alive"
 		end
 		
 		maps.theres_loaded_map = true
