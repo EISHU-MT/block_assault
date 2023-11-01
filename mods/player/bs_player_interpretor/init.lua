@@ -64,9 +64,13 @@ local function get_pitch_deg(player)
 end
 
 local last_arm_dir = {}
+local speed_players = {}
+local is_speed_reset = {}
 
 function DO_ANIMATION(player, animation, dtime)
 	local control = player:get_player_control()
+	
+	if not control then return end
 	
 	local speed = get_animation_speed(player)
 	local sin = math.sin(players_animation_data:get_time(player) * speed * math.pi)
@@ -90,12 +94,14 @@ function DO_ANIMATION(player, animation, dtime)
 	end
 	
 	if is_advancing(control) and not WConflicts then
-		-- Animate legs
-		rotate_bone(player, "Leg_Left", {x = 55 * sin, y = 0, z = 0})
-		rotate_bone(player, "Leg_Right", {x = -55 * sin, y = 0, z = 0})
-		-- Animate hands
-		rotate_bone(player, "Arm_Left", {x = -55 * sin,      y = 0, z = 0})
-		rotate_bone(player, "Arm_Right", {x = 55 * sin,       y = 0, z = 0})
+		if bs_match.match_is_started then
+			-- Animate legs
+			rotate_bone(player, "Leg_Left", {x = 55 * sin, y = 0, z = 0})
+			rotate_bone(player, "Leg_Right", {x = -55 * sin, y = 0, z = 0})
+			-- Animate hands
+			rotate_bone(player, "Arm_Left", {x = -55 * sin,      y = 0, z = 0})
+			rotate_bone(player, "Arm_Right", {x = 55 * sin,       y = 0, z = 0})
+		end
 	elseif not is_advancing(control) then
 		if WConflicts and wtypo then
 			if wtypo == "lay" then
@@ -125,6 +131,61 @@ function DO_ANIMATION(player, animation, dtime)
 		lastdir[pname] = ldeg
 	end
 	
+	if control.sneak then
+		local properties = player:get_properties()
+		properties.makes_footstep_sound = false
+		player:set_properties(properties)
+	else
+		local properties = player:get_properties()
+		properties.makes_footstep_sound = true
+		player:set_properties(properties)
+	end
+	
+	if bs_match.match_is_started then
+		local wield_item = player:get_wielded_item()
+		local item_name = wield_item:get_name()
+		local properties = player:get_properties()
+		properties.pointable = true
+		player:set_properties(properties)
+		if is_speed_reset[Name(player)] then
+			player:set_physics_override({
+				speed = 1,
+				jump = 1
+			})
+			is_speed_reset[Name(player)] = false
+		end
+		if item_name == ":" or item_name == " " or item_name == "" or item_name == nil then
+			if speed_players[Name(player)] ~= true then
+				local ph = player:get_physics_override()
+				player:set_physics_override({
+					speed = ph.speed + 0.5,
+					jump = ph.jump + 0.4
+				})
+				speed_players[Name(player)] = true
+			end
+		else
+			if speed_players[Name(player)] == true then
+				local ph = player:get_physics_override()
+				player:set_physics_override({
+					speed = ph.speed - 0.5,
+					jump = ph.jump - 0.4
+				})
+				speed_players[Name(player)] = false
+			end
+		end
+	else
+		if not is_speed_reset[Name(player)] then
+			player:set_physics_override({
+				speed = 0,
+				jump = 0
+			})
+			is_speed_reset[Name(player)] = true
+		end
+		local properties = player:get_properties()
+		properties.pointable = false
+		player:set_properties(properties)
+	end
+	
 	if IsPointing(player) then -- Pointing
 		rotate_bone(player, "Head", {x = ldeg, y = 6, z = 6.5})
 	else
@@ -142,7 +203,9 @@ function DO_ANIMATION(player, animation, dtime)
 			rotate_bone(player, "Arm_Right", {x = 10 * rarm_sin + pitch, y = 1, z = 0})
 		else
 			if is_advancing(control) then
-				rotate_bone(player, "Arm_Right", {x = 55 * sin,       y = 0, z = 0})
+				if bs_match.match_is_started then
+					rotate_bone(player, "Arm_Right", {x = 55 * sin,       y = 0, z = 0})
+				end
 			else
 				rotate_bone(player, "Arm_Right", {x = 0, y = 0, z = 0})
 			end
@@ -159,7 +222,9 @@ function DO_ANIMATION(player, animation, dtime)
 			rotate_bone(player, "Arm_Left", {x = (65), y = 35, z = -8})
 		else
 			if is_advancing(control) then
-				rotate_bone(player, "Arm_Left", {x = -55 * sin,       y = 0, z = 0})
+				if bs_match.match_is_started then
+					rotate_bone(player, "Arm_Left", {x = -55 * sin,       y = 0, z = 0})
+				end
 			else
 				rotate_bone(player, "Arm_Left", {x = 0, y = 0, z = 0})
 			end
