@@ -45,11 +45,19 @@ local function update_frames()
 	for team, value in pairs(bs_tsh) do
 		if bs.team[team].state == "alive" then
 			for player_name, id in pairs(value) do
-				Player(player_name):hud_change(id, "text", TransformTextReadable(team)..": "..bs.get_team_players_index(team))
+				if Player(player_name) then
+					Player(player_name):hud_change(id, "text", TransformTextReadable(team)..": "..bs.get_team_players_index(team))
+				else
+					bs_thh[team][player_name] = nil
+				end
 			end
 		else
 			for player_name, id in pairs(value) do
-				Player(player_name):hud_change(id, "text", "")
+				if Player(player_name) then
+					Player(player_name):hud_change(id, "text", "")
+				else
+					bs_thh[team][player_name] = nil
+				end
 			end
 		end
 	end
