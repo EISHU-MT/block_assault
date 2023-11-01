@@ -165,6 +165,13 @@ function bs.allocate_to_team(to_allocate, teamm, force, use_dead_table) -- Apply
 			player:set_hp(20)
 			bs.died[name] = nil
 			ResetSkin(player)
+			player:hud_set_flags({
+				wielditem = true,
+				crosshair = true,
+				--healthbar = true,
+				--breathbar = true,
+				hotbar = true,
+			})
 			return true
 		else
 			if bs.team[team] then
@@ -180,6 +187,13 @@ function bs.allocate_to_team(to_allocate, teamm, force, use_dead_table) -- Apply
 				player:set_hp(20)
 				bs.died[name] = nil
 				ResetSkin(player)
+				player:hud_set_flags({
+					wielditem = true,
+					crosshair = true,
+					--healthbar = true,
+					--breathbar = true,
+					hotbar = true,
+				})
 				return true
 			end
 		end
@@ -254,6 +268,15 @@ function bs.allocate_to_spectator(to_allocate, died)
 		AddPrivs(player, {fly=true, fast=true, noclip=true, teleport=true})
 		bs.is_playing[name] = false
 		bs.spectator[name] = true
+		player:hud_set_flags({
+			wielditem = false,
+			crosshair = false,
+			healthbar = false,
+			breathbar = false,
+			hotbar = false,
+		})
+		hb.hide_hudbar(player, "breath")
+		hb.hide_hudbar(player, "health")
 		if died then
 			bs.died[name] = bs.player_team[name]
 		end
