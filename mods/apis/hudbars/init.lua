@@ -574,6 +574,8 @@ minetest.register_globalstep(function(dtime)
 				update_hud(player)
 				if bs.spectator[Name(player)] then
 					hb.hide_hudbar(player, "ammo")
+				else
+					hb.unhide_hudbar(player, "ammo")
 				end
 			end
 		end
