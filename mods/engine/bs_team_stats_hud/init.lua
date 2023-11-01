@@ -48,7 +48,7 @@ local function update_frames()
 				if Player(player_name) then
 					Player(player_name):hud_change(id, "text", TransformTextReadable(team)..": "..bs.get_team_players_index(team))
 				else
-					bs_thh[team][player_name] = nil
+					bs_tsh[team][player_name] = nil
 				end
 			end
 		else
@@ -56,7 +56,7 @@ local function update_frames()
 				if Player(player_name) then
 					Player(player_name):hud_change(id, "text", "")
 				else
-					bs_thh[team][player_name] = nil
+					bs_tsh[team][player_name] = nil
 				end
 			end
 		end
