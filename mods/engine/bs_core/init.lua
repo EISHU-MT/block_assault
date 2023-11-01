@@ -133,29 +133,39 @@ function bs.get_team(to_index)
 	return ""
 end
 
-function bs.allocate_to_team(to_allocate, team, force, use_dead_table) -- Applying this function again to a applied player dont crash
+function bs.allocate_to_team(to_allocate, teamm, force, use_dead_table) -- Applying this function again to a applied player dont crash
 	if maps.theres_loaded_map or force then
+		
+		local team = ""
 		local player = Player(to_allocate)
 		local name = Name(to_allocate)
+		
 		if use_dead_table then
 			if bs.died[name] then
 				team = bs.died[name]
+			else
+				return false
 			end
-			if bs.team[team] then
-				bs.team[team].players[name] = true
-				bs.team[team].count = C(bs.team[team].players)
-				bs.player_team[name] = team
-				bs.is_playing[name] = true
-				bs.spectator[name] = nil
-				RunCallbacks(bs.cbs.OnAssignTeam, player, team)
-				player:set_armor_groups({immortal=0,fleshy=100})
-				AddPrivs(player, {fly=nil, fast=nil, noclip=nil, teleport=nil})
-				SpawnPlayerAtRandomPosition(player, team)
-				player:set_hp(20)
-				bs.died[name] = nil
-				ResetSkin(player)
-				return true
-			end
+		else
+			team = teamm
+		end
+		
+		if not bs.team[team] then return false end
+		
+		if use_dead_table then
+			bs.team[team].players[name] = true
+			bs.team[team].count = C(bs.team[team].players)
+			bs.player_team[name] = team
+			bs.is_playing[name] = true
+			bs.spectator[name] = nil
+			RunCallbacks(bs.cbs.OnAssignTeam, player, team)
+			player:set_armor_groups({immortal=0,fleshy=100})
+			AddPrivs(player, {fly=nil, fast=nil, noclip=nil, teleport=nil})
+			SpawnPlayerAtRandomPosition(player, team)
+			player:set_hp(20)
+			bs.died[name] = nil
+			ResetSkin(player)
+			return true
 		else
 			if bs.team[team] then
 				bs.team[team].players[name] = true
