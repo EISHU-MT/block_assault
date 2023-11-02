@@ -253,6 +253,8 @@ function bs.unallocate_team(to_allocate)
 		bs.player_team[name] = nil
 		bs.is_playing[name] = nil
 		bs.died[name] = nil
+		bs.spectator[name] = nil
+		AddPrivs(player, {fly=nil, fast=nil, noclip=nil, teleport=nil})
 		RunCallbacks(bs.cbs.OnAssignTeam, player, "")
 	end
 end
@@ -291,6 +293,7 @@ config = {
 	LoadOnLeaveScript = true,
 	RegisterInitialFunctions = {
 		join = true,
+		leave = true
 	},
 	DisableTimer = false,
 	ShowMenuToPlayerWhenEndedRounds = {bool = true, func = function() end},
