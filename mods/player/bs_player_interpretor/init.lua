@@ -142,48 +142,62 @@ function DO_ANIMATION(player, animation, dtime)
 	end
 	
 	if bs_match.match_is_started then
-		local wield_item = player:get_wielded_item()
-		local item_name = wield_item:get_name()
-		local properties = player:get_properties()
-		properties.pointable = true
-		player:set_properties(properties)
-		if is_speed_reset[Name(player)] then
+		if not bs.spectator[Name(player)] then
+			local wield_item = player:get_wielded_item()
+			local item_name = wield_item:get_name()
+			local properties = player:get_properties()
+			properties.pointable = true
+			player:set_properties(properties)
+			if is_speed_reset[Name(player)] then
+				player:set_physics_override({
+					speed = 1,
+					jump = 1
+				})
+				is_speed_reset[Name(player)] = false
+			end
+			if item_name == ":" or item_name == " " or item_name == "" or item_name == nil then
+				if speed_players[Name(player)] ~= true then
+					local ph = player:get_physics_override()
+					player:set_physics_override({
+						speed = ph.speed + 0.5,
+						jump = ph.jump + 0.4
+					})
+					speed_players[Name(player)] = true
+				end
+			else
+				if speed_players[Name(player)] == true then
+					local ph = player:get_physics_override()
+					player:set_physics_override({
+						speed = ph.speed - 0.5,
+						jump = ph.jump - 0.4
+					})
+					speed_players[Name(player)] = false
+				end
+			end
+		else
 			player:set_physics_override({
 				speed = 1,
 				jump = 1
 			})
-			is_speed_reset[Name(player)] = false
-		end
-		if item_name == ":" or item_name == " " or item_name == "" or item_name == nil then
-			if speed_players[Name(player)] ~= true then
-				local ph = player:get_physics_override()
-				player:set_physics_override({
-					speed = ph.speed + 0.5,
-					jump = ph.jump + 0.4
-				})
-				speed_players[Name(player)] = true
-			end
-		else
-			if speed_players[Name(player)] == true then
-				local ph = player:get_physics_override()
-				player:set_physics_override({
-					speed = ph.speed - 0.5,
-					jump = ph.jump - 0.4
-				})
-				speed_players[Name(player)] = false
-			end
 		end
 	else
-		if not is_speed_reset[Name(player)] then
+		if not bs.spectator[Name(player)] then
+			if not is_speed_reset[Name(player)] then
+				player:set_physics_override({
+					speed = 0,
+					jump = 0
+				})
+				is_speed_reset[Name(player)] = true
+			end
+			local properties = player:get_properties()
+			properties.pointable = false
+			player:set_properties(properties)
+		else
 			player:set_physics_override({
-				speed = 0,
-				jump = 0
+				speed = 1,
+				jump = 1
 			})
-			is_speed_reset[Name(player)] = true
 		end
-		local properties = player:get_properties()
-		properties.pointable = false
-		player:set_properties(properties)
 	end
 	
 	if IsPointing(player) then -- Pointing
