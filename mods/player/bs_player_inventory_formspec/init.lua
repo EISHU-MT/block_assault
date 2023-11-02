@@ -53,8 +53,8 @@ function bs_pif.ReturnFormspec(alive, dead, players, string_color)
 		"list[current_player;main;0.4,2.9;8,4;0]" ..
 		"box[0,0;10.1,0.6;#00FF00]" ..
 		"label[0.1,0.3;Your Team Stats]" ..
-		"label[0.6,1.3;Dead:"..dead.."]" ..
-		"label[0.6,2;Alive:"..alive.."]" ..
+		"label[0.6,1.3;Dead: "..dead.."]" ..
+		"label[0.6,2;Alive: "..alive.."]" ..
 		"box[10.1,0;5,0.6;#00A8E2]" ..
 		"label[10.2,0.3;Players:]" ..
 		"textlist[10.3,0.9;4.5,6.7;;"..table.concat(players, ",")..";1;false]"
