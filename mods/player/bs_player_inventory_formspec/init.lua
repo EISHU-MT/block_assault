@@ -15,7 +15,7 @@ local function get_all_players_in_game()
 	for team, data in pairs(bs.team) do
 		for pname in pairs(data.players) do
 			if bs.spectator[pname] then
-				table.insert(names, bs.get_team_color(team, "string").."["..pname.."]")
+				table.insert(names, bs.get_team_color(team, "string").."\["..pname.."\]")
 			else
 				table.insert(names, bs.get_team_color(team, "string")..pname)
 			end
@@ -27,7 +27,7 @@ local function get_all_players_in_game()
 					if data.state == "alive" then
 						table.insert(names, bs.get_team_color(team, "string")..name)
 					else
-						table.insert(names, bs.get_team_color(team, "string").."["..name.."]")
+						table.insert(names, bs.get_team_color(team, "string").."\["..name.."\]")
 					end
 				end
 			end
