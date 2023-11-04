@@ -4,8 +4,10 @@
 
 local function get_player_names_on_table(players)
 	local names = {}
-	for _, obj in pairs(players) do
-		table.insert(names, Name(obj))
+	if players then
+		for _, obj in pairs(players) do
+			table.insert(names, Name(obj))
+		end
 	end
 	return names
 end
