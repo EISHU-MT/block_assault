@@ -43,16 +43,16 @@ local function add2(p, v)
 	if score.enable_current_status == false then
 		return
 	end
-	if kills[p] and kills[p].score then
-		kills[p].score = kills[p].score + v
+	if PlayerKills[p] and PlayerKills[p].score then
+		PlayerKills[p].score = PlayerKills[p].score + v
 	end
 end
 local function rmv2(p, v)
 	if score.enable_current_status == false then
 		return
 	end
-	if kills[p] and kills[p].score then
-		kills[p].score = kills[p].score + v
+	if PlayerKills[p] and PlayerKills[p].score then
+		PlayerKills[p].score = PlayerKills[p].score + v
 	end
 end
 
@@ -102,6 +102,16 @@ end
 
 PvpCallbacks.RegisterFunction(function(data)
 	if type(data.killer) ~= "string" then
-		score.add_score_to(data.killer, 20)
+		score.add_score_to(data.killer, 10)
 	end
 end, "Score System")
+
+core.register_on_joinplayer(function(player)
+	if not score.get_storedDA()[Name(player)] then
+		save_dataTO(Name(player), 0)
+	end
+end)
+
+
+
+

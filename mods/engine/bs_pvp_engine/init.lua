@@ -33,7 +33,7 @@ PlayerKills = {}
 bs.cbs.OnAssignTeam[1 + CountTable(bs.cbs.OnAssignTeam)] = function(thing, team)
 	if team ~= "" then
 		local player = Player(thing)
-		PlayerKills[Name(player)] = {kills = 0, deaths = 0}
+		PlayerKills[Name(player)] = {kills = 0, deaths = 0, score}
 	end
 end
 
