@@ -79,14 +79,14 @@ function bs_pif.ReturnSpectatorFormspec()
 	"label[7.2,0.8;Blue]" ..
 	"label[2,4.4;Yellow]" ..
 	"label[7.1,4.4;Green]" ..
-	"label[0.4,1.5;R. Dead: "..get_dead_players_index("red").."]" ..
-	"label[0.4,2.9;R. Alive: "..bs.get_team_players_index("red").."]" ..
-	"label[0.5,5.3;Y. Dead: "..get_dead_players_index("red").."]" ..
-	"label[0.5,6.9;Y. Alive: "..bs.get_team_players_index("yellow").."]" ..
-	"label[5.4,3;B. Alive: "..bs.get_team_players_index("blue").."]" ..
-	"label[5.4,1.5;B. Dead: "..get_dead_players_index("red").."]" ..
-	"label[5.6,5.3;Gr. Dead: "..get_dead_players_index("red").."]" ..
-	"label[5.6,6.9;Gr. Alive: "..bs.get_team_players_index("green").."]"
+	"label[0.4,1.5;R. Dead: "..(get_dead_players_index("red") or "0").."]" ..
+	"label[0.4,2.9;R. Alive: "..(bs.get_team_players_index("red") or "0").."]" ..
+	"label[0.5,5.3;Y. Dead: "..(get_dead_players_index("red") or "0").."]" ..
+	"label[0.5,6.9;Y. Alive: "..(bs.get_team_players_index("yellow") or "0").."]" ..
+	"label[5.4,3;B. Alive: "..(bs.get_team_players_index("blue") or "0").."]" ..
+	"label[5.4,1.5;B. Dead: "..(get_dead_players_index("red") or "0").."]" ..
+	"label[5.6,5.3;Gr. Dead: "..(get_dead_players_index("red") or "0").."]" ..
+	"label[5.6,6.9;Gr. Alive: "..(bs.get_team_players_index("green") or "0").."]"
 end
 
 
@@ -107,7 +107,7 @@ local function on_step(dtime)
 					end
 				end
 				local c_alive_players = bs.get_team_players_index(bs.get_player_team_css(player))
-				player:set_inventory_formspec(bs_pif.ReturnFormspec(c_alive_players, c_dead_players, get_player_names_on_table(bs.get_team_players(bs.get_player_team_css(player)))))
+				player:set_inventory_formspec(bs_pif.ReturnFormspec(c_alive_players or "0", c_dead_players or "0", get_player_names_on_table(bs.get_team_players(bs.get_player_team_css(player))) or {}))
 			end
 		end
 		ticks = 0
