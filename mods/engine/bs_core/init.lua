@@ -172,6 +172,7 @@ function bs.allocate_to_team(to_allocate, teamm, force, use_dead_table) -- Apply
 				--breathbar = true,
 				hotbar = true,
 			})
+			player:set_properties({pointable = true, collide_with_objects = true, physical = true})
 			return true
 		else
 			if bs.team[team] then
@@ -194,6 +195,7 @@ function bs.allocate_to_team(to_allocate, teamm, force, use_dead_table) -- Apply
 					--breathbar = true,
 					hotbar = true,
 				})
+				player:set_properties({pointable = true, collide_with_objects = true, physical = true})
 				return true
 			end
 		end
@@ -263,7 +265,7 @@ function bs.allocate_to_spectator(to_allocate, died)
 	if maps.theres_loaded_map then
 		local player = Player(to_allocate)
 		local name = Name(to_allocate)
-		player:set_properties({textures = {"blank.png"}, pointable = false})
+		player:set_properties({textures = {"blank.png"}, pointable = false, collide_with_objects = false, physical = false})
 		player:set_hp(20)
 		player:set_armor_groups({immortal=1})
 		Inv(player):set_list("main", {})
