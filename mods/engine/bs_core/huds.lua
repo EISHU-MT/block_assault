@@ -3,7 +3,7 @@ minetest.register_on_joinplayer(function(ObjectRef, last_login)
 	ObjectRef:hud_add({
 		hud_elem_type = "image",
 		name = "defuser_timer",
-		scale = {x = 4.2, y = 4.2},
+		scale = {x = 3.5, y = 3.5},
 		position = {x = 0.5, y = 0},
 		offset = {x = 0, y = 30},
 		--size = {x = 2},
