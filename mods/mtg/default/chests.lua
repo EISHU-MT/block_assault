@@ -127,29 +127,7 @@ function default.chest.register_chest(prefixed_name, d)
 			end
 			return stack:get_count()
 		end
-		def.on_rightclick = function(pos, node, clicker, itemstack, pointed_thing)
-			if not default.can_interact_with_node(clicker, pos) then
-				return itemstack
-			end
-
-			local cn = clicker:get_player_name()
-
-			if default.chest.open_chests[cn] then
-				default.chest.chest_lid_close(cn)
-			end
-
-			minetest.sound_play(def.sound_open, {gain = 0.3,
-					pos = pos, max_hear_distance = 10}, true)
-			if not default.chest.chest_lid_obstructed(pos) then
-				minetest.swap_node(pos,
-						{ name = name .. "_open",
-						param2 = node.param2 })
-			end
-			minetest.after(0.2, minetest.show_formspec, cn,
-					"default:chest", default.chest.get_chest_formspec(pos))
-			default.chest.open_chests[cn] = { pos = pos,
-					sound = def.sound_close, swap = name }
-		end
+		def.on_rightclick = function(pos, node, clicker) end
 		def.on_blast = function() end
 		def.on_key_use = function(pos, player)
 			local secret = minetest.get_meta(pos):get_string("key_lock_secret")
@@ -207,26 +185,7 @@ function default.chest.register_chest(prefixed_name, d)
 			local inv = meta:get_inventory()
 			return inv:is_empty("main")
 		end
-		def.on_rightclick = function(pos, node, clicker)
-			local cn = clicker:get_player_name()
-
-			if default.chest.open_chests[cn] then
-				default.chest.chest_lid_close(cn)
-			end
-
-			minetest.sound_play(def.sound_open, {gain = 0.3, pos = pos,
-					max_hear_distance = 10}, true)
-			if not default.chest.chest_lid_obstructed(pos) then
-				minetest.swap_node(pos, {
-						name = name .. "_open",
-						param2 = node.param2 })
-			end
-			minetest.after(0.2, minetest.show_formspec,
-					cn,
-					"default:chest", default.chest.get_chest_formspec(pos))
-			default.chest.open_chests[cn] = { pos = pos,
-					sound = def.sound_close, swap = name }
-		end
+		def.on_rightclick = function(pos, node, clicker) end
 		def.on_blast = function(pos)
 			local drops = {}
 			default.get_inventory_drops(pos, "main", drops)
