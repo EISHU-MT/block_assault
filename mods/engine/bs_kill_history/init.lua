@@ -143,6 +143,10 @@ PvpCallbacks.RegisterFunction(function(data)
 			image = "bubble.png"
 			killer_name = "(drowned)"
 			color = 0x00FFFF
+		elseif data.killer == "set_hp" then
+			image = "killed_by_system.png"
+			killer_name = "(suicide ~ system)"
+			color = 0x00FFFF
 		end
 	elseif type(data.killer) == "userdata" then
 		-- Extreme code beggining
