@@ -160,7 +160,7 @@ function bs.allocate_to_team(to_allocate, teamm, force, use_dead_table) -- Apply
 			bs.spectator[name] = nil
 			RunCallbacks(bs.cbs.OnAssignTeam, player, team)
 			player:set_armor_groups({immortal=0,fleshy=100})
-			AddPrivs(player, {fly=nil, fast=nil, noclip=nil, teleport=nil})
+			RemovePrivs(player, {"fly", "fast", "noclip", "teleport"})
 			SpawnPlayerAtRandomPosition(player, team)
 			player:set_hp(20)
 			bs.died[name] = nil
@@ -183,7 +183,7 @@ function bs.allocate_to_team(to_allocate, teamm, force, use_dead_table) -- Apply
 				bs.spectator[name] = nil
 				RunCallbacks(bs.cbs.OnAssignTeam, player, team)
 				player:set_armor_groups({immortal=0,fleshy=100})
-				AddPrivs(player, {fly=nil, fast=nil, noclip=nil, teleport=nil})
+				RemovePrivs(player, {"fly", "fast", "noclip", "teleport"})
 				SpawnPlayerAtRandomPosition(player, team)
 				player:set_hp(20)
 				bs.died[name] = nil
@@ -256,7 +256,7 @@ function bs.unallocate_team(to_allocate)
 		bs.is_playing[name] = nil
 		bs.died[name] = nil
 		bs.spectator[name] = nil
-		AddPrivs(player, {fly=nil, fast=nil, noclip=nil, teleport=nil})
+		AddPrivs(player, {fly=false, fast=false, noclip=false, teleport=false})
 		RunCallbacks(bs.cbs.OnAssignTeam, player, "")
 	end
 end
