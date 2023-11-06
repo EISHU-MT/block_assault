@@ -265,6 +265,7 @@ function bs.allocate_to_spectator(to_allocate, died)
 	if maps.theres_loaded_map then
 		local player = Player(to_allocate)
 		local name = Name(to_allocate)
+		core.chat_send_player(name, core.colorize("cian", "Be sure to had noclip on!"))
 		player:set_properties({textures = {"blank.png"}, pointable = false, collide_with_objects = false, physical = false})
 		player:set_hp(20)
 		player:set_armor_groups({immortal=1})
@@ -281,8 +282,12 @@ function bs.allocate_to_spectator(to_allocate, died)
 		})
 		hb.hide_hudbar(player, "breath")
 		hb.hide_hudbar(player, "health")
+		
 		if died then
 			bs.died[name] = bs.player_team[name]
+			player:set_pos(maps.current_map.teams[bs.player_team[name]])
+		else
+			player:set_pos(maps.current_map.teams.blue)
 		end
 	else
 		SendError(to_allocate, "Unable to allocate you in spectators, map system not started.")
