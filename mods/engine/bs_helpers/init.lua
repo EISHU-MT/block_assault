@@ -64,6 +64,16 @@ function AddPrivs(p, privs) -- name=string, privs=table
 	minetest.set_player_privs(name, player_privs)
 end
 
+function RemovePrivs(p, privs) -- name=string, privs=table
+	local name = Name(p)
+	
+	local player_privs = minetest.get_player_privs(name)
+	for _, i in pairs(privs) do
+		player_privs[i] = nil
+	end
+	minetest.set_player_privs(name, player_privs)
+end
+
 function core.get_connected_names()
 	local names = {}
 	for _, player in pairs(core.get_connected_players()) do
