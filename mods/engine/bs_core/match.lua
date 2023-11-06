@@ -51,6 +51,11 @@ function bs_match.finish_match(winner)
 		bs_match.reset_rounds()
 		RunCallbacks(bs_match.cbs.SecondOnEndMatch)
 	end
+	if config.RestorePlayerHPOnEndRounds then
+		for _, p in pairs(core.get_connected_players()) do
+			p:set_hp(20)
+		end
+	end
 end
 
 --
