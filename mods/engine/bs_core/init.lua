@@ -140,6 +140,8 @@ function bs.allocate_to_team(to_allocate, teamm, force, use_dead_table) -- Apply
 		local player = Player(to_allocate)
 		local name = Name(to_allocate)
 		
+		player:set_hp(20)
+		
 		if use_dead_table then
 			if bs.died[name] then
 				team = bs.died[name]
@@ -319,6 +321,7 @@ config = {
 	GiveMoneyToKillerPlayer = {bool = true, amount = 10},
 	DontPunchPlayerWhileMatchNotStarted = true,
 	GameClass = "BA Hunt & Kill", -- Classic game of BA.S (Builtin)
+	RestorePlayerHPOnEndRounds = true
 }
 
 bs.login_menu = "formspec_version[6]" ..
