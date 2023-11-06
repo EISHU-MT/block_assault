@@ -33,7 +33,7 @@ function Shop.ShowFormspec(money)
 		"button[0.2,0.8;12,0.8;rifle;Rifles & Snipers]" ..
 		"button[0.2,1.7;12,0.8;shotgun;Shotguns]" ..
 		"button[0.2,2.6;12,0.8;pistol;Pistols]" ..
-		"button[0.2,3.5;12,0.8;armor;Armor]" ..
+		"button[0.2,3.5;12,0.8;armor;Misc & Armor]" ..
 		"button[0.2,4.4;12,0.8;smg;Smg]" ..
 		"button[0.2,5.3;12,0.8;sword;Swords]" ..
 		"button_exit[12.3,0.8;1.6,5.3;quit;Exit]"
