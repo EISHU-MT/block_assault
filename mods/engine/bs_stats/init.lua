@@ -111,33 +111,26 @@ local rank_definition = {
 		description = "Get rank of a player or yourself",
 		func = function(name, param)
 			if param and param ~= "" then
-				local players = csgo.uncompress_players() -- May take a while if our server is overused!
-				if players[param] then
-					local kn = stats.player.get_kills(param)
-					local dn = stats.player.get_deaths(param)
-					local kd = stats.player.calculate_kd(param)
-					local ss = score.get_score_of(param) or "-!-"
-					local n = tostring
-					
-					if kn and dn and kd and ss then
-						-- correct
-					else
-						--core.chat_send_player(name, "Something Failed for that request :/ !")
-						SendError(name, "Something Failed for that request :/ !\nMaybe you arent in the BA database.")
-						return
-					end
-					
-					s(name, c("#42BE00", "=====Player  Stats====="))
-					s(name, c("#42BE00", "Kills: ")..c("#FF3A3A", n(kn)))
-					s(name, c("#42BE00", "Deaths: ")..c("#FF3A3A", n(dn)))
-					s(name, c("#42BE00", "K/D: ")..c("#FF3A3A", n(kd)))
-					s(name, c("#42BE00", "Score: ")..c("#FF3A3A", n(ss)))
-					s(name, c("#42BE00", "==End of Player Stats=="))
-					return
+				local kn = stats.player.get_kills(name)
+				local dn = stats.player.get_deaths(name)
+				local kd = stats.player.calculate_kd(name)
+				local ss = score.get_score_of(name) or "-!-"
+				local n = tostring
+				
+				if kn and dn and kd and ss then
+					-- correct
 				else
-					core.chat_send_player(name, "The player "..param.." dont exists")
+					--core.chat_send_player(name, "Something Failed for that request :/ !")
+					SendError(name, "Something Failed for that request :/ !\nMaybe you arent in the BA database.")
 					return
 				end
+				
+				s(name, c("#42BE00", "=====Player  Stats====="))
+				s(name, c("#42BE00", "Kills: ")..c("#FF3A3A", n(kn)))
+				s(name, c("#42BE00", "Deaths: ")..c("#FF3A3A", n(dn)))
+				s(name, c("#42BE00", "K/D: ")..c("#FF3A3A", n(kd)))
+				s(name, c("#42BE00", "Score: ")..c("#FF3A3A", n(ss)))
+				s(name, c("#42BE00", "==End of Player Stats=="))
 			else
 				local kn = stats.player.get_kills(name)
 				local dn = stats.player.get_deaths(name)
