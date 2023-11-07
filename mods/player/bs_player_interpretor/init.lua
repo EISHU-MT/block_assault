@@ -149,7 +149,7 @@ function DO_ANIMATION(player, animation, dtime)
 			local properties = player:get_properties()
 			properties.pointable = true
 			player:set_properties(properties)
-			if is_speed_reset[Name(player)] or ph.speed <= 0.6 then
+			if is_speed_reset[Name(player)] or (ph.speed <= 0.6 and not Armor.QueuedToFullHP[Name(player)]) then
 				player:set_physics_override({
 					speed = 1,
 					jump = 1
