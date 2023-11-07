@@ -183,13 +183,11 @@ function DO_ANIMATION(player, animation, dtime)
 		end
 	else
 		if not bs.spectator[Name(player)] then
-			if not is_speed_reset[Name(player)] then
-				player:set_physics_override({
-					speed = 0,
-					jump = 0
-				})
-				is_speed_reset[Name(player)] = true
-			end
+			player:set_physics_override({
+				speed = 0,
+				jump = 0
+			})
+			is_speed_reset[Name(player)] = true
 			local properties = player:get_properties()
 			properties.pointable = false
 			player:set_properties(properties)
