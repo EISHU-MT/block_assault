@@ -321,7 +321,8 @@ config = {
 	GiveMoneyToKillerPlayer = {bool = true, amount = 10},
 	DontPunchPlayerWhileMatchNotStarted = true,
 	GameClass = "BA Hunt & Kill", -- Classic game of BA.S (Builtin)
-	RestorePlayerHPOnEndRounds = true
+	RestorePlayerHPOnEndRounds = true,
+	SecondsToWaitToEndMolotovFire = 10,
 }
 
 bs.login_menu = "formspec_version[6]" ..
