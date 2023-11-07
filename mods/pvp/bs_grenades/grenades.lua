@@ -192,6 +192,7 @@ grenades.register_grenade("grenades:smoke", {
 -- Flashbang Grenade
 
 local flash_huds = {}
+flash_node_pos = {}
 
 grenades.register_grenade("grenades:flashbang", {
 	description = "Flashbang grenade (Blinds all who look at blast)",
@@ -208,6 +209,11 @@ grenades.register_grenade("grenades:flashbang", {
 					gain = 1.0,
 					max_hear_distance = 32,
 				})
+				local cpos = CheckPos(pos)
+				core.set_node(cpos, {name="bs_molotov:node"})
+				local cache = FormRandomString(4)
+				flash_node_pos[cache] = cpos
+				core.after(0.2, function(id) core.set_node(flash_node_pos[id], {name="air"}) end, cache)
 				if math.acos(playerdir.x*grenadedir.x + playerdir.y*grenadedir.y + playerdir.z*grenadedir.z) <= math.pi/4 then
 					if v:is_player() then
 						local playerdir = vector.round(v:get_look_dir())
@@ -243,6 +249,8 @@ grenades.register_grenade("grenades:flashbang", {
 		end
 	end,
 })
+
+
 
 minetest.register_on_dieplayer(function(player)
 	local name = player:get_player_name()
