@@ -323,6 +323,7 @@ config = {
 	GameClass = "BA Hunt & Kill", -- Classic game of BA.S (Builtin)
 	RestorePlayerHPOnEndRounds = true,
 	SecondsToWaitToEndMolotovFire = 10,
+	LimitForBombsCount = 5,
 }
 
 bs.login_menu = "formspec_version[6]" ..
