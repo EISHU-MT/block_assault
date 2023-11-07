@@ -9,7 +9,11 @@ function Name(p)
 	if type(p) == "string" then
 		return p
 	elseif type(p) == "userdata" then
-		return p:get_player_name()
+		if p:is_player() then
+			return p:get_player_name()
+		else
+			return nil
+		end
 	end
 end
 function Inv(p)
