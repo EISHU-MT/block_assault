@@ -144,11 +144,12 @@ function DO_ANIMATION(player, animation, dtime)
 	if bs_match.match_is_started then
 		if not bs.spectator[Name(player)] then
 			local wield_item = player:get_wielded_item()
+			local ph = player:get_physics_override()
 			local item_name = wield_item:get_name()
 			local properties = player:get_properties()
 			properties.pointable = true
 			player:set_properties(properties)
-			if is_speed_reset[Name(player)] then
+			if is_speed_reset[Name(player)] or ph.speed <= 0.6 then
 				player:set_physics_override({
 					speed = 1,
 					jump = 1
