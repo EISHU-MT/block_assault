@@ -111,10 +111,10 @@ local rank_definition = {
 		description = "Get rank of a player or yourself",
 		func = function(name, param)
 			if param and param ~= "" then
-				local kn = stats.player.get_kills(name)
-				local dn = stats.player.get_deaths(name)
-				local kd = stats.player.calculate_kd(name)
-				local ss = score.get_score_of(name) or "-!-"
+				local kn = stats.player.get_kills(param)
+				local dn = stats.player.get_deaths(param)
+				local kd = stats.player.calculate_kd(param)
+				local ss = score.get_score_of(param) or "-!-"
 				local n = tostring
 				
 				if kn and dn and kd and ss then
