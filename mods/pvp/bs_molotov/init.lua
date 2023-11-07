@@ -69,6 +69,7 @@ local molotov_entity = {
 minetest.register_entity("bs_molotov:entity", molotov_entity)
 minetest.register_node("bs_molotov:node", {
 	description = "Invisible Molotov Node\nUsed to do light in a area for molotov",
+	drawtype = "glasslike_framed_optional",
 	tiles = {"blank.png"},
 	pointable = false,
 	light_source = 10,
