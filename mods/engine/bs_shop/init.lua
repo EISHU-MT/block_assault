@@ -88,6 +88,8 @@ function Shop.RegisterWeapon(name, specs)
 			table.insert(Shop.RegisteredWeapons[specs.type], {
 				item_name = specs.item or specs.item_name,
 				name = name,
+				stype = specs.stype or "",
+				count_limit = specs.limit or 1,
 				price = specs.price or specs.cost,
 				icon = specs.icon or specs.texture or ItemStack(specs.item or specs.item_name):get_description().inventory_image,  -- Useful for kill history
 				type = specs.type, -- Maybe its smg, shotgun, sword, etc
@@ -125,6 +127,18 @@ function Shop.GetWeaponsByType(type_to_scan)
 	return to_return
 end
 
+local function get_bombs_count_from_inventory(player)
+	local count = 0
+	for i, itemstack in pairs(Inv(player):get_list("main")) do
+		local item_name = itemstack:get_name()
+		if item_name == "grenades:frag" or item_name == "grenades:frag_sticky" or item_name == "grenades:flashbang" or item_name == "bs_molotov:molotov" then
+			count = count + itemstack:get_count()
+		end
+	end
+	print(count)
+	return count
+end
+
 function Shop.BuyWeaponFor(player, weapon_data)
 	-- Do check to dont crash game...
 	if not player then
@@ -138,17 +152,24 @@ function Shop.BuyWeaponFor(player, weapon_data)
 	local name = Name(player)
 	-- Proceed to check if theres other weapon with the same class
 	local detected_conflict_weapon
+	local decline_buy_act
 	for i, itemstack in pairs(Inv(player):get_list("main")) do
 		local item_name = itemstack:get_name()
 		local detected_weapon = Shop.IdentifyWeapon(item_name)
-		if detected_weapon and detected_weapon.type == weapon_data.type then
+		if detected_weapon and detected_weapon.stype and detected_weapon.stype == "grenade" then
+			if (get_bombs_count_from_inventory(player)) >= config.LimitForBombsCount then
+				decline_buy_act = true
+				Send(player, "[Shop] You reached bombs limit.", "red")
+				break
+			end
+		elseif detected_weapon and detected_weapon.type == weapon_data.type then
 			detected_conflict_weapon = detected_weapon
 		end
 	end
 	-- Check player balance
 	local money = bank.return_val(player)
 	-- Now drop the weapon
-	if money >= weapon_data.price then
+	if decline_buy_act ~= true and money >= weapon_data.price then
 		if detected_conflict_weapon then
 			core.item_drop(ItemStack(detected_conflict_weapon.item_name), player, player:get_pos())
 			Inv(player):remove_item("main", ItemStack(detected_conflict_weapon.item_name))
@@ -170,6 +191,7 @@ function Shop.BuyWeaponFor(player, weapon_data)
 			Inv(player):add_item("main", ItemStack(weapon_data.ammo.type.." "..tostring(weapon_data.ammo.count)))
 		end
 		bank.rm_player_value(player, weapon_data.price)
+		
 		return true
 	end
 	return false
