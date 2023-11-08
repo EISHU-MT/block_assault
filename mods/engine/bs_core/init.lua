@@ -154,7 +154,7 @@ function bs.allocate_to_team(to_allocate, teamm, force, use_dead_table) -- Apply
 		
 		if not bs.team[team] then return false end
 		
-		if use_dead_table then
+		if use_dead_table and name then
 			bs.team[team].players[name] = true
 			bs.team[team].count = C(bs.team[team].players)
 			bs.player_team[name] = team
@@ -177,7 +177,7 @@ function bs.allocate_to_team(to_allocate, teamm, force, use_dead_table) -- Apply
 			player:set_properties({pointable = true, collide_with_objects = true, physical = true})
 			return true
 		else
-			if bs.team[team] then
+			if bs.team[team] and name then
 				bs.team[team].players[name] = true
 				bs.team[team].count = C(bs.team[team].players)
 				bs.player_team[name] = team
