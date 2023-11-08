@@ -325,7 +325,7 @@ config = {
 	SecondsToWaitToEndMolotovFire = 10,
 	LimitForBombsCount = 5,
 	EnableDeadBody = true,
-	MapsLoadAreaType = "emerge", -- "emerge" or "load_area"
+	MapsLoadAreaType = "emerge", -- "emerge" or "load_area"; LoadArea: For low-ram mode, Emerge: for high-ram mode.
 }
 
 bs.login_menu = "formspec_version[6]" ..
