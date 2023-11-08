@@ -6,7 +6,9 @@ local function func(dt)
 				if player:get_pos() then
 					if not area:containsp(player:get_pos()) then
 						if (not bs.spectator[Name(player)]) or (not bs.player_team[Name(player)]) then
-							player:set_hp(0)
+							if maps.current_map.teams[bs.player_team[Name(player)]] then
+								player:set_pos(maps.current_map.teams[bs.player_team[Name(player)]])
+							end
 						end
 					end
 				end
