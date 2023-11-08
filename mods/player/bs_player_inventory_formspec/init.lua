@@ -6,7 +6,9 @@ local function get_player_names_on_table(players)
 	local names = {}
 	if players then
 		for _, obj in pairs(players) do
-			table.insert(names, Name(obj))
+			if Name(obj) then
+				table.insert(names, Name(obj) or "__error")
+			end
 		end
 	end
 	return names
