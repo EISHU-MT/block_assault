@@ -19,15 +19,28 @@ function maps.select_map()
 		return map_def
 	end
 end
+
 function maps.place_map(map_def)
-	maps.emerge_with_callbacks(nil, map_def.pos1, map_def.pos2, function()
+	if config.MapsLoadAreaType == "emerge" then
+		core.log("action", "Using \"Emerge\" type.")
+		maps.emerge_with_callbacks(nil, map_def.pos1, map_def.pos2, function()
+			core.log("info", "Placing map: "..map_def.name)
+			local bool = minetest.place_schematic(map_def.pos1, map_def.mcore, map_def.rotation == "z" and "0" or "90")
+			assert(bool, "Something failed!: Map core: 'core.mts' dont exist, or may it was corrupted!")
+			core.log("info", "ON-PLACE-MAP: Map light areas fix starting")
+			local function fix_light(...) core.fix_light(...) core.log("action", "ON-PLACE-MAP: Map light areas fix complete") end
+			core.after(5, fix_light, map_def.pos1, map_def.pos2)
+		end, nil)
+	elseif config.MapsLoadAreaType == "load_area" then -- Only in singlenode mapgen
+		core.log("action", "Using \"LoadArea\" type. This might glitch map if mapgen wanst singlenode!")
+		core.load_area(map_def.pos1, map_def.pos2)
 		core.log("info", "Placing map: "..map_def.name)
 		local bool = minetest.place_schematic(map_def.pos1, map_def.mcore, map_def.rotation == "z" and "0" or "90")
 		assert(bool, "Something failed!: Map core: 'core.mts' dont exist, or may it was corrupted!")
 		core.log("info", "ON-PLACE-MAP: Map light areas fix starting")
 		local function fix_light(...) core.fix_light(...) core.log("action", "ON-PLACE-MAP: Map light areas fix complete") end
 		core.after(5, fix_light, map_def.pos1, map_def.pos2)
-	end, nil)
+	end
 end
 
 function maps.new_map()
