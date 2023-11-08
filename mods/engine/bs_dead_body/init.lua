@@ -40,15 +40,17 @@ end
 
 PvpCallbacks.RegisterFunction(function(data)
 	if config.EnableDeadBody then
-		local player_look = data.died:get_look_horizontal()
-		local obj = core.add_entity(data.died:get_pos(), "bs_dead_body:body")
-		local ent = obj:get_luaentity()
-		ent.body_owner = data.died
-		obj:set_yaw(player_look)
-		obj:set_properties({
-			textures = {"character.png^player_"..bs.player_team[Name(data.died)].."_overlay.png"}
-		})
-		obj:set_animation({x = 162, y = 166}, 15, 0)
-		obj:set_acceleration(vector.new(0,-9.81,0))
+		if PvpMode.Mode == 1 then
+			local player_look = data.died:get_look_horizontal()
+			local obj = core.add_entity(data.died:get_pos(), "bs_dead_body:body")
+			local ent = obj:get_luaentity()
+			ent.body_owner = data.died
+			obj:set_yaw(player_look)
+			obj:set_properties({
+				textures = {"character.png^player_"..bs.player_team[Name(data.died)].."_overlay.png"}
+			})
+			obj:set_animation({x = 162, y = 166}, 15, 0)
+			obj:set_acceleration(vector.new(0,-9.81,0))
+		end
 	end
 end, "BS Dead Body")
