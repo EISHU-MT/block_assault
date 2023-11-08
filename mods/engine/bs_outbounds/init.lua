@@ -5,7 +5,7 @@ local function func(dt)
 			for _, player in pairs(core.get_connected_players()) do
 				if player:get_pos() then
 					if not area:containsp(player:get_pos()) then
-						if not bs.spectator[Name(player)] then
+						if (not bs.spectator[Name(player)]) or (not bs.player_team[Name(player)]) then
 							player:set_hp(0)
 						end
 					end
