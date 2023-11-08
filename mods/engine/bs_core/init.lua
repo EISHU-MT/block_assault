@@ -1,7 +1,7 @@
 --[[
 	BulletStorm Engine
 --]]
-_OID = "BlockAssault" -- To be overriden by modes
+_OID = "BlockAssault Classic" -- To be overriden by modes
 _V  = "Beta V2.9"
 _ID = "BlockAssault" -- Real engine name
 C = CountTable
@@ -325,6 +325,7 @@ config = {
 	SecondsToWaitToEndMolotovFire = 10,
 	LimitForBombsCount = 5,
 	EnableDeadBody = true,
+	MapsLoadAreaType = "emerge", -- "emerge" or "load_area"
 }
 
 bs.login_menu = "formspec_version[6]" ..
