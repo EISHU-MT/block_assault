@@ -2,7 +2,7 @@
 	BulletStorm Engine
 --]]
 _OID = "BlockAssault" -- To be overriden by modes
-_V  = "Beta V2.5"
+_V  = "Beta V2.9"
 _ID = "BlockAssault" -- Real engine name
 C = CountTable
 bs = {
@@ -324,6 +324,7 @@ config = {
 	RestorePlayerHPOnEndRounds = true,
 	SecondsToWaitToEndMolotovFire = 10,
 	LimitForBombsCount = 5,
+	EnableDeadBody = true,
 }
 
 bs.login_menu = "formspec_version[6]" ..
