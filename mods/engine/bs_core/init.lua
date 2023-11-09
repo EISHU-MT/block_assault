@@ -326,6 +326,8 @@ config = {
 	LimitForBombsCount = 5,
 	EnableDeadBody = true,
 	MapsLoadAreaType = "emerge", -- "emerge" or "load_area"; LoadArea: For low-ram mode, Emerge: for high-ram mode.
+	PlayerLigthingIntensity = 0.38,
+	PlayerLightingSaturation = 10,
 }
 
 bs.login_menu = "formspec_version[6]" ..
