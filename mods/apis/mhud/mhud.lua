@@ -116,7 +116,7 @@ end
 
 function hud.add(self, player, name, def)
 	local pobj = get_playerobj(player)
-	assert(pobj, "Attempt to add hud to offline player!")
+	if not pobj then return end
 
 	local pname = get_playername(player)
 
