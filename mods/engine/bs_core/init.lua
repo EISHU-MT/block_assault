@@ -328,6 +328,7 @@ config = {
 	MapsLoadAreaType = "emerge", -- "emerge" or "load_area"; LoadArea: For low-ram mode, Emerge: for high-ram mode.
 	PlayerLigthingIntensity = 0.38,
 	PlayerLightingSaturation = 10,
+	DefaultStartWeapon = {weapon = "rangedweapons:glock17", ammo = "rangedweapons:9mm 200", sword = "default:sword_steel"}
 }
 
 bs.login_menu = "formspec_version[6]" ..
