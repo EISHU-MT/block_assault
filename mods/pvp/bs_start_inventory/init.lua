@@ -1,8 +1,3 @@
-GiveToolsItems = {
-	sword = "default:sword_steel",
-	pistol = {weapon = "rangedweapons:glock17", ammo = "rangedweapons:9mm 90"}
-}
-
 bs.cbs.register_OnAssignTeam(function(player, team)
 	if team ~= "" then
 		if Player(player) and Inv(player) then
@@ -16,11 +11,11 @@ bs.cbs.register_OnAssignTeam(function(player, team)
 			if config.ClearPlayerInv.set_new_inventory_after_inventory_reset then
 				if config.GiveDefaultTools.bool then
 					if config.GiveDefaultTools.pistol then
-						Inv(player):add_item("main", ItemStack(GiveToolsItems.pistol.weapon))
-						Inv(player):add_item("main", ItemStack(GiveToolsItems.pistol.ammo))
+						Inv(player):add_item("main", ItemStack(config.DefaultStartWeapon.weapon))
+						Inv(player):add_item("main", ItemStack(config.DefaultStartWeapon.ammo))
 					end
 					if config.GiveDefaultTools.sword then
-						Inv(player):add_item("main", ItemStack(GiveToolsItems.sword))
+						Inv(player):add_item("main", ItemStack(config.DefaultStartWeapon.sword))
 					end
 				end
 			end
@@ -28,11 +23,11 @@ bs.cbs.register_OnAssignTeam(function(player, team)
 			if not config.ClearPlayerInv.maintain_last_inventory then
 				if config.GiveDefaultTools.bool then
 					if config.GiveDefaultTools.pistol then
-						Inv(player):add_item("main", ItemStack(GiveToolsItems.pistol.weapon))
-						Inv(player):add_item("main", ItemStack(GiveToolsItems.pistol.ammo))
+						Inv(player):add_item("main", ItemStack(config.DefaultStartWeapon.weapon))
+						Inv(player):add_item("main", ItemStack(config.DefaultStartWeapon.ammo))
 					end
 					if config.GiveDefaultTools.sword then
-						Inv(player):add_item("main", ItemStack(GiveToolsItems.sword))
+						Inv(player):add_item("main", ItemStack(config.DefaultStartWeapon.sword))
 					end
 				end
 			end
