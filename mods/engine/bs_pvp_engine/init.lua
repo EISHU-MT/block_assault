@@ -245,7 +245,10 @@ PvpCallbacks.RegisterFunction(function(data)
 				core.after(0.3, function(data)
 					local players_index = bs.get_team_players_index(data.teams.died)
 					if players_index <= 0 then
-						bs_match.finish_match(GetFirstIndex(bs.enemy_team(data.teams.died)))
+						bs_match.finish_match(GetFirstIndex(bs.enemy_team(data.teams.died)), PlayerKills)
+						for _, p in pairs(core.get_connected_players()) do
+							PlayerKills[Name(p)] = {kills = 0, deaths = 0, score = 0}
+						end
 					end
 				end, data)
 			else
