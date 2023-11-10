@@ -18,11 +18,11 @@ function bs_match.reset_rounds()
 	bs_match.current_rounds = bs_match.rounds
 end
 
-function bs_match.finish_match(winner)
+function bs_match.finish_match(winner, pk) -- PlayerKills, it resets every round.
 	if config.AnnouceWinner then
 		annouce.winner(winner)
 	end
-	RunCallbacks(bs_match.cbs.OnEndMatch, winner)
+	RunCallbacks(bs_match.cbs.OnEndMatch, winner, pk)
 	if bs_match.current_rounds - 1 >= 1 then
 		bs_match.current_rounds = bs_match.current_rounds - 1
 		bs_match.match_is_started = false
