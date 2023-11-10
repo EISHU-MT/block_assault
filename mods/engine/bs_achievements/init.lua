@@ -121,9 +121,43 @@ bs_match.register_OnEndMatch(function(winner, pk)
 	end
 end)
 
+PvpCallbacks.RegisterFunction(function(data)
+	local victim = Name(data.died)
+	local killer = Name(data.killer)
+	if data.killer:is_player() then
+		for name, achievement in pairs(Achievements) do
+			if achievement.type == "kills" then
+				local kills = stats.player.get_kills(killer)
+				if kills >= achievement.amount then
+					local player_data = AchievementsDatabase.get(data.killer)
+					if not player_data[name] then
+						AchievementsDatabase.add(killer, name)
+						core.chat_send_player(killer, core.colorize("#009200", "[Achievements] You got: ")..core.colorize("#00FFFF", achievement.name))
+					end
+				end
+			end
+		end
+	end
+end, "BA.S Achievements")
 
-
-
+if bots then
+	BotsCallbacks.RegisterOnKillBot(function(self, killer)
+		if killer:is_player() then
+			for name, achievement in pairs(Achievements) do
+				if achievement.type == "kills" then
+					local kills = stats.player.get_kills(Name(killer))
+					if kills >= achievement.amount then
+						local player_data = AchievementsDatabase.get(killer)
+						if not player_data[name] then
+							AchievementsDatabase.add(killer, name)
+							core.chat_send_player(Name(killer), core.colorize("#009200", "[Achievements] You got: ")..core.colorize("#00FFFF", achievement.name))
+						end
+					end
+				end
+			end
+		end
+	end, "BA.S Achievements")
+end
 
 
 
