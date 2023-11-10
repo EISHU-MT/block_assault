@@ -13,12 +13,16 @@ Shop = {
 	},
 	PlayersFormspecActions = {},
 	PlayersSelectedWeapon = {},
+	Callbacks = {
+		OnBuyWeapon = {}
+	}
 }
 
 ------------------
 --      API     --
 ------------------
 
+function Shop.RegisterOnBuyWeapon(func) table.insert(Shop.Callbacks.OnBuyWeapon, func) end
 
 ----
 --  Formspecs
@@ -135,7 +139,6 @@ local function get_bombs_count_from_inventory(player)
 			count = count + itemstack:get_count()
 		end
 	end
-	print(count)
 	return count
 end
 
@@ -191,7 +194,7 @@ function Shop.BuyWeaponFor(player, weapon_data)
 			Inv(player):add_item("main", ItemStack(weapon_data.ammo.type.." "..tostring(weapon_data.ammo.count)))
 		end
 		bank.rm_player_value(player, weapon_data.price)
-		
+		RunCallbacks(Shop.Callbacks.OnBuyWeapon, player, weapon_data)
 		return true
 	end
 	return false
