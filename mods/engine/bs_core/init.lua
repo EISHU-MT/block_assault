@@ -328,7 +328,8 @@ config = {
 	MapsLoadAreaType = "emerge", -- "emerge" or "load_area"; LoadArea: For low-ram mode, Emerge: for high-ram mode.
 	PlayerLigthingIntensity = 0.38,
 	PlayerLightingSaturation = 10,
-	DefaultStartWeapon = {weapon = "rangedweapons:glock17", ammo = "rangedweapons:9mm 200", sword = "default:sword_steel"}
+	DefaultStartWeapon = {weapon = "rangedweapons:glock17", ammo = "rangedweapons:9mm 200", sword = "default:sword_steel"},
+	TypeOfStorage = "json", -- Json or Lua
 }
 
 bs.login_menu = "formspec_version[6]" ..
@@ -363,20 +364,24 @@ end
 function bs.auto_allocate_team(player)
 	if not bs.is_playing[Name(player)] and bs.spectator[Name(player)] ~= true then
 		if C(maps.current_map.teams) == 2 then
-			if bs.team.red.count > bs.team.blue.count then
-				bs.allocate_to_team(player, "red")
-			elseif bs.team.blue.count > bs.team.red.count then
-				bs.allocate_to_team(player, "blue")
-			elseif bs.team.blue.count == bs.team.red.count then
-				local team = Randomise("", {"red", "blue"})
-				bs.allocate_to_team(player, team)
+			if Name(player) then
+				if bs.team.red.count > bs.team.blue.count then
+					bs.allocate_to_team(player, "red")
+				elseif bs.team.blue.count > bs.team.red.count then
+					bs.allocate_to_team(player, "blue")
+				elseif bs.team.blue.count == bs.team.red.count then
+					local team = Randomise("", {"red", "blue"})
+					bs.allocate_to_team(player, team)
+				end
 			end
 		else
-			local teams = {"red", "blue", "yellow", "green"}
-			table.sort(teams, function(n1,n2) return bs.team[n1].count > bs.team[n2].count end)
-			bs.allocate_to_team(player, teams[4]) -- The 4th index is the team with less players
+			if Name(player) then
+				local teams = {"red", "blue", "yellow", "green"}
+				table.sort(teams, function(n1,n2) return bs.team[n1].count > bs.team[n2].count end)
+				bs.allocate_to_team(player, teams[4]) -- The 4th index is the team with less players
+			end
 		end
-		core.close_formspec(Name(player), "core:menu")
+		core.close_formspec(Name(player) or "", "core:menu")
 	end
 end
 
