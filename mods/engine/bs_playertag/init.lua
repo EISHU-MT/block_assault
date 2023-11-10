@@ -42,24 +42,43 @@ minetest.register_entity("bs_playertag:name", {
 		makes_footstep_sound = false,
 		static_save = false,
 	},
-	on_step = function(self)
-		local attached = self.object:get_attach()
-		if not attached then
-			self.object:remove()
-		else
-			if bs.is_playing[Name(attached)] then
-				if bs.spectator[Name(attached)] then
-					self.object:remove()
-				else
-					--correct
-				end
+	timer = 0,
+	on_step = function(self, dt)
+		self.timer = self.timer + dt
+		if self.timer >= 1 then
+			local attached = self.object:get_attach()
+			if not attached then
+				self.object:remove()
 			else
-				if bs.spectator[Name(attached)] then
-					self.object:remove()
+				if bs.is_playing[Name(attached)] then
+					if bs.spectator[Name(attached)] then
+						self.object:remove()
+					else
+						local texture = "tag_bg.png"
+						local x = math.floor(134 - ((attached:get_player_name():len() * 11) / 2))
+						local i = 0
+						attached:get_player_name():gsub(".", function(char)
+							local n = "_"
+							if char:byte() > 96 and char:byte() < 123 or char:byte() > 47 and char:byte() < 58 or char == "-" then
+								n = char
+							elseif char:byte() > 64 and char:byte() < 91 then
+								n = "U" .. char
+							end
+							texture = texture.."^[combine:84x14:"..(x+i)..",0=W_".. n ..".png"
+							i = i + 11
+						end)
+						texture = texture.."^[colorize:"..bs.get_team_color(bs.get_player_team_css(attached), "string")..":255"
+						self.object:set_properties({ textures={texture} })
+					end
 				else
-					self.object:remove()
+					if bs.spectator[Name(attached)] then
+						self.object:remove()
+					else
+						self.object:remove()
+					end
 				end
 			end
+			self.timer = 0
 		end
 	end,
 	is_nametag = true
