@@ -18,11 +18,11 @@ function bs_match.reset_rounds()
 	bs_match.current_rounds = bs_match.rounds
 end
 
-function bs_match.finish_match(winner, pk) -- PlayerKills, it resets every round.
+function bs_match.finish_match(winner) -- PlayerKills, it resets every round.
 	if config.AnnouceWinner then
 		annouce.winner(winner)
 	end
-	RunCallbacks(bs_match.cbs.OnEndMatch, winner, pk)
+	RunCallbacks(bs_match.cbs.OnEndMatch, winner, table.copy(PlayerKills))
 	if bs_match.current_rounds - 1 >= 1 then
 		bs_match.current_rounds = bs_match.current_rounds - 1
 		bs_match.match_is_started = false
@@ -55,6 +55,9 @@ function bs_match.finish_match(winner, pk) -- PlayerKills, it resets every round
 		for _, p in pairs(core.get_connected_players()) do
 			p:set_hp(20)
 		end
+	end
+	for _, p in pairs(core.get_connected_players()) do
+		PlayerKills[Name(p)] = {kills = 0, deaths = 0, score = 0}
 	end
 end
 
