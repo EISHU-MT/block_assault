@@ -154,6 +154,14 @@ function bs.allocate_to_team(to_allocate, teamm, force, use_dead_table) -- Apply
 		
 		if not bs.team[team] then return false end
 		
+		-- We should check if player is on other team.
+		for teamm, data in pairs(bs.team) do
+			bs.team[teamm].players[name] = nil
+			bs.team[teamm].count = C(bs.team[teamm].players)
+			bs.player_team[name] = nil
+			bs.spectator[name] = nil
+		end
+		
 		if use_dead_table and name then
 			bs.team[team].players[name] = true
 			bs.team[team].count = C(bs.team[team].players)
@@ -325,7 +333,7 @@ config = {
 	SecondsToWaitToEndMolotovFire = 10,
 	LimitForBombsCount = 5,
 	EnableDeadBody = true,
-	MapsLoadAreaType = "emerge", -- "emerge" or "load_area"; LoadArea: For low-ram mode, Emerge: for high-ram mode.
+	MapsLoadAreaType = "load_area", -- "emerge" or "load_area"; LoadArea: For low-ram mode, Emerge: for high-ram mode.
 	PlayerLigthingIntensity = 0.38,
 	PlayerLightingSaturation = 10,
 	DefaultStartWeapon = {weapon = "rangedweapons:glock17", ammo = "rangedweapons:9mm 200", sword = "default:sword_steel"},
