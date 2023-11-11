@@ -281,16 +281,22 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 	if formname == "shop:main" then
 		if fields.rifle then
 			Shop.ShowBuyFormspec(player, nil, "Rifles", "rifle", true)
+			Shop.PlayersSelectedWeapon[Name(player)] = Shop.RegisteredWeapons.rifle[1]
 		elseif fields.shotgun then
 			Shop.ShowBuyFormspec(player, nil, "Shotguns", "shotgun", true)
+			Shop.PlayersSelectedWeapon[Name(player)] = Shop.RegisteredWeapons.shotgun[1]
 		elseif fields.sword then
 			Shop.ShowBuyFormspec(player, nil, "Swords", "sword", true)
+			Shop.PlayersSelectedWeapon[Name(player)] = Shop.RegisteredWeapons.sword[1]
 		elseif fields.smg then
 			Shop.ShowBuyFormspec(player, nil, "Smg", "smg", true)
+			Shop.PlayersSelectedWeapon[Name(player)] = Shop.RegisteredWeapons.smg[1]
 		elseif fields.armor then
 			Shop.ShowBuyFormspec(player, nil, "Armors", "armor", true)
+			Shop.PlayersSelectedWeapon[Name(player)] = Shop.RegisteredWeapons.armor[1]
 		elseif fields.pistol then
 			Shop.ShowBuyFormspec(player, nil, "Pistols", "pistol", true)
+			Shop.PlayersSelectedWeapon[Name(player)] = Shop.RegisteredWeapons.pistol[1]
 		end
 	elseif formname == "shop:shop_menu" then
 		if fields.back then
