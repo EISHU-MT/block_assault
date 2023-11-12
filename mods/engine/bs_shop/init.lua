@@ -379,15 +379,14 @@ end
 
 local function on_prepare_all_map()
 	for _, data in pairs(maps.current_map.teams) do
-		local pos = CheckPos(data)
-		core.set_node(pos, {name="bs_shop:trading_table"})
+		core.set_node(data, {name="bs_shop:trading_table"})
 	end
 end
 
 maps.register_on_load(on_prepare_all_map)
 core.register_on_mods_loaded(on_load)
 
-
+bs_match.register_OnEndMatch(on_prepare_all_map)
 
 
 
