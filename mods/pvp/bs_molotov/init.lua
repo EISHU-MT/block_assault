@@ -34,28 +34,30 @@ local molotov_entity = {
 						end
 					end
 					if has_no_error then
-						local ray_view = minetest.raycast(self.object:get_pos(), obj:get_pos(), true, true)
-						if ray_view then
-							local view = ray_view:next()
-							local did_has_errors = false
-							while view do
-								if view.type == "node" then
-									local node_data = core.get_node(view.under)
-									if not (core.registered_nodes[node_data.name] and core.registered_nodes[node_data.name].walkable) then
-										did_has_errors = true
-										break
+						if obj:get_pos() and self.object:get_pos() then
+							local ray_view = minetest.raycast(self.object:get_pos(), obj:get_pos(), true, true)
+							if ray_view then
+								local view = ray_view:next()
+								local did_has_errors = false
+								while view do
+									if view.type == "node" then
+										local node_data = core.get_node(view.under)
+										if not (core.registered_nodes[node_data.name] and core.registered_nodes[node_data.name].walkable) then
+											did_has_errors = true
+											break
+										end
+									elseif view.type == "object" then
+										if view.ref:get_properties() and not view.ref:get_properties().pointable then
+											did_has_errors = true
+											break
+										end
 									end
-								elseif view.type == "object" then
-									if view.ref:get_properties() and not view.ref:get_properties().pointable then
-										did_has_errors = true
-										break
-									end
+									view = ray_view:next()
 								end
-								view = ray_view:next()
-							end
-							if Name(obj) then
-								if self.dropper then
-									obj:punch(self.dropper, nil, {damage_groups = {fleshy=4}}, nil)
+								if Name(obj) then
+									if self.dropper then
+										obj:punch(self.dropper, nil, {damage_groups = {fleshy=4}}, nil)
+									end
 								end
 							end
 						end
