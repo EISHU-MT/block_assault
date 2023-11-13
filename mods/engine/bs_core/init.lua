@@ -338,6 +338,8 @@ config = {
 	PlayerLightingSaturation = 10,
 	DefaultStartWeapon = {weapon = "rangedweapons:glock17", ammo = "rangedweapons:9mm 200", sword = "default:sword_steel"},
 	TypeOfStorage = "json", -- Json or Lua
+	AllowPlayersModifyMaps = false,
+	StrictMapgenCheck = true, -- Avoid big lag
 }
 
 bs.login_menu = "formspec_version[6]" ..
