@@ -294,6 +294,18 @@ for _, critDmg in pairs(damage) do
 damage[_] = damage[_] * critEffc
 end
 
+local enemy_pos = moveresult.collisions[1].object:get_pos()
+local bullet_pos = self.object:get_pos()
+if enemy_pos and bullet_pos then
+	print(dump(enemy_pos), dump(bullet_pos))
+	local upper_enemy_pos = vector.add(enemy_pos, vector.new(0,1.05,0))
+	if bullet_pos.y >= upper_enemy_pos.y then
+		for name, dmg in pairs(damage) do
+			damage[name] = dmg + 20 -- Insta kill
+		end
+	end
+end
+
 
 entpos = self.object:get_pos()
 minetest.add_particle	({
