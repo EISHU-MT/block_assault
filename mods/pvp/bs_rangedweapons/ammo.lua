@@ -317,7 +317,7 @@ end
 
 moveresult.collisions[1].object:punch(owner, nil, {damage_groups = damage}, nil)
 if owner:is_player() then
-	owner:hud_change(hits[Name(owner)], "text", hit_texture)
+	--owner:hud_change(hits[Name(owner)], "text", hit_texture)
 end
 	for i=1,math.random(math.ceil(rweapons_bloodyness*0.66),math.ceil(rweapons_bloodyness*1.5)) do
 	minetest.add_particle({
