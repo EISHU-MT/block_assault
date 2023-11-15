@@ -87,27 +87,33 @@ minetest.register_tool("bs_wielded_rifle:invisible", {
 })
 core.register_entity(":bs_shop:animated_rifle", def)
 
-local function on_join(id, team)
-	if team ~= "" then
-		-- Check if the player dont had the same entity
-		local player = Player(id)
-		if player then
-			for i, obj in pairs(player:get_children() or {}) do
-				if obj:get_luaentity() then
-					local ent = obj:get_luaentity()
-					if ent.animated_rifle then
-						obj:remove() -- May it is useless
+local function on_step(id, team)
+	for _, id in pairs(core.get_connected_players()) do
+		local team = bs.get_player_team_css(id)
+		if team ~= "" then
+			-- Check if the player dont had the same entity
+			local player = Player(id)
+			if player then
+				local is_obj_detected = false
+				for i, obj in pairs(player:get_children() or {}) do
+					if obj:get_luaentity() then
+						local ent = obj:get_luaentity()
+						if ent.animated_rifle then
+							--obj:remove() -- May it is useless
+							is_obj_detected = true
+						end
 					end
 				end
+				if is_obj_detected ~= true then
+					core.add_entity(player:get_pos(), "bs_shop:animated_rifle"):set_attach(player, "", vector.new(-0.9, 9, -1.6), vector.new(0,0,-45))
+				end
 			end
-			
-			core.add_entity(player:get_pos(), "bs_shop:animated_rifle"):set_attach(player, "", vector.new(-0.9, 9, -1.6), vector.new(0,0,-45))
 		end
 	end
 end
 
-bs.cbs.register_OnAssignTeam(on_join)
-
+--bs.cbs.register_OnAssignTeam(on_join)
+core.register_globalstep(on_step)
 
 
 
