@@ -87,18 +87,22 @@ function CheckPlayer(name)
 end
 
 
-function bank.player_add_value(player, amount)
+function bank.player_add_value(player, amount, dont_annouce)
 	if CheckPlayer(player) and bank.player[Name(player)] then
-		core.chat_send_player(Name(player), core.colorize("#14FF14","You received $"..tostring(amount).."+"))
+		if not dont_annouce then
+			core.chat_send_player(Name(player), core.colorize("#14FF14","You received $"..tostring(amount).."+"))
+		end
 		if bank.player[Name(player)].money then
 			bank.player[Name(player)].money = bank.player[Name(player)].money + amount
 		end
 	end
 end
 --Remove some values of a player, can be by buying some arms
-function bank.rm_player_value(player, amount)
+function bank.rm_player_value(player, amount, dont_annouce)
 	if CheckPlayer(player) and bank.player[Name(player)] then
-		core.chat_send_player(Name(player), "$" .. core.colorize("#FFB500", tostring(amount.."-")))
+		if not dont_annouce then
+			core.chat_send_player(Name(player), "$" .. core.colorize("#FFB500", tostring(amount.."-")))
+		end
 		if bank.player[Name(player)].money then
 			bank.player[Name(player)].money = bank.player[Name(player)].money - amount
 		end
