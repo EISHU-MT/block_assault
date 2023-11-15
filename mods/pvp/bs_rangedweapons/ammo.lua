@@ -296,11 +296,15 @@ end
 
 local enemy_pos = moveresult.collisions[1].object:get_pos()
 local bullet_pos = self.object:get_pos()
+local difference = 0
+if Name(moveresult.collisions[1].object) and PlayerArmor.HeadHPDifference[Name(moveresult.collisions[1].object)] then
+	difference = PlayerArmor.HeadHPDifference[Name(moveresult.collisions[1].object)]
+end
 if enemy_pos and bullet_pos then
 	local upper_enemy_pos = vector.add(enemy_pos, vector.new(0,1.05,0))
 	if bullet_pos.y >= upper_enemy_pos.y then
 		for name, dmg in pairs(damage) do
-			damage[name] = dmg + 20 -- Insta kill
+			damage[name] = dmg + 20 - difference -- Insta kill
 		end
 	end
 end
