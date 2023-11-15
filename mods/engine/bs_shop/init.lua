@@ -94,6 +94,7 @@ function Shop.RegisterWeapon(name, specs)
 				name = name,
 				stype = specs.stype or "",
 				count_limit = specs.limit or 1,
+				exec_on_buy = specs.exec_on_buy or nil,
 				price = specs.price or specs.cost,
 				icon = specs.icon or specs.texture or ItemStack(specs.item or specs.item_name):get_description().inventory_image,  -- Useful for kill history
 				type = specs.type, -- Maybe its smg, shotgun, sword, etc
@@ -153,6 +154,16 @@ function Shop.BuyWeaponFor(player, weapon_data)
 	-- First of all, resolve the player info
 	player = Player(player)
 	local name = Name(player)
+	-- Get player balance
+	local money = bank.return_val(player)
+	-- Check if theres any script on the weapon (It might is armor or misc item)
+	if weapon_data.exec_on_buy then
+		if money >= weapon_data.price then
+			weapon_data.exec_on_buy(player)
+			bank.rm_player_value(player, weapon_data.price)
+			return true
+		end
+	end
 	-- Proceed to check if theres other weapon with the same class
 	local detected_conflict_weapon
 	local decline_buy_act
@@ -169,8 +180,6 @@ function Shop.BuyWeaponFor(player, weapon_data)
 			detected_conflict_weapon = detected_weapon
 		end
 	end
-	-- Check player balance
-	local money = bank.return_val(player)
 	-- Now drop the weapon
 	if decline_buy_act ~= true and money >= weapon_data.price then
 		if detected_conflict_weapon then
@@ -193,7 +202,8 @@ function Shop.BuyWeaponFor(player, weapon_data)
 		if weapon_data.ammo.uses_ammo then
 			Inv(player):add_item("main", ItemStack(weapon_data.ammo.type.." "..tostring(weapon_data.ammo.count)))
 		end
-		bank.rm_player_value(player, weapon_data.price)
+		Send(player, "-"..tostring(weapon_data.price).."$, From buying "..weapon_data.name, "#00FF00")
+		bank.rm_player_value(player, weapon_data.price, true)
 		RunCallbacks(Shop.Callbacks.OnBuyWeapon, player, weapon_data)
 		return true
 	end
@@ -376,17 +386,30 @@ local function on_load()
 	end
 end
 
+local ticks = 0
 
 local function on_prepare_all_map()
-	for _, data in pairs(maps.current_map.teams) do
-		core.set_node(data, {name="bs_shop:trading_table"})
+	if maps.current_map and maps.current_map.teams then
+		for _, data in pairs(maps.current_map.teams) do
+			core.set_node(data, {name="bs_shop:trading_table"})
+		end
 	end
 end
 
-maps.register_on_load(on_prepare_all_map)
-core.register_on_mods_loaded(on_load)
+local function on_step(dt)
+	ticks = ticks + dt
+	if ticks >= 0.4 then
+		on_prepare_all_map()
+		ticks = 0
+	end
+end
 
-bs_match.register_OnEndMatch(on_prepare_all_map)
+core.register_globalstep(on_step)
+
+--maps.register_on_load(on_prepare_all_map)
+--core.register_on_mods_loaded(on_load)
+
+--bs_match.register_OnEndMatch(on_prepare_all_map)
 
 
 
