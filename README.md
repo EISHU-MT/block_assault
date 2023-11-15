@@ -1,6 +1,9 @@
-# BlockAssault [BA.S]
-Is a game that gives better PVP for players, with teams.
+![BlockAssaultLogo](menu/header.png)
+BlockAssault is a subgame of Minetest, made for playing PvP or PvE. For training PvP, Aim. Made from scratch
 
+This game has [bots](https://github.com/EISHU-MT/bs_bots) feature!
+
+If you find a bug, glitch or crash. Please send to us! You would help us too much **:)**
 # Features
 
 - Weapons for battle **(Almost all)**
@@ -22,6 +25,12 @@ Is a game that gives better PVP for players, with teams.
 - Uses MTG
 
 - Various animations for players
+
+- Shaders support
+
+- Maps support
+
+- Achievements
 
 ## Starting the game
 
@@ -46,9 +55,4 @@ All mods stands in [⇒ mods](mods/)
 
  On **Discord**: [Link Is Here!](https://discord.gg/EWRYqfKXP8)
  
- On **MineTest**: Address: ei1.minetest.land:54700 (Powered again in 25/09/23 19:00)
-
-# System Specifications for use
-Depends of the game overrider **"bs_tweaks"**.
-
-This game uses the same as other games.
+ On **MineTest**: Address: **ehs.minetest.land:54700**
