@@ -1,0 +1,142 @@
+[BAS Advanced Configuration]
+
+#    PopUp the Team Selector when the player joins in the game
+LoadOnLoginMenu (TeamSelectorMenu) bool true
+
+#    Load the OnLeave script when a player leaves the game, you should make sure before changing this
+#    this might break the game is disabled. Depends on RegisterInitialFunctions
+LoadOnLeaveScript (TeamSelectorMenu On leave) bool true
+
+#    Run all needed scripts for players when they join
+RegisterInitialFunctions.join (PlayerInitialFunction Join) bool true
+
+#    Run all needed scripts for players when they leave
+RegisterInitialFunctions.leave (PlayerInitialFunction Leave) bool true
+
+#    The default timer 00:00 of the game
+DisableTimer (Disable timer) bool false
+
+#    Game class name
+GameClass (Game Class name) string "BA Hunt & Kill"
+
+#    Show again the TeamSelector for players when the rounds count reachs the limit
+ShowMenuToPlayerWhenEndedRounds (Show TeamSelector on EndRounds) bool true
+
+#    Set the player max hp as the HP of the player when the round ends
+RestorePlayerHPOnEndRounds (Player HP Restoration) bool true
+
+#    Use PvP Match engine, for match control over kills
+UsePvpMatchEngine (PvP Match Engine) bool true
+
+[Basic]
+
+#    Use the BAS Builtin currency
+UseEngineCurrency (Currency) bool true
+
+#    Use the BAS Builtin Score engine
+UseScoreSystem (Score) bool true
+
+[PvP]
+
+#    Use PvP Engine (From BAS Builtin)
+PvpEngine (PvP Engine) bool true
+
+#    Allow/Disable FriendShoot
+PvpEngine.FriendShoot (FriendShoot) bool true
+
+#    Count Players kills, to cache
+PvpEngine.CountPlayersKills (CPK) bool true
+
+[Match]
+
+#    Reset player balance when the rounds count reachs the limit
+ResetPlayerMoneyOnEndRounds (Reset Player Balance) bool true
+
+#    Annouce the winner team when a match ends
+AnnouceWinner (Annouce team) bool true
+
+[Player]
+
+#    Give default tools to a player from (respawning, joining team or other case)
+GiveDefaultTools (Default tools) bool true
+
+#    Give pistol to player, depends from GiveDefaultTools
+GiveDefaultTools.pistol (Default pistol bool) bool true
+
+#    Give sword to player, depends from GiveDefaultTools
+GiveDefaultTools.sword (Default sword bool) bool true
+
+#    Clear player inventory when they join a team
+ClearPlayerInv (Clear player inventory) bool true
+
+#    Keep the items and dont delete items of the player inventory, depends on ClearPlayerInv
+ClearPlayerInv.maintain_last_inventory (Keep Items) bool true
+
+#    Default Start Weapon, Pistol item string
+DefaultStartWeapon.weapon (Default Pistol item string) string "rangedweapons:glock17"
+
+#    Default Start Weapon, Pistol Ammo item string
+DefaultStartWeapon.ammo (Default Pistol Ammo item string) string "rangedweapons:9mm 200"
+
+#    Default Start Weapon, Sword item string
+DefaultStartWeapon.sword (Default Sword item string) string "default:sword_steel"
+
+#    Player lighting intensity, for shaders only
+PlayerLigthingIntensity (Lighting Intensity) float 0.38 0.0 1.0
+
+#    Player lighting saturation, for shaders only
+PlayerLigthingSaturation (Lighting Saturation) float 10.0 0.0 20.0
+
+#    Dont hurt player while they are in prepare time
+DontPunchPlayerWhileMatchNotStarted (Prepare time on_punch) bool true
+
+#    Enable dead body, dead body is the laying object that appears when a player dies
+EnableDeadBody (Dead body) bool true
+
+#    Player can place/remove nodes of a map
+AllowPlayersModifyMaps (Players Map Interact) bool false
+
+#    Give money to the killer of a player/bot
+GiveMoneyToKillerPlayer (Give to killer money) bool true
+
+#    The amount of money that we need to give to the killer, depends on GiveMoneyToKillerPlayer
+GiveMoneyToKillerPlayer.amount (Give to killer money amount) int 10 10 65535
+
+[Grenades]
+
+#    Limit for grenades count in a inventory
+LimitForBombsCount (Grenades limit) int 5 1 50
+
+#    Alive time of the fire that drops the molotov
+SecondsToWaitToEndMolotovFire (Molotov fire alive seconds limit) int 10 1 60
+
+[Maps]
+
+#    Maps load type, Emerge or LoadArea
+MapsLoadAreaType (Maps load type) enum emerge,load_area
+
+#    Strict Mapgen Check, if mg_name wanst singlenode then crash
+StrictMapgenCheck (Strict mapgen Check) bool true
+
+[Storage]
+
+#    Type of storage, LuaSerialization or Json
+TypeOfStorage (Storage Type) enum lua,json
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
