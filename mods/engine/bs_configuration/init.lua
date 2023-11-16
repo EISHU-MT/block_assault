@@ -38,7 +38,7 @@ local LoadOnLeaveScript = GetBoolean("LoadOnLeaveScript", true)
 local UsePvpMatchEngine = GetBoolean("UsePvpMatchEngine", true)
 local UseEngineCurrency = GetBoolean("UseEngineCurrency", true)
 local StrictMapgenCheck = GetBoolean("StrictMapgenCheck", true)
-local PvpEngineFriendShoot = GetBoolean("PvpEngine.FriendShoot", true)
+local PvpEngineFriendShoot = GetBoolean("PvpEngine.FriendShoot", false)
 local GiveDefaultToolsSword = GetBoolean("GiveDefaultTools.sword", true)
 local AllowPlayersModifyMaps = GetBoolean("AllowPlayersModifyMaps", false)
 local GiveDefaultToolsPistol = GetBoolean("GiveDefaultTools.pistol", true)
@@ -75,7 +75,7 @@ local MapsLoadAreaType = Get("MapsLoadAreaType", "emerge")
 
 -- Proccess
 
-config.PvpEngine.bool = PvpEngine
+config.PvpEngine.enable = PvpEngine
 config.DisableTimer = DisableTimer
 config.EnableDeadBody = EnableDeadBody
 config.UseScoreSystem = UseScoreSystem
@@ -84,9 +84,9 @@ config.ClearPlayerInv.bool = ClearPlayerInv
 config.LoadOnLeaveScript = LoadOnLeaveScript
 config.UseEngineCurrency = UseEngineCurrency
 config.StrictMapgenCheck = StrictMapgenCheck
+config.GiveDefaultTools.bool = GiveDefaultTools
 config.UsePvpMatchEngine.bool = UsePvpMatchEngine
 config.PvpEngine.FriendShoot = PvpEngineFriendShoot
-config.GiveDefaultTools.bool = GiveDefaultTools
 config.GiveDefaultTools.sword = GiveDefaultToolsSword
 config.AllowPlayersModifyMaps = AllowPlayersModifyMaps
 config.GiveDefaultTools.pistol = GiveDefaultToolsPistol
