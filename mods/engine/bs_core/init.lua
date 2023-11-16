@@ -281,7 +281,7 @@ function bs.allocate_to_spectator(to_allocate, died)
 		player:set_properties({textures = {"blank.png"}, pointable = false, collide_with_objects = false, physical = false})
 		player:set_hp(20)
 		player:set_armor_groups({immortal=1})
-		Inv(player):set_list("main", {})
+		--Inv(player):set_list("main", {}) -- Now this job does bs_drops
 		AddPrivs(player, {fly=true, fast=true, noclip=true, teleport=true})
 		bs.is_playing[name] = false
 		bs.spectator[name] = true
