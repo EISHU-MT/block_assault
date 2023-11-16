@@ -140,6 +140,8 @@ function bs.allocate_to_team(to_allocate, teamm, force, use_dead_table) -- Apply
 		local player = Player(to_allocate)
 		local name = Name(to_allocate)
 		
+		if not name then return false end
+		
 		player:set_hp(20)
 		
 		if use_dead_table then
