@@ -42,7 +42,7 @@ UseScoreSystem (Score) bool true
 PvpEngine (PvP Engine) bool true
 
 #    Allow/Disable FriendShoot
-PvpEngine.FriendShoot (FriendShoot) bool true
+PvpEngine.FriendShoot (FriendShoot) bool false
 
 #    Count Players kills, to cache
 PvpEngine.CountPlayersKills (CPK) bool true
@@ -71,6 +71,9 @@ ClearPlayerInv (Clear player inventory) bool true
 
 #    Keep the items and dont delete items of the player inventory, depends on ClearPlayerInv
 ClearPlayerInv.maintain_last_inventory (Keep Items) bool true
+
+#    Set new inventory after the inventory reset
+ClearPlayerInv.set_new_inventory_after_inventory_reset (Set New Inventory) bool true
 
 #    Default Start Weapon, Pistol item string
 DefaultStartWeapon.weapon (Default Pistol item string) string "rangedweapons:glock17"
