@@ -16,5 +16,12 @@ function dropondie.drop_all(player)
 	drop_list(pos, player:get_inventory(), "main")
 end
 
-minetest.register_on_dieplayer(dropondie.drop_all)
+--minetest.register_on_dieplayer(dropondie.drop_all)
+
+core.register_on_punchplayer(function(player, hitter, time_from_last_punch, tool_capabilities, dir, damage)
+	if player:get_hp() - damage <= 0 then
+		dropondie.drop_all(player)
+	end
+end)
+
 minetest.register_on_leaveplayer(dropondie.drop_all)
