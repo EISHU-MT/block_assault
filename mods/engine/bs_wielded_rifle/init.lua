@@ -48,7 +48,9 @@ local def = {
 					if stack:get_name() == hstac:get_name() then
 						self.object:set_properties({textures = {"bs_wielded_rifle:invisible"}}) -- If the player has a rifle in his hand then hide
 						local obj = get_wieldhand_entity(attached)
-						obj:set_properties({textures = {hstac:get_name()}})
+						if obj then
+							obj:set_properties({textures = {hstac:get_name()}})
+						end
 					else
 						
 						self.object:set_properties({textures = {stack:get_name()}})
@@ -64,7 +66,9 @@ local def = {
 					if stack:get_name() == hstac:get_name() then
 						self.object:set_properties({textures = {"bs_wielded_rifle:invisible"}}) -- If the player has a rifle in his hand then hide
 						local obj = get_wieldhand_entity(attached)
-						obj:set_properties({textures = {hstac:get_name()}})
+						if obj then
+							obj:set_properties({textures = {hstac:get_name()}})
+						end
 					else
 						
 						self.object:set_properties({textures = {stack:get_name()}})
