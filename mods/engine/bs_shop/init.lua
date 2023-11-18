@@ -213,6 +213,7 @@ end
 function Shop.GetWeapon(item, player, data)
 	player = Player(player)
 	local name = Name(player)
+	local weapon_data = Shop.IdentifyWeapon(item:get_name())
 	
 	local detected_conflict_weapon
 	for i, itemstack in pairs(Inv(player):get_list("main")) do
@@ -220,6 +221,7 @@ function Shop.GetWeapon(item, player, data)
 		local detected_weapon = Shop.IdentifyWeapon(item_name)
 		if weapon_data and detected_weapon and detected_weapon.type == weapon_data.type then
 			detected_conflict_weapon = detected_weapon
+			break
 		end
 	end
 	
@@ -235,7 +237,9 @@ function Shop.GetWeapon(item, player, data)
 			Inv(player):remove_item("main", ItemStack(detected_conflict_weapon.ammo.type.." "..tostring(count)))
 		end
 	end
-	--return item
+	--return item -- 6845
+	data.ref:remove()
+	Inv(player):add_item("main", item)
 end
 
 ------------------
@@ -407,7 +411,7 @@ end
 core.register_globalstep(on_step)
 
 --maps.register_on_load(on_prepare_all_map)
---core.register_on_mods_loaded(on_load)
+core.register_on_mods_loaded(on_load)
 
 --bs_match.register_OnEndMatch(on_prepare_all_map)
 
