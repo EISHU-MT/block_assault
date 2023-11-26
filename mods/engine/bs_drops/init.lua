@@ -13,7 +13,18 @@ end
 function dropondie.drop_all(player)
 	local pos = player:get_pos()
 	pos.y = math.floor(pos.y + 0.5)
-	drop_list(pos, player:get_inventory(), "main")
+	local inv = Inv(player)
+	local list = inv:get_list("main")
+	for _, itemstack in pairs(list) do
+		if itemstack:get_name() == config.DefaultStartWeapon.weapon then
+			itemstack:clear()
+		end
+		if itemstack:get_name() == config.DefaultStartWeapon.sword then
+			itemstack:clear()
+		end
+		list[_] = itemstack
+	end
+	drop_list(pos, list, "main")
 end
 
 --minetest.register_on_dieplayer(dropondie.drop_all)
