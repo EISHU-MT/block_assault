@@ -426,7 +426,22 @@ core.register_globalstep(on_step)
 --maps.register_on_load(on_prepare_all_map)
 core.register_on_mods_loaded(on_load)
 
---bs_match.register_OnEndMatch(on_prepare_all_map)
+-- Add more ammo to players
+bs_match.register_OnEndMatch(function()
+	for _, player in pairs(core.get_connected_players()) do
+		for _, typo in pairs({"smg", "pistol", "shotgun", "rifle"}) do
+			local weapon = Shop.GetPlayerWeaponByType(player, typo)
+			if weapon and weapon.ammo then
+				if weapon.ammo.uses_ammo then
+					if Inv(player) then
+						local ammo_item = ItemStack(weapon.ammo.type.." "..weapon.ammo.count)
+						Inv(player):add_item("main", ammo_item)
+					end
+				end
+			end
+		end
+	end
+end)
 
 
 
