@@ -143,36 +143,51 @@ function DO_ANIMATION(player, animation, dtime)
 	
 	if bs_match.match_is_started then
 		if not bs.spectator[Name(player)] then
-			local wield_item = player:get_wielded_item()
-			local ph = player:get_physics_override()
-			local item_name = wield_item:get_name()
-			local properties = player:get_properties()
-			properties.pointable = true
-			player:set_properties(properties)
-			if is_speed_reset[Name(player)] or (ph.speed <= 0.6 and not Armor.QueuedToFullHP[Name(player)]) then
+			if IsPointing(player) then
+				is_speed_reset[Name(player)] = true
 				player:set_physics_override({
-					speed = 1,
-					jump = 1
+					speed = 0.5,
+					jump = 0
 				})
-				is_speed_reset[Name(player)] = false
-			end
-			if item_name == ":" or item_name == " " or item_name == "" or item_name == nil then
-				if speed_players[Name(player)] ~= true then
-					local ph = player:get_physics_override()
-					player:set_physics_override({
-						speed = ph.speed + 0.5,
-						jump = ph.jump + 0.4
-					})
-					speed_players[Name(player)] = true
-				end
 			else
-				if speed_players[Name(player)] == true then
-					local ph = player:get_physics_override()
+				local wield_item = player:get_wielded_item()
+				local ph = player:get_physics_override()
+				local item_name = wield_item:get_name()
+				local properties = player:get_properties()
+				properties.pointable = true
+				player:set_properties(properties)
+				if is_speed_reset[Name(player)] or (ph.speed <= 0.6 and not Armor.QueuedToFullHP[Name(player)]) then
 					player:set_physics_override({
-						speed = ph.speed - 0.5,
-						jump = ph.jump - 0.4
+						speed = 1,
+						jump = 1
 					})
-					speed_players[Name(player)] = false
+					is_speed_reset[Name(player)] = false
+				end
+				if item_name == ":" or item_name == " " or item_name == "" or item_name == nil then
+					if speed_players[Name(player)] ~= true then
+						local ph = player:get_physics_override()
+						local overrideable = 0
+						if ph.jump <= 0.1 then
+							overrideable = 0.6
+						end
+						player:set_physics_override({
+							speed = ph.speed + 0.5,
+							jump = ph.jump + 0.4 + overrideable
+						})
+						speed_players[Name(player)] = true
+					end
+				else
+					if speed_players[Name(player)] == true then
+						local ph = player:get_physics_override()
+						if ph.jump <= 0 then
+							ph.jump = 1
+						end
+						player:set_physics_override({
+							speed = ph.speed - 0.5,
+							jump = ph.jump - 0.4
+						})
+						speed_players[Name(player)] = false
+					end
 				end
 			end
 		else
