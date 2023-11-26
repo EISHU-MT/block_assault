@@ -132,6 +132,19 @@ function Shop.GetWeaponsByType(type_to_scan)
 	return to_return
 end
 
+function Shop.GetPlayerWeaponByType(player, type_to_scan)
+	local inv = Inv(player)
+	if inv and type_to_scan then
+		for i, itemstack in pairs(Inv(player):get_list("main")) do
+			local item_name = itemstack:get_name()
+			local detected_weapon = Shop.IdentifyWeapon(item_name)
+			if detected_weapon and detected_weapon.type == type_to_scan then
+				return detected_weapon
+			end
+		end
+	end
+end
+
 local function get_bombs_count_from_inventory(player)
 	local count = 0
 	for i, itemstack in pairs(Inv(player):get_list("main")) do
