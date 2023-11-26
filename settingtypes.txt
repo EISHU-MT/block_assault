@@ -63,6 +63,11 @@ GiveDefaultTools (Default tools) bool true
 #    Give pistol to player, depends from GiveDefaultTools
 GiveDefaultTools.pistol (Default pistol bool) bool true
 
+#    For player name tag, what type do you want:
+#    Classic: true
+#    Modern: false
+TypeOfPlayerTag (Player Tag type) bool false
+
 #    Give sword to player, depends from GiveDefaultTools
 GiveDefaultTools.sword (Default sword bool) bool true
 
