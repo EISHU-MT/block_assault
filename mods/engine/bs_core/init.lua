@@ -342,6 +342,7 @@ config = {
 	TypeOfStorage = "json", -- Json or Lua
 	AllowPlayersModifyMaps = false,
 	StrictMapgenCheck = true, -- Avoid big lag
+	TypeOfPlayerTag = false, -- Classic: true, Modern: false
 }
 
 bs.login_menu = "formspec_version[6]" ..
