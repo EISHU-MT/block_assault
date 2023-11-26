@@ -24,7 +24,8 @@ function dropondie.drop_all(player)
 		end
 		list[_] = itemstack
 	end
-	drop_list(pos, list, "main")
+	inv:set_list("main", list)
+	drop_list(pos, inv, "main")
 end
 
 --minetest.register_on_dieplayer(dropondie.drop_all)
