@@ -29,7 +29,7 @@ function Top.GetPlayers(pname)
 		table.sort(names, function (n1, n2) return data[n1] > data[n2] end)
 		for _, name in pairs(names) do
 			if name ~= "__null" then
-				local len = name:len()
+				local len = name:len() * 2
 				local to_use = Top.space_to_use - len
 				local str = name
 				for i = 1, to_use do
