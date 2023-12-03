@@ -76,12 +76,13 @@ local MapsLoadAreaType = Get("MapsLoadAreaType", "emerge")
 
 -- Proccess
 
-config.PvpEngine.enable = PvpEngine
 config.DisableTimer = DisableTimer
+config.PvpEngine.enable = PvpEngine
 config.EnableDeadBody = EnableDeadBody
 config.UseScoreSystem = UseScoreSystem
 config.LoadOnLoginMenu = LoadOnLoginMenu
 config.TypeOfPlayerTag = TypeOfPlayerTag
+config.MapsLoadAreaType = MapsLoadAreaType
 config.ClearPlayerInv.bool = ClearPlayerInv
 config.LoadOnLeaveScript = LoadOnLeaveScript
 config.UseEngineCurrency = UseEngineCurrency
