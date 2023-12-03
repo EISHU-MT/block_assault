@@ -121,7 +121,7 @@ SecondsToWaitToEndMolotovFire (Molotov fire alive seconds limit) int 10 1 60
 [Maps]
 
 #    Maps load type, Emerge or LoadArea
-MapsLoadAreaType (Maps load type) enum emerge,load_area
+MapsLoadAreaType (Maps load type) enum emerge emerge,load_area
 
 #    Strict Mapgen Check, if mg_name wanst singlenode then crash
 StrictMapgenCheck (Strict mapgen Check) bool true
@@ -129,7 +129,7 @@ StrictMapgenCheck (Strict mapgen Check) bool true
 [Storage]
 
 #    Type of storage, LuaSerialization or Json
-TypeOfStorage (Storage Type) enum lua,json
+TypeOfStorage (Storage Type) enum lua lua,json
 
 
 
