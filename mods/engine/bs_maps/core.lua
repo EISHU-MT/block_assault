@@ -23,6 +23,7 @@ end
 function maps.place_map(map_def)
 	if config.MapsLoadAreaType == "emerge" then
 		core.log("action", "Using \"Emerge\" type.")
+		steps.FreezeTicks()
 		maps.emerge_with_callbacks(nil, map_def.pos1, map_def.pos2, function()
 			core.log("info", "Placing map: "..map_def.name)
 			local bool = minetest.place_schematic(map_def.pos1, map_def.mcore, map_def.rotation == "z" and "0" or "90")
@@ -30,6 +31,7 @@ function maps.place_map(map_def)
 			core.log("info", "ON-PLACE-MAP: Map light areas fix starting")
 			local function fix_light(...) core.fix_light(...) core.log("action", "ON-PLACE-MAP: Map light areas fix complete") end
 			core.after(5, fix_light, map_def.pos1, map_def.pos2)
+			steps.UnFreezeTicks()
 		end, nil)
 	elseif config.MapsLoadAreaType == "load_area" then -- Only in singlenode mapgen
 		core.log("action", "Using \"LoadArea\" type. This might glitch map if mapgen wanst singlenode!")
