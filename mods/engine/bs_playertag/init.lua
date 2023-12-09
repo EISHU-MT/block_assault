@@ -10,16 +10,16 @@ player_tags = {
 		hide = function(user)
 			if not user then return false end
 			local player = Player(user)
-			if player and player_tags.objs[player:get_player_name()] and (player_tags.objs_status[player:get_player_name()] ~= true) then
-				player_tags.objs[player:get_player_name()]:set_properties({is_visible = false,})
+			if player and player_tags.objs_classic[player:get_player_name()] and (player_tags.objs_status[player:get_player_name()] ~= true) then
+				player_tags.objs_classic[player:get_player_name()]:set_properties({is_visible = false,})
 				return true
 			end
 		end,
 		show = function(user)
 			if not user then return false end
 			local player = Player(user)
-			if player and player_tags.objs[player:get_player_name()] and (player_tags.objs_status[player:get_player_name()] == true) then
-				player_tags.objs[player:get_player_name()]:set_properties({is_visible = true,})
+			if player and player_tags.objs_classic[player:get_player_name()] and (player_tags.objs_status[player:get_player_name()] == true) then
+				player_tags.objs_classic[player:get_player_name()]:set_properties({is_visible = true,})
 				return true
 			end
 		end,
@@ -180,9 +180,9 @@ local function add(player, team)
 end
 
 local function on_leave_player(player)
-	if player and type(player_tags.objs[player:get_player_name()]) == "userdata" then
-		player_tags.objs[player:get_player_name()]:remove()
-		player_tags.objs[player:get_player_name()] = nil
+	if player and type(player_tags.objs_classic[player:get_player_name()]) == "userdata" then
+		player_tags.objs_classic[player:get_player_name()]:remove()
+		player_tags.objs_classic[player:get_player_name()] = nil
 	end
 end
 
