@@ -115,13 +115,11 @@ minetest.register_entity("bs_playertag:name_tag", {
 					if bs.is_playing[Name(attached)] then
 						if bs.spectator[Name(attached)] then
 							self.object:remove()
+						else
+							
 						end
 					else
-						if bs.spectator[Name(attached)] then
-							self.object:remove()
-						else
-							self.object:remove()
-						end
+						self.object:remove()
 					end
 					--local names = {}
 					--for _, p in pairs(core.get_connected_players()) do
@@ -194,39 +192,53 @@ local function on_join_team(name, team)
 	end
 end
 
-local function on_step()
-	for _, player in pairs(core.get_connected_players()) do
-		player:set_nametag_attributes({
-			text = " ",
-			bgcolor = 0x00000,
-		})
-		
-		local objs = player:get_children()
-		local selected_obj
-		for _, obj in pairs(objs) do
-			local ent = obj:get_luaentity()
-			if ent then
-				if ent.is_nametag then
-					selected_obj = obj
-					break
+local steps = 0
+
+local function on_step(dt)
+	steps = steps + dt
+	if steps >= 0.5 then
+		for _, player in pairs(core.get_connected_players()) do
+			player:set_nametag_attributes({
+				text = " ",
+				bgcolor = 0x00000,
+			})
+			
+			local objs = player:get_children()
+			local selected_obj
+			for _, obj in pairs(objs) do
+				local ent = obj:get_luaentity()
+				if ent then
+					if ent.is_nametag then
+						selected_obj = obj
+						break
+					end
+				end
+			end
+			if not selected_obj then
+				if bs.spectator[Name(player)] ~= true and bs.is_playing[Name(player)] then
+					add(player, bs.get_team(player))
+				end
+			else
+				if bs.spectator[Name(player)] then
+					selected_obj:remove()
 				end
 			end
 		end
-		if not selected_obj then
-			if bs.spectator[Name(player)] ~= true and bs.is_playing[Name(player)] then
-				add(player, bs.get_team(player))
-			end
-		else
-			if bs.spectator[Name(player)] then
-				selected_obj:remove()
-			end
-		end
+		steps = 0
+	end
+end
+
+local function ResetAllNametags()
+	for name, obj in pairs(player_tags.objs_classic) do
+		player_tags.objs_classic[name]:remove()
+		player_tags.objs_classic[name] = nil
 	end
 end
 
 --core.register_on_joinplayer(on_join_player)
 core.register_globalstep(on_step)
 core.register_on_leaveplayer(on_leave_player)
+bs_match.register_OnEndMatch(ResetAllNametags)
 --bs.cbs.register_OnAssignTeam(on_join_team)
 
 
