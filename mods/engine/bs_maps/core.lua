@@ -20,6 +20,8 @@ function maps.select_map()
 	end
 end
 
+maps.used_load_area = false
+
 function maps.place_map(map_def)
 	if config.MapsLoadAreaType == "emerge" then
 		core.log("action", "Using \"Emerge\" type.")
@@ -42,6 +44,7 @@ function maps.place_map(map_def)
 		core.log("info", "ON-PLACE-MAP: Map light areas fix starting")
 		local function fix_light(...) core.fix_light(...) core.log("action", "ON-PLACE-MAP: Map light areas fix complete") end
 		core.after(5, fix_light, map_def.pos1, map_def.pos2)
+		maps.used_load_area = true
 	end
 end
 
@@ -53,6 +56,10 @@ function maps.new_map()
 		maps.place_map(def)
 		maps.current_map = def
 		maps.update_env()
+		
+		if not maps.used_load_area then
+			core.load_area(def.pos1, def.pos2)
+		end
 		
 		--maps.current_map.teams[""] = vector.new()
 		
