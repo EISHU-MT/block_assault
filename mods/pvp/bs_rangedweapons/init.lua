@@ -150,7 +150,7 @@ hb.change_hudbar(player, "ammo", rangedweapons.bullets[Name(player)], rangedweap
 if GunCaps.gun_magazine ~= nil then
 		local pos = player:get_pos()
 		local dir = player:get_look_dir()
-		local yaw = player:get_look_yaw()
+		local yaw = player:get_look_horizontal()
 		if pos and dir and yaw then
 			pos.y = pos.y + 1.4
 local obj = minetest.add_entity(pos,"rangedweapons:mag")
@@ -158,7 +158,7 @@ local obj = minetest.add_entity(pos,"rangedweapons:mag")
 obj:set_properties({textures = {GunCaps.gun_magazine}})
 	obj:set_velocity({x=dir.x*2, y=dir.y*2, z=dir.z*2})
 	obj:set_acceleration({x=0, y=-5, z=0})
-	obj:set_rotation({x=0,y=yaw+math.pi,z=0})
+	obj:set_rotation({x=0,y=yaw,z=0})
 end end end
 
 if GunCaps.gun_unloaded ~= nil then
@@ -683,7 +683,7 @@ rangedweapons_launch_projectile = function(player,projNum,projDmg,projEnt,visual
 	local shl = minetest.add_entity(pos, shellEnt)
 shl:setvelocity({x=dir.x * -10, y=dir.y * -10, z=dir.z * -10})
 shl:setacceleration({x=dir.x * -5, y= -10, z=dir.z * -5})
-shl:set_rotation({x=0,y=yaw + math.pi,z=-svertical})
+shl:set_rotation({x=0,y=yaw + math.pi, z=-svertical})
 shl:set_properties({
 textures = {shellTexture},
 visual = shellVisual,})
