@@ -76,7 +76,7 @@ end
 
 -- this hidden node is placed on top of the bottom, and prevents
 -- nodes from being placed in the top half of the door.
-minetest.register_node("doors:hidden", {
+--[[minetest.register_node("doors:hidden", {
 	description = S("Hidden Door Segment"),
 	inventory_image = "doors_hidden_segment.png^default_invisible_node_overlay.png",
 	wield_image = "doors_hidden_segment.png^default_invisible_node_overlay.png",
@@ -98,7 +98,8 @@ minetest.register_node("doors:hidden", {
 		type = "fixed",
 		fixed = {-15/32, 13/32, -15/32, -13/32, 1/2, -13/32},
 	},
-})
+})--]]
+core.register_alias("doors:hidden", "air")
 
 -- table used to aid door opening/closing
 local transform = {
@@ -148,9 +149,6 @@ function doors.door_toggle(pos, node, clicker)
 
 	replace_old_owner_information(pos)
 
-	if clicker and not default.can_interact_with_node(clicker, pos) then
-		return false
-	end
 
 	-- until Lua-5.2 we have no bitwise operators :(
 	if state % 2 == 1 then
