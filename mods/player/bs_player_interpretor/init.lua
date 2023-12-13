@@ -11,7 +11,9 @@ local function is_advancing(control)
 end
 
 local function request_player_data(player)
-	return player_api.get_animation(player)
+	--return player_api.get_animation(player) --using this is deprecated
+	-- THIS WILL DEPEND BAS EMOTES!
+	return emote.get(player)
 end
 
 local function get_animation_speed(player)
@@ -32,9 +34,8 @@ local function check_conflicts(player)
 end
 
 local function check_onwalk_conflicts(player)
-	local data = request_player_data(player)
-	if data then
-		local animation = data.animation
+	local animation = request_player_data(player)
+	if animation then
 		if animation == "sit" then
 			return true, animation
 		end
@@ -42,6 +43,7 @@ local function check_onwalk_conflicts(player)
 			return true, animation
 		end
 	end
+	return false, ""
 end
 
 local abs = math.abs
@@ -81,10 +83,9 @@ function DO_ANIMATION(player, animation, dtime)
 	local cConflict, typo = check_conflicts(player)
 	local WConflicts, wtypo = check_onwalk_conflicts(player)
 	
-	
 	local IsIdle = is_idle(animation)
 	
-	if IsIdle and not (WConflicts or cConflict) then
+	if IsIdle and not WConflicts then
 		rotate_bone(player, "Body", {x = 0, y = 0, z = 0})
 		rotate_bone(player, "Cape", {x = 0, y = 0, z = 0})
 		rotate_bone(player, "Arm_Left", {x = 0, y = 0, z = 0})
@@ -93,8 +94,8 @@ function DO_ANIMATION(player, animation, dtime)
 		rotate_bone(player, "Leg_Right", {x = 0, y = 0, z = 0})
 	end
 	
-	if is_advancing(control) and not WConflicts then
-		if bs_match.match_is_started then
+	if is_advancing(control) then
+		if not WConflicts then
 			-- Animate legs
 			rotate_bone(player, "Leg_Left", {x = 55 * sin, y = 0, z = 0})
 			rotate_bone(player, "Leg_Right", {x = -55 * sin, y = 0, z = 0})
@@ -102,7 +103,7 @@ function DO_ANIMATION(player, animation, dtime)
 			rotate_bone(player, "Arm_Left", {x = -55 * sin,      y = 0, z = 0})
 			rotate_bone(player, "Arm_Right", {x = 55 * sin,       y = 0, z = 0})
 		end
-	elseif not is_advancing(control) then
+	else	
 		if WConflicts and wtypo then
 			if wtypo == "lay" then
 				rotate_bone(player, "Head", {x = 0, y = 0, z = 0})
@@ -112,7 +113,8 @@ function DO_ANIMATION(player, animation, dtime)
 				rotate_bone(player, "Leg_Left", {x = 0, y = 0, z = 0})
 				rotate_bone(player, "Leg_Right", {x = 0, y = 0, z = 0})
 				rotate_bone(player, "Body", {x = 270, y = 0, z = 0}, {x = 270, y = 0, z = 0})
-			elseif wtype == "sit" then
+				return
+			elseif wtypo == "sit" then
 				rotate_bone(player, "Arm_Left", {x = 0,  y = 0, z = 0})
 				rotate_bone(player, "Arm_Right", {x = 0,  y = 0, z = 0})
 				rotate_bone(player, "Leg_Left", {x = 90, y = 0, z = 0})
@@ -143,6 +145,9 @@ function DO_ANIMATION(player, animation, dtime)
 	
 	if bs_match.match_is_started then
 		if not bs.spectator[Name(player)] then
+			local properties = player:get_properties()
+			properties.pointable = true
+			player:set_properties(properties)
 			if IsPointing(player) then
 				is_speed_reset[Name(player)] = true
 				player:set_physics_override({
@@ -153,9 +158,6 @@ function DO_ANIMATION(player, animation, dtime)
 				local wield_item = player:get_wielded_item()
 				local ph = player:get_physics_override()
 				local item_name = wield_item:get_name()
-				local properties = player:get_properties()
-				properties.pointable = true
-				player:set_properties(properties)
 				if is_speed_reset[Name(player)] or (ph.speed <= 0.6 and not Armor.QueuedToFullHP[Name(player)]) then
 					player:set_physics_override({
 						speed = 1,
@@ -198,10 +200,6 @@ function DO_ANIMATION(player, animation, dtime)
 		end
 	else
 		if not bs.spectator[Name(player)] then
-			player:set_physics_override({
-				speed = 0,
-				jump = 0
-			})
 			is_speed_reset[Name(player)] = true
 			local properties = player:get_properties()
 			properties.pointable = false
