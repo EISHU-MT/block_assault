@@ -26,21 +26,6 @@ local function repeater(dt)
 				end
 			end
 		end
-		peer_time = peer_time + dt
-		if not bs_match.match_is_started then
-			if peer_time >= 0.65 then
-				peer_time = 0
-				local player_team = bs.get_player_team_css(player)
-				if player_team ~= "" then
-					local to_pos = maps.current_map.teams[player_team]
-					if to_pos then
-						if vector.distance(player:get_pos(), to_pos) >= 2 then
-							player:set_pos(CheckPos(to_pos))
-						end
-					end
-				end
-			end
-		end
 	end
 end
 
