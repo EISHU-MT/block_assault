@@ -114,10 +114,10 @@ function summary.close_all_forms()
 		if Player(pname) then
 			obj:remove()
 			summary.shown_players_panel[pname] = nil
-			summary.is_from_match[Name(player)] = nil
+			summary.is_from_match[pname] = nil
 		else
 			summary.shown_players_panel[pname] = nil
-			summary.is_from_match[Name(player)] = nil
+			summary.is_from_match[pname] = nil
 		end
 	end
 end
