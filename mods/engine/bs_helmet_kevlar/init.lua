@@ -21,7 +21,7 @@ function PlayerArmor.AddArmorToPlayer(player, typo)
 			end
 		elseif typo == "kevlar" then
 			if PlayerArmor.AlreadyArmoredPlayers[Name(player)].kevlar ~= true or PlayerArmor.DifferenceOfHP[Name(player)] < 10 then
-				Send(player, "-40$, From buying Helmet", "#00FF00")
+				Send(player, "-40$, From buying Kevlar", "#00FF00")
 				PlayerArmor.DifferenceOfHP[Name(player)] = 10
 				PlayerArmor.AlreadyArmoredPlayers[Name(player)] = {kevlar = true, helmet = PlayerArmor.AlreadyArmoredPlayers[Name(player)].helmet}
 				PlayerArmor.SetKevlarSkin(player)
