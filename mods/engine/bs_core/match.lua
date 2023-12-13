@@ -18,8 +18,8 @@ function bs_match.reset_rounds()
 	bs_match.current_rounds = bs_match.rounds
 end
 
-local function QueueCloseForms()
-	core.after(2, summary.close_all_forms)
+local function QueueCloseForms(int)
+	core.after(int or 2, summary.close_all_forms)
 end
 
 function bs_match.finish_match(winner) -- PlayerKills, it resets every round.
@@ -36,10 +36,10 @@ function bs_match.finish_match(winner) -- PlayerKills, it resets every round.
 		end
 		RunCallbacks(bs_match.cbs.SecondOnEndMatch)
 		summary.show_to_all()
-		QueueCloseForms()
+		QueueCloseForms(3)
 	else
 		summary.show_to_all()
-		QueueCloseForms()
+		QueueCloseForms(5)
 		bs_match.match_is_started = false
 		maps.new_map()
 		if config.ShowMenuToPlayerWhenEndedRounds.bool then
