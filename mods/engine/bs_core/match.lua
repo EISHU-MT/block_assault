@@ -18,6 +18,10 @@ function bs_match.reset_rounds()
 	bs_match.current_rounds = bs_match.rounds
 end
 
+local function QueueCloseForms()
+	core.after(2, summary.close_all_forms)
+end
+
 function bs_match.finish_match(winner) -- PlayerKills, it resets every round.
 	if config.AnnouceWinner then
 		annouce.winner(winner)
@@ -31,7 +35,11 @@ function bs_match.finish_match(winner) -- PlayerKills, it resets every round.
 			score.add_score_to(name, 30)
 		end
 		RunCallbacks(bs_match.cbs.SecondOnEndMatch)
+		summary.show_to_all()
+		QueueCloseForms()
 	else
+		summary.show_to_all()
+		QueueCloseForms()
 		bs_match.match_is_started = false
 		maps.new_map()
 		if config.ShowMenuToPlayerWhenEndedRounds.bool then
@@ -50,14 +58,18 @@ function bs_match.finish_match(winner) -- PlayerKills, it resets every round.
 		RunCallbacks(bs_match.cbs.OnNewMatches)
 		bs_match.reset_rounds()
 		RunCallbacks(bs_match.cbs.SecondOnEndMatch)
+		core.after(1, function()
+			for _, p in pairs(core.get_connected_players()) do
+				if not bs.spectator[Name(p)] then
+					PlayerKills[Name(p)] = {kills = 0, deaths = 0, score = 0}
+				end
+			end
+		end)
 	end
 	if config.RestorePlayerHPOnEndRounds then
 		for _, p in pairs(core.get_connected_players()) do
 			p:set_hp(20)
 		end
-	end
-	for _, p in pairs(core.get_connected_players()) do
-		PlayerKills[Name(p)] = {kills = 0, deaths = 0, score = 0}
 	end
 end
 
