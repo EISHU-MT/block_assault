@@ -40,7 +40,7 @@ local function recount_for_scale(int)
 	local initial = 0.1
 end
 
--- players: table {p1 = true, p2 = true or true boolean}
+
 function summary.return_sub_elements(players, auth_player)
 	table.sort(players, function (n1, n2) return PlayerKills[n1].score > PlayerKills[n2].score end)
 	local elements = {}
@@ -53,7 +53,7 @@ function summary.return_sub_elements(players, auth_player)
 			alignment = { x = 0, y = i + 0.5 },
 			offset = {x = 0, y = -130},
 			text = summary.string_format:format(pname, PlayerKills[pname].score, PlayerKills[pname].kills, PlayerKills[pname].deaths),
-			number = bs.get_team_color(bs.get_player_team_css(pname), "number")
+			number = bs.get_team_color(bs.get_team(pname), "number")
 		}
 		y_level = y_level + 0.05 -- calc form
 		sub_y_scale_level = sub_y_scale_level + 5
@@ -64,7 +64,7 @@ end
 function summary.return_players()
 	local players = {}
 	for pname, data in pairs(PlayerKills) do
-		if bs.get_player_team_css(pname) ~= "" or bs.died[pname] then
+		if bs.get_team(pname) then
 			table.insert(players, pname)
 		end
 	end
