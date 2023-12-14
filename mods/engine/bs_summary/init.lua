@@ -53,7 +53,7 @@ function summary.return_sub_elements(players, auth_player)
 			alignment = { x = 0, y = i + 0.5 },
 			offset = {x = 0, y = -130},
 			text = summary.string_format:format(pname, PlayerKills[pname].score, PlayerKills[pname].kills, PlayerKills[pname].deaths),
-			number = bs.get_team_color(bs.get_team(pname), "number")
+			number = bs.get_team_color(bs.get_team_force(pname), "number")
 		}
 		y_level = y_level + 0.05 -- calc form
 		sub_y_scale_level = sub_y_scale_level + 5
@@ -64,7 +64,7 @@ end
 function summary.return_players()
 	local players = {}
 	for pname, data in pairs(PlayerKills) do
-		if bs.get_team(pname) then
+		if bs.get_team_force(pname) then
 			table.insert(players, pname)
 		end
 	end
