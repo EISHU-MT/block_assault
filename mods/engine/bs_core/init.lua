@@ -128,9 +128,9 @@ function bs.get_team(to_index)
 	if bs.is_playing[name] then
 		return bs.player_team[name] or nil
 	else
-		return ""
+		return nil
 	end
-	return ""
+	return nil
 end
 
 function bs.allocate_to_team(to_allocate, teamm, force, use_dead_table) -- Applying this function again to a applied player dont crash
