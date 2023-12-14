@@ -64,7 +64,7 @@ end
 function summary.return_players()
 	local players = {}
 	for pname, data in pairs(PlayerKills) do
-		if bs.get_team_force(pname) then
+		if bs.died[pname] or bs.get_team_force(pname) then
 			table.insert(players, pname)
 		end
 	end
@@ -90,12 +90,23 @@ function summary.OnStep(dt)
 	for _, player in pairs(core.get_connected_players()) do
 		local controls = player:get_player_control()
 		if not summary.is_from_match[Name(player)] then
-			if controls.aux1 and controls.sneak then
-				summary.show_to_player(player)
-			elseif (not controls.aux1) and (not controls.sneak) then
-				if summary.shown_players_panel[Name(player)] then
-					summary.shown_players_panel[Name(player)]:remove()
-					summary.shown_players_panel[Name(player)] = nil
+			if not bs.spectator[Name(player)] then
+				if controls.aux1 and controls.sneak then
+					summary.show_to_player(player)
+				elseif (not controls.aux1) and (not controls.sneak) then
+					if summary.shown_players_panel[Name(player)] then
+						summary.shown_players_panel[Name(player)]:remove()
+						summary.shown_players_panel[Name(player)] = nil
+					end
+				end
+			else
+				if controls.aux1 then
+					summary.show_to_player(player)
+				else
+					if summary.shown_players_panel[Name(player)] then
+						summary.shown_players_panel[Name(player)]:remove()
+						summary.shown_players_panel[Name(player)] = nil
+					end
 				end
 			end
 		end
