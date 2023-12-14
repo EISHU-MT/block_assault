@@ -133,6 +133,11 @@ function bs.get_team(to_index)
 	return nil
 end
 
+function bs.get_team_force(to_index)
+	local name = Name(to_index)
+	return bs.player_team[name] or nil
+end
+
 function bs.allocate_to_team(to_allocate, teamm, force, use_dead_table) -- Applying this function again to a applied player dont crash
 	if maps.theres_loaded_map or force then
 		
