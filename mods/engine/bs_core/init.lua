@@ -299,12 +299,18 @@ function bs.allocate_to_spectator(to_allocate, died)
 		})
 		hb.hide_hudbar(player, "breath")
 		hb.hide_hudbar(player, "health")
-		
+		Inv(player):set_list("main", {})
 		if died then
 			bs.died[name] = bs.player_team[name]
 			player:set_pos(maps.current_map.teams[bs.player_team[name]])
 		else
 			player:set_pos(maps.current_map.teams.blue)
+			-- If he dint die then delete him from all teams.
+			for teamm, data in pairs(bs.team) do
+				bs.team[teamm].players[name] = nil
+				bs.team[teamm].count = C(bs.team[teamm].players)
+				bs.player_team[name] = nil
+			end
 		end
 	else
 		SendError(to_allocate, "Unable to allocate you in spectators, map system not started.")
