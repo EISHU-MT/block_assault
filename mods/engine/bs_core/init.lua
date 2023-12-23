@@ -1,7 +1,8 @@
 --[[
 	BulletStorm Engine
 --]]
-_OID = "BlockAssault Classic" -- To be overriden by modes
+local S = core.get_translator("bs_core")
+_OID = S("BlockAssault Classic") -- To be overriden by modes
 _V  = "Beta V3.0"
 _ID = "BlockAssault" -- Real engine name
 C = CountTable
@@ -217,7 +218,7 @@ function bs.allocate_to_team(to_allocate, teamm, force, use_dead_table) -- Apply
 			end
 		end
 	else
-		SendError(to_allocate, "Unable to allocate you in "..team..", map system not started.")
+		SendError(to_allocate, S("Unable to allocate you in @1, map system not started.", team))
 		core.log("error", "Unable to allocate player in team \""..team.."\". There are not loaded map")
 		return false
 	end
@@ -282,7 +283,7 @@ function bs.allocate_to_spectator(to_allocate, died)
 	if maps.theres_loaded_map then
 		local player = Player(to_allocate)
 		local name = Name(to_allocate)
-		core.chat_send_player(name, core.colorize("cian", "Be sure to had noclip on!"))
+		core.chat_send_player(name, core.colorize("cyan", S("Be sure to had noclip on!")))
 		player:set_properties({textures = {"blank.png"}, pointable = false, collide_with_objects = false, physical = false})
 		player:set_hp(20)
 		player:set_armor_groups({immortal=1})
@@ -313,7 +314,7 @@ function bs.allocate_to_spectator(to_allocate, died)
 			end
 		end
 	else
-		SendError(to_allocate, "Unable to allocate you in spectators, map system not started.")
+		SendError(to_allocate, S("Unable to allocate you in spectators, map system not started."))
 		core.log("error", "Unable to allocate player in \"spectators\". There are not loaded map")
 	end
 end
@@ -359,17 +360,17 @@ config = {
 bs.login_menu = "formspec_version[6]" ..
 	"size[13.7,9.1]" ..
 	"box[0,0;13.7,1.1;#00DB00]" ..
-	"label[0.2,0.5;Welcome to ".._OID.."!]" ..
+	"label[0.2,0.5;"..S("Welcome to").." ".._OID.."!]" ..
 	"label[10.6,0.3;".._ID.."]" ..
 	"label[11.4,0.8;".._V.."]" ..
 	"box[0,1.1;13.7,0.7;#267026]" ..
-	"label[4.9,1.4;Please select a team to join]" ..
+	"label[4.9,1.4;"..S("Please select a team to join").."]" ..
 	"image_button[0.1,2;4.5,3.5;team_red_color.png;red;Red team;false;false]" ..
 	"image_button[0.1,5.5;4.5,3.5;team_blue_color.png;blue;Blue Team;false;false]" ..
 	"image_button[4.6,2;4.5,3.5;team_yellow_color.png;yellow;Yellow Team;false;false]" ..
 	"image_button[4.6,5.5;4.5,3.5;team_green_color.png;green;Green Team;false;false]" ..
 	"image_button[9.1,2;4.5,3.5;team_null_color.png;spect;No team;false;false]" ..
-	"image_button[9.1,5.5;4.5,3.5;quit.png;exit;Disconnect;false;false]"
+	"image_button[9.1,5.5;4.5,3.5;quit.png;exit;"..S("Disconnect")..";false;false]"
 
 function bs.send_to_team(team, msg)
 	if bots then
