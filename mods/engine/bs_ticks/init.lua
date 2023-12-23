@@ -4,7 +4,8 @@
 --]]
 steps = {
 	state = true,
-	funcs = {}
+	funcs = {},
+	old_register = core.register_globalstep,
 }
 
 core.register_globalstep(function(dtime)
