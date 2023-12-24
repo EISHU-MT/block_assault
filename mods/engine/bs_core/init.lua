@@ -140,6 +140,7 @@ function bs.get_team_force(to_index)
 end
 
 function bs.allocate_to_team(to_allocate, teamm, force, use_dead_table) -- Applying this function again to a applied player dont crash
+	if not to_allocate then return false end
 	if maps.theres_loaded_map or force then
 		
 		local team = ""
@@ -147,6 +148,7 @@ function bs.allocate_to_team(to_allocate, teamm, force, use_dead_table) -- Apply
 		local name = Name(to_allocate)
 		
 		if not name then return false end
+		if not player then return false end
 		
 		player:set_hp(20)
 		
@@ -181,6 +183,8 @@ function bs.allocate_to_team(to_allocate, teamm, force, use_dead_table) -- Apply
 			RemovePrivs(player, {"fly", "fast", "noclip", "teleport"})
 			SpawnPlayerAtRandomPosition(player, team)
 			player:set_hp(20)
+			player:hud_set_hotbar_image("gui_hotbar_"..team..".png")
+			player:hud_set_hotbar_selected_image("gui_hotbar_select_"..team..".png")
 			bs.died[name] = nil
 			ResetSkin(player)
 			player:hud_set_flags({
@@ -204,6 +208,8 @@ function bs.allocate_to_team(to_allocate, teamm, force, use_dead_table) -- Apply
 				RemovePrivs(player, {"fly", "fast", "noclip", "teleport"})
 				SpawnPlayerAtRandomPosition(player, team)
 				player:set_hp(20)
+				player:hud_set_hotbar_image("gui_hotbar_"..team..".png")
+				player:hud_set_hotbar_selected_image("gui_hotbar_select_"..team..".png")
 				bs.died[name] = nil
 				ResetSkin(player)
 				player:hud_set_flags({
@@ -283,12 +289,13 @@ function bs.allocate_to_spectator(to_allocate, died)
 	if maps.theres_loaded_map then
 		local player = Player(to_allocate)
 		local name = Name(to_allocate)
-		core.chat_send_player(name, core.colorize("cyan", S("Be sure to had noclip on!")))
+		core.chat_send_player(name, core.colorize("grey", S("*** Be sure to had noclip on!")))
 		player:set_properties({textures = {"blank.png"}, pointable = false, collide_with_objects = false, physical = false})
 		player:set_hp(20)
 		player:set_armor_groups({immortal=1})
 		--Inv(player):set_list("main", {}) -- Now this job does bs_drops
 		AddPrivs(player, {fly=true, fast=true, noclip=true, teleport=true})
+		player:hud_set_hotbar_selected_image("blank.png")
 		bs.is_playing[name] = false
 		bs.spectator[name] = true
 		player:hud_set_flags({
