@@ -32,5 +32,6 @@ bs.cbs.register_OnAssignTeam(function(player, team)
 				end
 			end
 		end
+		Inv(player):add_item("main", ItemStack("bs_throwable_snow:snowball 100"))
 	end
 end)
