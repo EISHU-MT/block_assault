@@ -3,7 +3,7 @@
 --]]
 local S = core.get_translator("bs_core")
 _OID = S("BlockAssault Classic") -- To be overriden by modes
-_V  = "Beta V3.0"
+_V  = "Beta V3.5"
 _ID = "BlockAssault" -- Real engine name
 C = CountTable
 bs = {
@@ -194,7 +194,7 @@ function bs.allocate_to_team(to_allocate, teamm, force, use_dead_table) -- Apply
 				--breathbar = true,
 				hotbar = true,
 			})
-			player:set_properties({pointable = true, collide_with_objects = true, physical = true})
+			player:set_properties({pointable = true, collide_with_objects = true, physical = true, is_visible = true})
 			return true
 		else
 			if bs.team[team] and name then
@@ -219,7 +219,7 @@ function bs.allocate_to_team(to_allocate, teamm, force, use_dead_table) -- Apply
 					--breathbar = true,
 					hotbar = true,
 				})
-				player:set_properties({pointable = true, collide_with_objects = true, physical = true})
+				player:set_properties({pointable = true, collide_with_objects = true, physical = true, is_visible = true})
 				return true
 			end
 		end
@@ -290,7 +290,7 @@ function bs.allocate_to_spectator(to_allocate, died)
 		local player = Player(to_allocate)
 		local name = Name(to_allocate)
 		core.chat_send_player(name, core.colorize("grey", S("*** Be sure to had noclip on!")))
-		player:set_properties({textures = {"blank.png"}, pointable = false, collide_with_objects = false, physical = false})
+		player:set_properties({textures = {"blank.png"}, pointable = false, collide_with_objects = false, physical = false, is_visible = false})
 		player:set_hp(20)
 		player:set_armor_groups({immortal=1})
 		--Inv(player):set_list("main", {}) -- Now this job does bs_drops
