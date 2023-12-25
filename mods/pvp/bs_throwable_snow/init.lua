@@ -13,9 +13,9 @@ end
 grenades.register_grenade("bs_throwable_snow:snowball", {
 	description = S("Snowball"),
 	image = "default_snowball.png",
-	range = 4,
+	range = 20,
 	collide_with_objects = true,
-	stack_max = 99,
+	stack_max = 100,
 	throw_cooldown = 0.9,
 	on_explode = function(def, obj, pos, name)
 		minetest.add_particlespawner({
