@@ -17,7 +17,7 @@ RegisterInitialFunctions.leave (PlayerInitialFunction Leave) bool true
 DisableTimer (Disable timer) bool false
 
 #    Game class name
-GameClass (Game Class name) string "BA Hunt & Kill"
+GameClass (Game Class name) string BA Hunt & Kill
 
 #    Show again the TeamSelector for players when the rounds count reachs the limit
 ShowMenuToPlayerWhenEndedRounds (Show TeamSelector on EndRounds) bool true
@@ -81,13 +81,13 @@ ClearPlayerInv.maintain_last_inventory (Keep Items) bool true
 ClearPlayerInv.set_new_inventory_after_inventory_reset (Set New Inventory) bool true
 
 #    Default Start Weapon, Pistol item string
-DefaultStartWeapon.weapon (Default Pistol item string) string "rangedweapons:glock17"
+DefaultStartWeapon.weapon (Default Pistol item string) string rangedweapons:glock17
 
 #    Default Start Weapon, Pistol Ammo item string
-DefaultStartWeapon.ammo (Default Pistol Ammo item string) string "rangedweapons:9mm 200"
+DefaultStartWeapon.ammo (Default Pistol Ammo item string) string rangedweapons:9mm 200
 
 #    Default Start Weapon, Sword item string
-DefaultStartWeapon.sword (Default Sword item string) string "default:sword_steel"
+DefaultStartWeapon.sword (Default Sword item string) string default:sword_steel
 
 #    Player lighting intensity, for shaders only
 PlayerLigthingIntensity (Lighting Intensity) float 0.38 0.0 1.0
