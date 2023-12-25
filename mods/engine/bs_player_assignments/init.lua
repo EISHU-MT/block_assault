@@ -29,4 +29,4 @@ local function repeater(dt)
 	end
 end
 
-core.register_globalstep(repeater)
+--core.register_globalstep(repeater)
