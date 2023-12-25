@@ -76,8 +76,10 @@ local MapsLoadAreaType = Get("MapsLoadAreaType", "emerge")
 
 -- Proccess
 
+
 config.DisableTimer = DisableTimer
 config.PvpEngine.enable = PvpEngine
+config.TypeOfStorage = TypeOfStorage
 config.EnableDeadBody = EnableDeadBody
 config.UseScoreSystem = UseScoreSystem
 config.LoadOnLoginMenu = LoadOnLoginMenu
@@ -87,18 +89,23 @@ config.ClearPlayerInv.bool = ClearPlayerInv
 config.LoadOnLeaveScript = LoadOnLeaveScript
 config.UseEngineCurrency = UseEngineCurrency
 config.StrictMapgenCheck = StrictMapgenCheck
+config.LimitForBombsCount = LimitForBombsCount
 config.GiveDefaultTools.bool = GiveDefaultTools
 config.UsePvpMatchEngine.bool = UsePvpMatchEngine
 config.PvpEngine.FriendShoot = PvpEngineFriendShoot
 config.GiveDefaultTools.sword = GiveDefaultToolsSword
 config.AllowPlayersModifyMaps = AllowPlayersModifyMaps
 config.GiveDefaultTools.pistol = GiveDefaultToolsPistol
+config.PlayerLigthingIntensity = PlayerLigthingIntensity
+config.PlayerLigthingSaturation = PlayerLigthingSaturation
 config.GiveMoneyToKillerPlayer.bool = GiveMoneyToKillerPlayer
 config.RestorePlayerHPOnEndRounds = RestorePlayerHPOnEndRounds
 config.PvpEngine.CountPlayersKills = PvpEngineCountPlayersKills
 config.ResetPlayerMoneyOnEndRounds = ResetPlayerMoneyOnEndRounds
 config.RegisterInitialFunctions.join = RegisterInitialFunctionsJoin
+config.SecondsToWaitToEndMolotovFire = SecondsToWaitToEndMolotovFire
 config.RegisterInitialFunctions.leave = RegisterInitialFunctionsLeave
+config.GiveMoneyToKillerPlayer.amount = GiveMoneyToKillerPlayerAmount
 config.ShowMenuToPlayerWhenEndedRounds.bool = ShowMenuToPlayerWhenEndedRounds
 config.DontPunchPlayerWhileMatchNotStarted = DontPunchPlayerWhileMatchNotStarted
 config.ClearPlayerInv.maintain_last_inventory = ClearPlayerInvMaintain_last_inventory
