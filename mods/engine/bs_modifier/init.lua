@@ -7,7 +7,7 @@
 local function vector_random(pos, rad)
 	return {
 		x = math.random(pos.x, pos.x + rad),
-		y = GetFloorPos(pos).y,
+		y = pos.y,
 		z = math.random(pos.z, pos.z + rad),
 	}
 end
@@ -24,6 +24,6 @@ end
 
 function SpawnPlayerAtRandomPosition(player, team)
 	if player and Name(player) then
-		player:set_pos(CheckPos(do_check_upper_pos(CheckPos(vector_random(maps.current_map.teams[team], 1)))))
+		player:set_pos(CheckPosForPlayer(vector_random(maps.current_map.teams[team], 2)))
 	end
 end
