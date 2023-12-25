@@ -2,7 +2,7 @@ grenades = {
 	grenade_deaccel = 8
 }
 		
-local cooldown = 0.5
+local cooldown = steps.register_cooldown()
 function grenades.throw_grenade(name, startspeed, player)
 	local dir = player:get_look_dir()
 	local pos = vector.offset(player:get_pos(), 0, player:get_properties().eye_height, 0)
@@ -157,10 +157,10 @@ function grenades.register_grenade(name, def)
 	
 	if def.throw_cooldown then
 		newdef.on_use = function(itemstack, user, ...)
-			if cooldown:get(user) then
+			if not cooldown:is_zero(Name(user)) then
 				return
 			else
-				cooldown:set(user, def.throw_cooldown)
+				cooldown:set(def.throw_cooldown, Name(user))
 			end
 
 			return on_use(itemstack, user, ...)
