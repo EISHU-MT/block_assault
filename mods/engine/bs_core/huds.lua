@@ -2,8 +2,7 @@ minetest.register_on_joinplayer(function(ObjectRef, last_login)
 	local pname = Name(ObjectRef)
 	ObjectRef:hud_add({
 		hud_elem_type = "image",
-		name = "defuser_timer",
-		scale = {x = 3.5, y = 3.5},
+		scale = {x = 1.8, y = 3.5},
 		position = {x = 0.5, y = 0},
 		offset = {x = 0, y = 30},
 		--size = {x = 2},
