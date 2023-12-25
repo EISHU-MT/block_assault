@@ -9,7 +9,8 @@ Achievements = {
 	texas_style = {type = "item_shopt_first_time", item_name = "rangedweapons:deagle", name = "Texas Style, Desert Eagle."},
 	ninja_style = {type = "kills_per_round", kills = nil, deaths = 0, name = "Ninja Style!"},
 	spectator = {type = "player_team_select", team = "", name = "Spectating people"},
-	lets_throw_bombs = {type = "item_shopt_first_time", item_name = "grenades:frag", name = "Lets throw bombs at enemy!"}
+	lets_throw_bombs = {type = "item_shopt_first_time", item_name = "grenades:frag", name = "Lets throw bombs at enemy!"},
+	snow_throwed_by_first_time = {type = "item_on_use", item_name = "bs_throwable_snow:snowball", name = "We might start the WW3 with snowballs, Captain, look at this 'thing'"},
 }
 AchievementsApi = {}
 AchievementsDatabase = {
@@ -159,7 +160,32 @@ if bots then
 	end, "BA.S Achievements")
 end
 
-
+core.register_on_mods_loaded(function()
+	core.after(1, function()
+		for name, def in pairs(minetest.registered_items) do
+			if def.on_use then
+				local old_on_use = def.on_use
+				local func = function(itemstack, user, pointed_thing)
+					local iname = itemstack:get_name()
+					local player = Player(user)
+					for name, achievement in pairs(Achievements) do
+						if achievement.type == "item_on_use" then
+							if achievement.item_name == iname then
+								local player_data = AchievementsDatabase.get(player)
+								if not player_data[name] then
+									AchievementsDatabase.add(player, name)
+									core.chat_send_player(Name(player), core.colorize("#009200", "[Achievements] You got: ")..core.colorize("#00FFFF", achievement.name))
+								end
+							end
+						end
+					end
+					old_on_use(itemstack, user, pointed_thing)
+				end
+				minetest.registered_items[name].on_use = func
+			end
+		end
+	end)
+end)
 
 
 
