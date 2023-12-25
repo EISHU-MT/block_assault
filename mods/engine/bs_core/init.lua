@@ -305,6 +305,7 @@ function bs.allocate_to_spectator(to_allocate, died)
 			breathbar = false,
 			hotbar = false,
 		})
+		RunCallbacks(bs.cbs.OnAssignTeam, player, "")
 		hb.hide_hudbar(player, "breath")
 		hb.hide_hudbar(player, "health")
 		Inv(player):set_list("main", {})
