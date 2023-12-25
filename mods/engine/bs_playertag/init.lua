@@ -185,8 +185,13 @@ local function on_leave_player(player)
 end
 
 local function on_join_team(name, team)
+	local player = Player(name)
+	if player and type(player_tags.objs_classic[name]) == "userdata" then
+		player_tags.objs_classic[name]:remove()
+		player_tags.objs_classic[name] = nil
+	end
 	if name and (team == "" or not team) then
-		on_leave_player(Player(name)) -- Delete nametag.
+		on_leave_player(player) -- Delete nametag.
 	elseif name and team ~= "" then
 		add(Player(name), team)
 	end
@@ -236,9 +241,8 @@ local function ResetAllNametags()
 end
 
 --core.register_on_joinplayer(on_join_player)
-core.register_globalstep(on_step)
 core.register_on_leaveplayer(on_leave_player)
 bs_match.register_OnEndMatch(ResetAllNametags)
---bs.cbs.register_OnAssignTeam(on_join_team)
+bs.cbs.register_OnAssignTeam(on_join_team)
 
 
