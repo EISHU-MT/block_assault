@@ -30,6 +30,7 @@ function PlayerArmor.AddArmorToPlayer(player, typo)
 				bank.player_add_value(Name(player), 40, true)
 			end
 		end
+		PlayerArmor.UpdateHud(Name(player))
 	end
 end
 
@@ -65,7 +66,7 @@ core.register_on_joinplayer(function(player, last_login)
 			position = {x = 0.01, y = 0.94},
 			offset = {x=50, y = 1},
 			scale = {x = 100, y = 100},
-			text = "Kevlar Vest: 0%",
+			text = "Kevlar: 0%",
 			number = 0xFFFFFF,
 		}),
 		helmet = player:hud_add({
@@ -77,6 +78,7 @@ core.register_on_joinplayer(function(player, last_login)
 			number = 0xFFFFFF,
 		}),
 	}
+	PlayerArmor.UpdateHud(Name(player))
 end)
 
 core.register_on_leaveplayer(function(player, timed_out)
@@ -104,8 +106,8 @@ function PlayerArmor.SetKevlarSkin(player)
 end
 
 -- HUDS
-function PlayerArmor.GetColorFromArmorStatus(player)
-	local pname = Name(player)
+function PlayerArmor.GetColorFromArmorStatus(pname)
+	local pname = Name(pname)
 	if pname then
 		local difference = PlayerArmor.DifferenceOfHP[pname]
 		local head = PlayerArmor.HeadHPDifference[pname]
@@ -136,22 +138,21 @@ function PlayerArmor.GetColorFromArmorStatus(player)
 	end
 end
 
-local function on_step(dtime)
-	for pname, data in pairs(PlayerArmor.Huds) do
-		if Player(pname) then
-			-- Strings
-			Player(pname):hud_change(data.kevlar, "text", "Kevlar: "..tostring(PlayerArmor.DifferenceOfHP[pname] * 10).."%")
-			Player(pname):hud_change(data.helmet, "text", "Helmet: "..tostring(PlayerArmor.HeadHPDifference[pname] * 10).."%")
-			-- Colors
-			Player(pname):hud_change(data.kevlar, "number", PlayerArmor.GetColorFromArmorStatus(Player(pname)).kevlar)
-			Player(pname):hud_change(data.helmet, "number", PlayerArmor.GetColorFromArmorStatus(Player(pname)).helmet)
-		else
-			PlayerArmor.Huds[pname] = nil
-		end
+function PlayerArmor.UpdateHud(pname)
+	local data = PlayerArmor.Huds[pname]
+	if data and Player(pname) then
+		-- Strings
+		Player(pname):hud_change(data.kevlar, "text", "Kevlar: "..tostring(PlayerArmor.DifferenceOfHP[pname] * 10).."%")
+		Player(pname):hud_change(data.helmet, "text", "Helmet: "..tostring(PlayerArmor.HeadHPDifference[pname] * 10).."%")
+		-- Colors
+		Player(pname):hud_change(data.kevlar, "number", PlayerArmor.GetColorFromArmorStatus(pname).kevlar)
+		Player(pname):hud_change(data.helmet, "number", PlayerArmor.GetColorFromArmorStatus(pname).helmet)
+	else
+		PlayerArmor.Huds[pname] = nil
 	end
 end
 
-core.register_globalstep(on_step)
+--core.register_globalstep(on_step)
 
 -- SHOP
 
@@ -183,6 +184,7 @@ core.register_on_punchplayer(function(player, hitter, time_from_last_punch, tool
 		PlayerArmor.DifferenceOfHP[Name(player)] = 0
 		PlayerArmor.PerDoubleUse[Name(player)] = 0
 	end
+	PlayerArmor.UpdateHud(Name(player))
 end)
 
 
