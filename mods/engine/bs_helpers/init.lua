@@ -163,6 +163,24 @@ function CheckPos(pos)
 	end
 end
 
+function CheckPosForPlayer(pos)
+	local node = core.get_node(pos)
+	if node.name ~= "air" then
+		for _, position in pairs(positions) do
+			local vector_to_use = sum(pos, position)
+			local second_vector_to_use = sum(pos, sum(position, vector.new(0,1,0)))
+			local Cnode = core.get_node(vector_to_use)
+			local SecondCnode = core.get_node(second_vector_to_use)
+			if Cnode.name == "air" and SecondCnode.name == "air" then
+				return vector_to_use
+			end
+		end
+		return vector.new(pos.x, pos.y + 2, pos.z)
+	else
+		return pos
+	end
+end
+
 RadiusToArea = function(center, r)
 	return {
 		x = center.x - r,
