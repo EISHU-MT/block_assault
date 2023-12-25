@@ -67,9 +67,12 @@ end
 
 --This function should handle "FriendShoot" feature.
 function OnPunchPlayer(player, hitter, _,_,_, damage)
-	
 	if bs.spectator[Name(hitter)] or bs.spectator[Name(player)] then -- Dont allow spectators do damage.
 		return true
+	end
+	
+	if not bs.player_team[Name(player)] then
+		return true -- Avoid hitting player without team.
 	end
 	
 	-- Should dont hit other players when match inst started
