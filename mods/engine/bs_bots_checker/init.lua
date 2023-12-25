@@ -44,5 +44,7 @@ if core.is_singleplayer() then
 			core.show_formspec("singleplayer", "core:menu", bs.login_menu)
 		end
 	end)
+else
+	config.RegisterInitialFunctions.join = true
 end
 
