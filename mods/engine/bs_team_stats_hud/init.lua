@@ -61,6 +61,6 @@ local function update_frames()
 			end
 		end
 	end
-	core.after(0.5, update_frames)
+
 end
-core.after(0.5, update_frames)
+bs.cbs.register_OnAssignTeam(update_frames)
