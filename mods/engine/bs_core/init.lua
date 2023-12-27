@@ -163,6 +163,7 @@ function bs.allocate_to_team(to_allocate, teamm, force, use_dead_table) -- Apply
 		end
 		
 		if not bs.team[team] then return false end
+		if bs.team[team].state == "neutral" then return false end
 		
 		-- We should check if player is on other team.
 		for teamm, data in pairs(bs.team) do
@@ -337,6 +338,7 @@ config = {
 	DisableTimer = false,
 	ShowMenuToPlayerWhenEndedRounds = {bool = true, func = function() end},
 	PvpEngine = {enable = true, func = function() end, FriendShoot = false, CountPlayersKills = true}, -- FriendShoot == true then player teammate can be killed from his own teammate.
+	EnableShopTable = true,
 	ResetPlayerMoneyOnEndRounds = true,
 	UseEngineCurrency = true,
 	OverridePlayersSkinForTeams = true,
