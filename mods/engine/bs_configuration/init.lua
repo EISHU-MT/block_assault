@@ -3,7 +3,7 @@ local cfg = minetest.settings
 
 local function GetBoolean(config, fallback)
 	local from_cfg = cfg:get_bool(config, fallback)
-	if not from_cfg then
+	if from_cfg == nil then
 		from_cfg = fallback
 	end
 	return from_cfg
@@ -32,6 +32,7 @@ local DisableTimer = GetBoolean("DisableTimer", false)
 local UseScoreSystem = GetBoolean("UseScoreSystem", true)
 local ClearPlayerInv = GetBoolean("ClearPlayerInv", true)
 local EnableDeadBody = GetBoolean("EnableDeadBody", true)
+local EnableShopTable = GetBoolean("EnableShopTable", true)
 local LoadOnLoginMenu = GetBoolean("LoadOnLoginMenu", true)
 local TypeOfPlayerTag = GetBoolean("TypeOfPlayerTag", false)
 local GiveDefaultTools = GetBoolean("GiveDefaultTools", true)
@@ -43,7 +44,7 @@ local PvpEngineFriendShoot = GetBoolean("PvpEngine.FriendShoot", false)
 local GiveDefaultToolsSword = GetBoolean("GiveDefaultTools.sword", true)
 local AllowPlayersModifyMaps = GetBoolean("AllowPlayersModifyMaps", false)
 local GiveDefaultToolsPistol = GetBoolean("GiveDefaultTools.pistol", true)
-local GiveMoneyToKillerPlayer = GetBoolean("GiveMoneyToKillerPlayer", false)
+local GiveMoneyToKillerPlayer = GetBoolean("GiveMoneyToKillerPlayer", true)
 local RestorePlayerHPOnEndRounds = GetBoolean("RestorePlayerHPOnEndRounds", true)
 local PvpEngineCountPlayersKills = GetBoolean("PvpEngine.CountPlayersKills", true)
 local ResetPlayerMoneyOnEndRounds = GetBoolean("ResetPlayerMoneyOnEndRounds", true)
@@ -76,6 +77,7 @@ local MapsLoadAreaType = Get("MapsLoadAreaType", "emerge")
 
 -- Proccess
 
+print(EnableDeadBody)
 
 config.DisableTimer = DisableTimer
 config.PvpEngine.enable = PvpEngine
@@ -83,6 +85,7 @@ config.TypeOfStorage = TypeOfStorage
 config.EnableDeadBody = EnableDeadBody
 config.UseScoreSystem = UseScoreSystem
 config.LoadOnLoginMenu = LoadOnLoginMenu
+config.EnableShopTable = EnableShopTable
 config.TypeOfPlayerTag = TypeOfPlayerTag
 config.MapsLoadAreaType = MapsLoadAreaType
 config.ClearPlayerInv.bool = ClearPlayerInv
