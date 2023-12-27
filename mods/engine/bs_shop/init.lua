@@ -414,10 +414,13 @@ local function on_prepare_all_map()
 end
 
 local function on_step(dt)
-	ticks = ticks + dt
-	if ticks >= 0.4 then
-		on_prepare_all_map()
-		ticks = 0
+	if config.EnableShopTable then
+		ticks = ticks + dt
+		if ticks >= 0.4 then
+			on_prepare_all_map()
+			ticks = 0
+		end
+		print("repeating")
 	end
 end
 
