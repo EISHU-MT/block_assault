@@ -10,6 +10,9 @@ LoadOnLeaveScript (TeamSelectorMenu On leave) bool true
 #    Run all needed scripts for players when they join
 RegisterInitialFunctions.join (PlayerInitialFunction Join) bool true
 
+#    Spawn Shop Table on teams (Red, Blue, Green and Yellow)
+EnableShopTable (Shop Table) bool true
+
 #    Run all needed scripts for players when they leave
 RegisterInitialFunctions.leave (PlayerInitialFunction Leave) bool true
 
