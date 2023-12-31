@@ -32,6 +32,7 @@ local DisableTimer = GetBoolean("DisableTimer", false)
 local UseScoreSystem = GetBoolean("UseScoreSystem", true)
 local ClearPlayerInv = GetBoolean("ClearPlayerInv", true)
 local EnableDeadBody = GetBoolean("EnableDeadBody", true)
+local AlwaysShopOpen = GetBoolean("AlwaysShopOpen", false)
 local EnableShopTable = GetBoolean("EnableShopTable", true)
 local LoadOnLoginMenu = GetBoolean("LoadOnLoginMenu", true)
 local TypeOfPlayerTag = GetBoolean("TypeOfPlayerTag", false)
@@ -74,19 +75,20 @@ local GiveMoneyToKillerPlayerAmount = GetNumber("GiveMoneyToKillerPlayer.amount"
 
 local TypeOfStorage = Get("TypeOfStorage", "lua")
 local MapsLoadAreaType = Get("MapsLoadAreaType", "emerge")
+local TypeOfAnimation = Get("TypeOfAnimation", "bas_default")
 
 -- Proccess
-
-print(EnableDeadBody)
 
 config.DisableTimer = DisableTimer
 config.PvpEngine.enable = PvpEngine
 config.TypeOfStorage = TypeOfStorage
 config.EnableDeadBody = EnableDeadBody
 config.UseScoreSystem = UseScoreSystem
+config.AlwaysShopOpen = AlwaysShopOpen
 config.LoadOnLoginMenu = LoadOnLoginMenu
 config.EnableShopTable = EnableShopTable
 config.TypeOfPlayerTag = TypeOfPlayerTag
+config.TypeOfAnimation = TypeOfAnimation
 config.MapsLoadAreaType = MapsLoadAreaType
 config.ClearPlayerInv.bool = ClearPlayerInv
 config.LoadOnLeaveScript = LoadOnLeaveScript
