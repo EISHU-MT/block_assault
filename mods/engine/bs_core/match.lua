@@ -37,6 +37,15 @@ function bs_match.finish_match(winner) -- PlayerKills, it resets every round.
 		RunCallbacks(bs_match.cbs.SecondOnEndMatch)
 		summary.show_to_all()
 		QueueCloseForms(3)
+		if C(maps.current_map.teams) > 2 then
+			bs.team.red.state = "alive"
+			bs.team.blue.state = "alive"
+			bs.team.green.state = "alive"
+			bs.team.yellow.state = "alive"
+		else
+			bs.team.red.state = "alive"
+			bs.team.blue.state = "alive"
+		end
 	else
 		summary.show_to_all()
 		QueueCloseForms(5)
