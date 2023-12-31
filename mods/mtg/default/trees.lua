@@ -103,15 +103,6 @@ function default.grow_sapling(pos)
 	end
 end
 
-minetest.register_lbm({
-	name = "default:convert_saplings_to_node_timer",
-	nodenames = {"default:sapling", "default:junglesapling",
-			"default:pine_sapling", "default:acacia_sapling",
-			"default:aspen_sapling"},
-	action = function(pos)
-		minetest.get_node_timer(pos):start(math.random(300, 1500))
-	end
-})
 
 --
 -- Tree generation

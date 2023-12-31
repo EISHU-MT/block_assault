@@ -162,19 +162,7 @@ default.cool_lava = function(pos, node)
 		{pos = pos, max_hear_distance = 16, gain = 0.2}, true)
 end
 
-if minetest.settings:get_bool("enable_lavacooling") ~= false then
-	minetest.register_abm({
-		label = "Lava cooling",
-		nodenames = {"default:lava_source", "default:lava_flowing"},
-		neighbors = {"group:cools_lava", "group:water"},
-		interval = 2,
-		chance = 2,
-		catch_up = false,
-		action = function(...)
-			default.cool_lava(...)
-		end,
-	})
-end
+
 
 
 --
@@ -198,7 +186,7 @@ end
 -- Papyrus and cactus growing
 --
 
--- Wrapping the functions in ABM action is necessary to make overriding them possible
+
 
 function default.grow_cactus(pos, node)
 	if node.param2 >= 4 then
