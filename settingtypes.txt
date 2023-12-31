@@ -63,6 +63,12 @@ AnnouceWinner (Annouce team) bool true
 #    Give default tools to a player from (respawning, joining team or other case)
 GiveDefaultTools (Default tools) bool true
 
+#    Player Animation type
+#    - default: Uses the default minetest player animation (MTG)
+#    - bas_pas: full animated player
+#    - bas_default: Only animate head but use default animation
+TypeOfAnimation (Animation Type) enum bas_default bas_default,default,bas_pas
+
 #    Give pistol to player, depends from GiveDefaultTools
 GiveDefaultTools.pistol (Default pistol bool) bool true
 
