@@ -335,6 +335,7 @@ config = {
 		join = true,
 		leave = true
 	},
+	TypeOfAnimation = "bas_default",
 	DisableTimer = false,
 	ShowMenuToPlayerWhenEndedRounds = {bool = true, func = function() end},
 	PvpEngine = {enable = true, func = function() end, FriendShoot = false, CountPlayersKills = true}, -- FriendShoot == true then player teammate can be killed from his own teammate.
@@ -349,6 +350,7 @@ config = {
 	ClearPlayerInv = {bool = true, maintain_last_inventory = false, set_new_inventory_after_inventory_reset = true},
 	EnableStatsForPlayers = true, -- New feature
 	UseScoreSystem = true,
+	AlwaysShopOpen = false,
 	IsDefaultGame = true, -- Only this is true when the game has not modified settings (As here "config") else this is modified.
 	GiveMoneyToKillerPlayer = {bool = true, amount = 10},
 	DontPunchPlayerWhileMatchNotStarted = true,
