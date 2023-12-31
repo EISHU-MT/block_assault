@@ -286,7 +286,7 @@ minetest.register_node("bs_shop:trading_table", {
 		local player = Player(clicker)
 		local name = Name(clicker)
 		if bs.get_team(name) ~= "" then
-			if bs_match.match_is_started == false or not bs_match.match_is_started then
+			if (bs_match.match_is_started == false or not bs_match.match_is_started) or config.AlwaysShopOpen then
 				core.show_formspec(name, "shop:main", Shop.ShowFormspec(bank.return_val(name)))
 			else
 				hud_events.new(player, {
