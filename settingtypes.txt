@@ -58,6 +58,9 @@ ResetPlayerMoneyOnEndRounds (Reset Player Balance) bool true
 #    Annouce the winner team when a match ends
 AnnouceWinner (Annouce team) bool true
 
+#    Shop Table should be open anyway on battle time
+AlwaysShopOpen (Shop Should Be Open) bool false
+
 [Player]
 
 #    Give default tools to a player from (respawning, joining team or other case)
