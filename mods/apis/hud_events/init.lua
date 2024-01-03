@@ -104,6 +104,8 @@ end
 ]]
 function hud_events.new(player, def)
 
+	if not player:is_player() then return false end
+
 	if type(def) == "string" then
 		def = {text = def}
 	end
