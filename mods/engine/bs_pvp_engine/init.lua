@@ -168,7 +168,6 @@ function OnPlayerGetHurt(player, hp, reason)
 						if PlayerKills[Name(player)] then
 							PlayerKills[Name(player)].deaths = PlayerKills[Name(player)].deaths + 1
 							RunCallbacks(PvpCallbacks.Callbacks, {died = player, killer = reason.type, teams = {died = bs.get_team(player), killer = nil}})
-							bs.allocate_to_spectator(player, true)
 						end
 					end
 				elseif PvpMode.Mode == 3 then
@@ -259,6 +258,8 @@ PvpCallbacks.RegisterFunction(function(data)
 					end
 				end, data)
 			end
+		elseif PvpMode.Mode == 2 then
+			bs.allocate_to_team(data.died, data.teams.died, true, false)
 		end
 	end
 end, "Match Shared Function")
