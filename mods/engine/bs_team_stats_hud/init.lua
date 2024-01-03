@@ -64,3 +64,4 @@ local function update_frames()
 
 end
 bs.cbs.register_OnAssignTeam(update_frames)
+UpdateTeamHuds = update_frames
