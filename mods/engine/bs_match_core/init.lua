@@ -19,7 +19,7 @@ local function to_use_two()
 		for team, data in pairs(bs.team) do
 			for name in pairs(data.players) do
 				bs.allocate_to_team(name, bs.died[name], true, true)
-				--SpawnPlayerAtRandomPosition(Player(name), team)
+				SpawnPlayerAtRandomPosition(Player(name), team)
 			end
 		end
 		bs.died = {}
