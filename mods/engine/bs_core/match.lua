@@ -80,6 +80,7 @@ function bs_match.finish_match(winner) -- PlayerKills, it resets every round.
 			p:set_hp(20)
 		end
 	end
+	core.set_timeofday(0.24)
 end
 
 --
@@ -100,3 +101,5 @@ core.register_on_mods_loaded(function()
 	maps.new_map()
 	bs_timer.reset()
 end)
+
+bs_match.register_OnMatchStart(function() core.set_timeofday(0.24) end)
