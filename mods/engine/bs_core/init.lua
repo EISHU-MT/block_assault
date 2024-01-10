@@ -181,6 +181,7 @@ function bs.allocate_to_team(to_allocate, teamm, force, use_dead_table) -- Apply
 			bs.spectator[name] = nil
 			RunCallbacks(bs.cbs.OnAssignTeam, player, team)
 			player:set_armor_groups({immortal=0,fleshy=100})
+			player:set_nametag_attributes({text=nil,color=nil})
 			RemovePrivs(player, {"fly", "fast", "noclip", "teleport"})
 			SpawnPlayerAtRandomPosition(player, team)
 			player:set_hp(20)
@@ -203,6 +204,7 @@ function bs.allocate_to_team(to_allocate, teamm, force, use_dead_table) -- Apply
 				bs.team[team].count = C(bs.team[team].players)
 				bs.player_team[name] = team
 				bs.is_playing[name] = true
+				player:set_nametag_attributes({text=nil,color=nil})
 				bs.spectator[name] = nil
 				RunCallbacks(bs.cbs.OnAssignTeam, player, team)
 				player:set_armor_groups({immortal=0,fleshy=100})
