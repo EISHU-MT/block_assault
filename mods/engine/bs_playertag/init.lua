@@ -172,6 +172,7 @@ local function add(player, team)
 	entity:set_properties({ textures={texture} })
 	entity:set_attach(player, "", player_tags.configs.coords, {x=0, y=0, z=0})
 	local luaent = entity:get_luaentity()
+	luaent.team = bs.get_player_team_css(player)
 	luaent.attachedto = player:get_player_name()
 	player_tags.objs_classic[player:get_player_name()] = entity
 	--player_tags.objs_modern[player:get_player_name()] = modern_entity
@@ -197,15 +198,19 @@ local function on_join_team(name, team)
 	end
 end
 
+local last_team = {}
+
 local steps = 0
 
 local function on_step(dt)
 	steps = steps + dt
 	if steps >= 0.5 then
 		for _, player in pairs(core.get_connected_players()) do
+			
 			player:set_nametag_attributes({
-				text = " ",
-				bgcolor = 0x00000,
+				text = nil,
+				bgcolor = nil,
+				color = nil,
 			})
 			
 			local objs = player:get_children()
