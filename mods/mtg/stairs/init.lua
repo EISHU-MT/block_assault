@@ -20,7 +20,7 @@ minetest.register_alias("stairs:stair_pinewood", "stairs:stair_pine_wood")
 minetest.register_alias("stairs:slab_pinewood", "stairs:slab_pine_wood")
 
 
--- Get setting for replace ABM
+-- Get setting for replace 
 
 local replace = minetest.settings:get_bool("enable_stairs_replace_abm")
 
@@ -299,24 +299,6 @@ end
 -- Optionally replace old "upside_down" nodes with new param2 versions.
 -- Disabled by default.
 
-if replace then
-	minetest.register_abm({
-		label = "Slab replace",
-		nodenames = {"group:slabs_replace"},
-		interval = 16,
-		chance = 1,
-		action = function(pos, node)
-			node.name = minetest.registered_nodes[node.name].replace_name
-			node.param2 = node.param2 + 20
-			if node.param2 == 21 then
-				node.param2 = 23
-			elseif node.param2 == 23 then
-				node.param2 = 21
-			end
-			minetest.set_node(pos, node)
-		end,
-	})
-end
 
 
 -- Register inner stair
