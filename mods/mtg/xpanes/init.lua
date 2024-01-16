@@ -202,17 +202,7 @@ xpanes.register_pane("bar", {
 	}
 })
 
-minetest.register_lbm({
-	name = "xpanes:gen2",
-	nodenames = {"group:pane"},
-	action = function(pos, node)
-		update_pane(pos)
-		for i = 0, 3 do
-			local dir = minetest.facedir_to_dir(i)
-			update_pane(vector.add(pos, dir))
-		end
-	end
-})
+
 
 -- Register steel bar doors and trapdoors
 
