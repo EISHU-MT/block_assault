@@ -26,9 +26,7 @@ end
 -- GUI related stuff
 minetest.register_on_joinplayer(function(player)
 	-- Set formspec prepend
-	local formspec = [[
-			bgcolor[#080808BB;true]
-			listcolors[#00000069;#5A5A5A;#141318;#30434C;#FFF] ]]
+	local formspec = ""
 	local name = player:get_player_name()
 	local info = minetest.get_player_information(name)
 	if info.formspec_version > 1 then
