@@ -878,19 +878,7 @@ end
 if rweapons_glass_breaking == "true" then
 	dofile(modpath.."/glass_breaking.lua")
 end
-if not minetest.settings:get_bool("glass_breaking") then
-minetest.register_abm({
-	nodenames = {"rangedweapons:broken_glass"},
-	interval = 1,
-	chance = 1,
-	action = function(pos, node)
-		if minetest.get_node(pos).name == "rangedweapons:broken_glass" then
-			node.name = "default:glass"
-			minetest.set_node(pos, node)
-		end
-	end
-})
-end
+
 
 local rangedweapons_empty_shell = {
 	physical = false,
@@ -925,20 +913,6 @@ end
 
 minetest.register_entity("rangedweapons:empty_shell", rangedweapons_empty_shell )
 
-
-minetest.register_abm({
-	nodenames = {"doors:hidden"},
-	interval = 1,
-	chance = 1,
-	action = function(pos, node)
-		pos.y = pos.y-1
-		if minetest.get_node(pos).name == "air" then
-		pos.y = pos.y+1
-			node.name = "air"
-			minetest.set_node(pos, node)
-		end
-	end
-})
 
 minetest.register_on_joinplayer(function(player)
 	hb.init_hudbar(player, "ammo", 0, 150, false)
