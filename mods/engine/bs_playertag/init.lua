@@ -194,7 +194,7 @@ local function on_join_team(name, team)
 	if name and (team == "" or not team) then
 		on_leave_player(player) -- Delete nametag.
 	elseif name and team ~= "" then
-		add(Player(name), team)
+		add(player, team)
 	end
 end
 
@@ -208,9 +208,9 @@ local function on_step(dt)
 		for _, player in pairs(core.get_connected_players()) do
 			
 			player:set_nametag_attributes({
-				text = nil,
-				bgcolor = nil,
-				color = nil,
+				text = " ",
+				bgcolor = {a=0},
+				color = {a=0},
 			})
 			
 			local objs = player:get_children()
@@ -238,11 +238,22 @@ local function on_step(dt)
 	end
 end
 
+local function DoFixNametags()
+	for _, p in pairs(core.get_connected_players()) do
+		local name = Name(p)
+		local team = bs.get_player_team_css(name)
+		if team ~= "" then
+			add(p, team)
+		end
+	end
+end
+
 local function ResetAllNametags()
 	for name, obj in pairs(player_tags.objs_classic) do
 		player_tags.objs_classic[name]:remove()
 		player_tags.objs_classic[name] = nil
 	end
+	core.after(1, DoFixNametags)
 end
 
 --core.register_on_joinplayer(on_join_player)
