@@ -227,8 +227,8 @@ function bs.allocate_to_team(to_allocate, teamm, force, use_dead_table) -- Apply
 			end
 		end
 	else
-		SendError(to_allocate, S("Unable to allocate you in @1, map system not started.", team))
-		core.log("error", "Unable to allocate player in team \""..team.."\". There are not loaded map")
+		SendError(to_allocate, S("Unable to allocate you in @1, map system not started.", teamm))
+		core.log("error", "Unable to allocate player in team \""..teamm.."\". There are not loaded map")
 		return false
 	end
 	
