@@ -3,7 +3,7 @@
 --]]
 local S = core.get_translator("bs_core")
 _OID = S("BlockAssault Classic") -- To be overriden by modes
-_V  = "Beta V3.5 Xmas Event"
+_V  = "Beta V4"
 _ID = "BlockAssault" -- Real engine name
 C = CountTable
 bs = {
@@ -374,7 +374,7 @@ config = {
 bs.login_menu = "formspec_version[6]" ..
 	"size[13.7,9.1]" ..
 	"box[0,0;13.7,1.1;#00DB00]" ..
-	"label[0.2,0.5;"..S("Welcome to").." ".._OID.."!]" ..
+	"label[0.2,0.5;"..S("Welcome to").." "..(config.GameClass or _OID).."!]" ..
 	"label[10.6,0.3;".._ID.."]" ..
 	"label[11.4,0.8;".._V.."]" ..
 	"box[0,1.1;13.7,0.7;#267026]" ..
@@ -434,6 +434,16 @@ local function on_login(player)
 end
 
 bs.show_menu_and_expire = on_login
+
+minetest.register_on_leaveplayer(function(player)
+	local name = player:get_player_name()
+	local team = bs.get_player_team_css(player)
+	if team == "" then
+		team = "#009200"
+	end
+	local str = "*** "..core.colorize(team, name).." left the game"
+	core.chat_send_all(str)
+end)
 
 local function on_leave(player)
 	if config.RegisterInitialFunctions.leave then
@@ -515,6 +525,26 @@ dofile(bs.modpath..DIR_DELIM.."callbacks.lua")
 dofile(bs.modpath..DIR_DELIM.."huds.lua")
 dofile(bs.modpath..DIR_DELIM.."timer.lua")
 dofile(bs.modpath..DIR_DELIM.."match.lua")
+
+minetest.register_on_respawnplayer(function(ObjectRef)
+	return true
+end)
+
+--minetest.send_join_message = function() end
+minetest.send_leave_message = function() end
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
