@@ -243,7 +243,7 @@ function Shop.GetWeapon(item, player, data)
 		Inv(player):remove_item("main", ItemStack(detected_conflict_weapon.item_name))
 		if detected_conflict_weapon.ammo.uses_ammo then
 			local bool, _, count = FindItem(detected_conflict_weapon.ammo.type)
-			if count > detected_conflict_weapon.ammo.count then
+			if bool and count and count > detected_conflict_weapon.ammo.count then
 				count = detected_conflict_weapon.ammo.count
 			end
 			core.item_drop(ItemStack(detected_conflict_weapon.ammo.type.." "..tostring(count)), player, player:get_pos())
