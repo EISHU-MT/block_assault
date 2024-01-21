@@ -47,6 +47,7 @@ local GiveDefaultToolsSword = GetBoolean("GiveDefaultTools.sword", true)
 local AllowPlayersModifyMaps = GetBoolean("AllowPlayersModifyMaps", false)
 local GiveDefaultToolsPistol = GetBoolean("GiveDefaultTools.pistol", true)
 local GiveMoneyToKillerPlayer = GetBoolean("GiveMoneyToKillerPlayer", true)
+local ForceUseOfCraftingTable = GetBoolean("ForceUseOfCraftingTable", false)
 local RestorePlayerHPOnEndRounds = GetBoolean("RestorePlayerHPOnEndRounds", true)
 local PvpEngineCountPlayersKills = GetBoolean("PvpEngine.CountPlayersKills", true)
 local ResetPlayerMoneyOnEndRounds = GetBoolean("ResetPlayerMoneyOnEndRounds", true)
@@ -82,7 +83,6 @@ local TypeOfAnimation = Get("TypeOfAnimation", "bas_default")
 
 -- Proccess
 
-
 config.DisableTimer = DisableTimer
 config.PvpEngine.enable = PvpEngine
 config.TypeOfStorage = TypeOfStorage
@@ -109,6 +109,7 @@ config.GiveDefaultTools.sword = GiveDefaultToolsSword
 config.AllowPlayersModifyMaps = AllowPlayersModifyMaps
 config.GiveDefaultTools.pistol = GiveDefaultToolsPistol
 config.PlayerLigthingIntensity = PlayerLigthingIntensity
+config.ForceUseOfCraftingTable = ForceUseOfCraftingTable
 config.PlayerLigthingSaturation = PlayerLigthingSaturation
 config.GiveMoneyToKillerPlayer.bool = GiveMoneyToKillerPlayer
 config.RestorePlayerHPOnEndRounds = RestorePlayerHPOnEndRounds
