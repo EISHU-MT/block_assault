@@ -352,6 +352,9 @@ config = {
 	ClearPlayerInv = {bool = true, maintain_last_inventory = false, set_new_inventory_after_inventory_reset = true},
 	EnableStatsForPlayers = true, -- New feature
 	UseScoreSystem = true,
+	UseLogForWarnings = false,
+	MedicStandTicksRate = 0.3,
+	MedicStandHealPerTick = 3,
 	AlwaysShopOpen = false,
 	IsDefaultGame = true, -- Only this is true when the game has not modified settings (As here "config") else this is modified.
 	GiveMoneyToKillerPlayer = {bool = true, amount = 10},
