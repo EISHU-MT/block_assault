@@ -9,7 +9,7 @@ bullet_particles = bullet_particles or "rangedweapons_bullet_fly.png"
 
 
 minetest.register_craftitem("rangedweapons:shot_bullet_visual", {
-	wield_scale = {x=1.0,y=1.0,z=1.0},
+	wield_scale = {x=0.5,y=0.5,z=0.5},
 	inventory_image = "rangedweapons_bulletshot.png",
 })
 
@@ -20,9 +20,9 @@ initial_properties = {
 	physical = true,
 	hp_max = 420,
 	glow = 100,
-	visual = "wielditem",
-	visual_size = {x=0.75, y=0.75},
-	textures = {"rangedweapons:shot_bullet_visual"},
+	visual = "sprite",
+	visual_size = {x=0.3, y=0.3},
+	textures = {"rangedweapons_bullet_fly.png"},
 	lastpos = {},
         collide_with_objects = false,
 	collisionbox = {-0.0025, -0.0025, -0.0025, 0.0025, 0.0025, 0.0025},
@@ -179,24 +179,7 @@ if sparks > 0 then
 make_sparks(self.object:get_pos())
 end
 
-local objVel = moveresult.collisions[1].old_velocity
-local objRot = self.object:get_rotation()
 
-if objRot and objVel then
-if moveresult.collisions[1].axis == "x" then
-self.object:set_rotation({x=0,y=objRot.y,z=objRot.z+3})
-self.object:set_velocity({x=objVel.x*-1,y=objVel.y,z=objVel.z})
-end
-
-if moveresult.collisions[1].axis == "z" then
-self.object:set_rotation({x=0,y=objRot.y,z=objRot.z+3})
-self.object:set_velocity({x=objVel.x,y=objVel.y,z=objVel.z*-1})
-end
-
-if moveresult.collisions[1].axis == "y" then
-self.object:set_rotation({x=0,y=objRot.y+3,z=objRot.z+3})
-self.object:set_velocity({x=objVel.x,y=objVel.y*-1,z=objVel.z})
-end end
 
 
 else
@@ -301,7 +284,7 @@ if Name(moveresult.collisions[1].object) and PlayerArmor.HeadHPDifference[Name(m
 	difference = PlayerArmor.HeadHPDifference[Name(moveresult.collisions[1].object)]
 end
 if enemy_pos and bullet_pos then
-	local upper_enemy_pos = vector.add(enemy_pos, vector.new(0,1.05,0))
+	local upper_enemy_pos = vector.add(enemy_pos, vector.new(0,1.55,0))
 	if bullet_pos.y >= upper_enemy_pos.y then
 		for name, dmg in pairs(damage) do
 			damage[name] = dmg + 20 - difference -- Insta kill
@@ -311,11 +294,7 @@ end
 
 
 entpos = self.object:get_pos()
-minetest.add_particle	({
-pos = entpos, velocity = 0, acceleration = {x=0, y=5, z=0},
-expirationtime = 0.75, size = 12, collisiondetection = false,
-vertical = false, texture = "rangedweapons_crit.png", glow = 30,})
-hit_texture = "rangedweapons_crithit.png"
+hit_texture = "blank.png"
 end
 
 moveresult.collisions[1].object:punch(owner, nil, {damage_groups = damage}, nil)
@@ -395,34 +374,35 @@ minetest.register_craftitem("rangedweapons:handgun_mag_black", {
 	inventory_image = "rangedweapons_magazine_handgun.png",
 })
 local rangedweapons_mag = {
-	physical = false,
-	timer = 0,
-	visual = "wielditem",
-	visual_size = {x=0.3, y=0.3},
-	textures = {"rangedweapons:handgun_mag_black"},
+	initial_properties = {
+		physical = false,
+		visual = "wielditem",
+		visual_size = {x=0.3, y=0.3},
+		textures = {"rangedweapons:handgun_mag_black"},
+		collisionbox = {0, 0, 0, 0, 0, 0},
+	},
 	lastpos= {},
-	collisionbox = {0, 0, 0, 0, 0, 0},
+	timer = 0,
+	on_step = function(self, dtime, pos)
+		self.timer = self.timer + dtime
+		local pos = self.object:get_pos()
+		local node = minetest.get_node(pos)
+		if self.lastpos.y ~= nil then
+			if minetest.registered_nodes[node.name] ~= nil then
+			if minetest.registered_nodes[node.name].walkable then
+		local vel = self.object:get_velocity()
+		local acc = self.object:get_acceleration()
+		self.object:set_velocity({x=0, y=0, z=0})
+		self.object:set_acceleration({x=0, y=0, z=0})
+				end end
+		end
+		if self.timer > 2.0 then
+			self.object:remove()
+
+		end
+		self.lastpos= {x = pos.x, y = pos.y, z = pos.z}
+	end
 }
-rangedweapons_mag.on_step = function(self, dtime, pos)
-	self.timer = self.timer + dtime
-	local pos = self.object:get_pos()
-	local node = minetest.get_node(pos)
-	if self.lastpos.y ~= nil then
-		if minetest.registered_nodes[node.name] ~= nil then
-		if minetest.registered_nodes[node.name].walkable then
-	local vel = self.object:get_velocity()
-	local acc = self.object:get_acceleration()
-	self.object:set_velocity({x=0, y=0, z=0})
-	self.object:set_acceleration({x=0, y=0, z=0})
-			end end
-	end
-	if self.timer > 2.0 then
-		self.object:remove()
-
-	end
-	self.lastpos= {x = pos.x, y = pos.y, z = pos.z}
-end
-
 minetest.register_entity("rangedweapons:mag", rangedweapons_mag)
 
 minetest.register_craftitem("rangedweapons:handgun_mag_white", {
