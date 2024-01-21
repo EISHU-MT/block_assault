@@ -546,71 +546,64 @@ minetest.register_globalstep(function(dtime)
 			end
 			-- Free hand
 			if bs_match.match_is_started then
-				if not bs.spectator[Name(player)] then
-					local properties = player:get_properties()
-					properties.pointable = true
-					player:set_properties(properties)
-					if IsPointing(player) then
-						is_speed_reset[Name(player)] = true
-						player:set_physics_override({
-							speed = 0.5,
-							jump = 0
-						})
-					else
-						local wield_item = player:get_wielded_item()
-						local ph = player:get_physics_override()
-						local item_name = wield_item:get_name()
-						if is_speed_reset[Name(player)] or (ph.speed <= 0.6 and not Armor.QueuedToFullHP[Name(player)]) then
+				if physics then
+					if not bs.spectator[Name(player)] then
+						local properties = player:get_properties()
+						properties.pointable = true
+						player:set_properties(properties)
+						if IsPointing(player) then
 							player:set_physics_override({
-								speed = 1,
-								jump = 1
+								speed = physics.speed - 0.5,
+								jump = 0
 							})
-							is_speed_reset[Name(player)] = false
-						end
-						if item_name == ":" or item_name == " " or item_name == "" or item_name == nil then
-							if speed_players[Name(player)] ~= true then
-								local ph = player:get_physics_override()
-								local overrideable = 0
-								if ph.jump <= 0.1 then
-									overrideable = 0.6
-								end
-								player:set_physics_override({
-									speed = ph.speed + 0.5,
-									jump = ph.jump + 0.4 + overrideable
-								})
-								speed_players[Name(player)] = true
-							end
 						else
-							if speed_players[Name(player)] == true then
-								local ph = player:get_physics_override()
-								if ph.jump <= 0 then
-									ph.jump = 1
+							if not Armor.QueuedToFullHP[Name(player)] then
+								local wield_item = player:get_wielded_item()
+								local item_name = wield_item:get_name()
+								if item_name == ":" or item_name == " " or item_name == "" then
+									player:set_physics_override({
+										speed = physics.speed + 0.5,
+										jump = physics.jump + 0.4
+									})
+								else
+									player:set_physics_override({
+										speed = physics.speed,
+										jump = physics.jump
+									})
 								end
+							else
 								player:set_physics_override({
-									speed = ph.speed - 0.5,
-									jump = ph.jump - 0.4
+									speed = physics.speed - 0.5,
+									jump = physics.jump - 0.4
 								})
-								speed_players[Name(player)] = false
 							end
 						end
+					else
+						player:set_physics_override({
+							gravity = physics.gravity,
+							speed = physics.speed,
+							jump = physics.jump
+						})
 					end
-				else
-					player:set_physics_override({
-						speed = 1,
-						jump = 1
-					})
 				end
 			else
-				if not bs.spectator[Name(player)] then
-					is_speed_reset[Name(player)] = true
-					local properties = player:get_properties()
-					properties.pointable = false
-					player:set_properties(properties)
-				else
-					player:set_physics_override({
-						speed = 1,
-						jump = 1
-					})
+				if physics then
+					if not bs.spectator[Name(player)] then
+						is_speed_reset[Name(player)] = true
+						local properties = player:get_properties()
+						properties.pointable = false
+						player:set_properties(properties)
+						player:set_physics_override({
+							gravity = physics.gravity,
+							speed = physics.speed,
+							jump = physics.jump
+						})
+					else
+						player:set_physics_override({
+							speed = 1,
+							jump = 1
+						})
+					end
 				end
 			end
 		end
