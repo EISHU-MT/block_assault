@@ -62,6 +62,20 @@ function maps.new_map()
 		end
 		
 		--maps.current_map.teams[""] = vector.new()
+		-- Clear objects
+		core.after(2, function(def)
+			core.log("action", "Going to remove unused objects....")
+			local objs = minetest.get_objects_in_area(def.pos1, def.pos2)
+			for _, obj in pairs(objs) do
+				local ent = obj:get_luaentity()
+				if ent and obj then
+					if (not ent.wield_hand) and (not ent.is_nametag) and (not ent.bot_name) then
+						core.log("action", "Removing obj "..tostring(obj).." on ClearNewMapArea")
+						obj:remove()
+					end
+				end
+			end
+		end, def)
 		
 		core.set_node(def.teams.blue, {name="air"})
 		core.set_node(def.teams.red, {name="air"})
