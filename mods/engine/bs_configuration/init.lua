@@ -41,6 +41,7 @@ local LoadOnLeaveScript = GetBoolean("LoadOnLeaveScript", true)
 local UsePvpMatchEngine = GetBoolean("UsePvpMatchEngine", true)
 local UseEngineCurrency = GetBoolean("UseEngineCurrency", true)
 local StrictMapgenCheck = GetBoolean("StrictMapgenCheck", true)
+local UseLogForWarnings = GetBoolean("UseLogForWarnings", false)
 local PvpEngineFriendShoot = GetBoolean("PvpEngine.FriendShoot", false)
 local GiveDefaultToolsSword = GetBoolean("GiveDefaultTools.sword", true)
 local AllowPlayersModifyMaps = GetBoolean("AllowPlayersModifyMaps", false)
@@ -66,6 +67,8 @@ local DefaultStartWeaponWeapon = Get("DefaultStartWeapon.weapon", "rangedweapons
 -- Int, Float
 
 local LimitForBombsCount = GetNumber("LimitForBombsCount", 5)
+local MedicStandTicksRate = GetNumber("MedicStandTicksRate", 0.3)
+local MedicStandHealPerTick = GetNumber("MedicStandHealPerTick", 3)
 local PlayerLigthingIntensity = GetNumber("PlayerLigthingIntensity", 0.38)
 local PlayerLigthingSaturation = GetNumber("PlayerLigthingSaturation", 10.0)
 local SecondsToWaitToEndMolotovFire = GetNumber("SecondsToWaitToEndMolotovFire", 5)
@@ -79,6 +82,7 @@ local TypeOfAnimation = Get("TypeOfAnimation", "bas_default")
 
 -- Proccess
 
+
 config.DisableTimer = DisableTimer
 config.PvpEngine.enable = PvpEngine
 config.TypeOfStorage = TypeOfStorage
@@ -91,13 +95,16 @@ config.TypeOfPlayerTag = TypeOfPlayerTag
 config.TypeOfAnimation = TypeOfAnimation
 config.MapsLoadAreaType = MapsLoadAreaType
 config.ClearPlayerInv.bool = ClearPlayerInv
+config.UseLogForWarnings = UseLogForWarnings
 config.LoadOnLeaveScript = LoadOnLeaveScript
 config.UseEngineCurrency = UseEngineCurrency
 config.StrictMapgenCheck = StrictMapgenCheck
 config.LimitForBombsCount = LimitForBombsCount
 config.GiveDefaultTools.bool = GiveDefaultTools
+config.MedicStandTicksRate = MedicStandTicksRate
 config.UsePvpMatchEngine.bool = UsePvpMatchEngine
 config.PvpEngine.FriendShoot = PvpEngineFriendShoot
+config.MedicStandHealPerTick = MedicStandHealPerTick
 config.GiveDefaultTools.sword = GiveDefaultToolsSword
 config.AllowPlayersModifyMaps = AllowPlayersModifyMaps
 config.GiveDefaultTools.pistol = GiveDefaultToolsPistol
