@@ -197,6 +197,7 @@ function bs.allocate_to_team(to_allocate, teamm, force, use_dead_table) -- Apply
 				hotbar = true,
 			})
 			player:set_properties({pointable = true, collide_with_objects = true, physical = true, is_visible = true})
+			bs.send_to_team(team, S("### @1 joined on this team!", name))
 			return true
 		else
 			if bs.team[team] and name then
@@ -223,6 +224,7 @@ function bs.allocate_to_team(to_allocate, teamm, force, use_dead_table) -- Apply
 					hotbar = true,
 				})
 				player:set_properties({pointable = true, collide_with_objects = true, physical = true, is_visible = true})
+				bs.send_to_team(team, S("### @1 joined on this team!", name))
 				return true
 			end
 		end
@@ -392,7 +394,7 @@ bs.login_menu = "formspec_version[6]" ..
 	"image_button[0.1,5.5;4.5,3.5;team_blue_color.png;blue;Blue Team;false;false]" ..
 	"image_button[4.6,2;4.5,3.5;team_yellow_color.png;yellow;Yellow Team;false;false]" ..
 	"image_button[4.6,5.5;4.5,3.5;team_green_color.png;green;Green Team;false;false]" ..
-	"image_button[9.1,2;4.5,3.5;team_null_color.png;spect;No team;false;false]" ..
+	"image_button[9.1,2;4.5,3.5;team_null_color.png;spect;"..S("No team")..";false;false]" ..
 	"image_button[9.1,5.5;4.5,3.5;quit.png;exit;"..S("Disconnect")..";false;false]"
 
 function bs.send_to_team(team, msg)
@@ -450,7 +452,7 @@ minetest.register_on_leaveplayer(function(player)
 	if team == "" then
 		team = "#009200"
 	end
-	local str = "*** "..core.colorize(team, name).." left the game"
+	local str = S("*** @1 left the game", core.colorize(team, name))
 	core.chat_send_all(str)
 end)
 
@@ -482,7 +484,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 				end
 				core.close_formspec(Name(player), "core:menu")
 			else
-				core.chat_send_player(Name(player), c("#FF0000", "-!- Current map dont support 2+ teams map."))
+				core.chat_send_player(Name(player), c("#FF0000", S("-!- Current map dont support 2+ teams map.")))
 			end
 		elseif fields.green then
 			if C(maps.current_map.teams) > 2 then
@@ -492,13 +494,13 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 				end
 				core.close_formspec(Name(player), "core:menu")
 			else
-				core.chat_send_player(Name(player), c("#FF0000", "-!- Current map dont support 2+ teams map."))
+				core.chat_send_player(Name(player), c("#FF0000", S("-!- Current map dont support 2+ teams map.")))
 			end
 		elseif fields.spect then
 			bs.allocate_to_spectator(player, false)
 			core.close_formspec(Name(player), "core:menu")
 		elseif fields.exit then
-			core.disconnect_player(Name(player), "Disconnected from GUI")
+			core.disconnect_player(Name(player), S("Disconnected from GUI"))
 		end
 	end
 end)
