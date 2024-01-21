@@ -420,7 +420,6 @@ local function on_step(dt)
 			on_prepare_all_map()
 			ticks = 0
 		end
-		print("repeating")
 	end
 end
 
