@@ -1,6 +1,8 @@
 minetest.register_node(":bas:wall_block", {
 	description = ("Wall of maps\nBA.S Block\nUsed to fill free space in non-walkable area"),
-	tiles = {"walls.png"},
+	tiles = {
+		[1] = "default_tin_block.png",
+	},
 	is_ground_content = false,
 	sunlight_propagates = true,
 	groups = {immortal = 1},
@@ -8,7 +10,7 @@ minetest.register_node(":bas:wall_block", {
 
 minetest.register_node(":bas:ceiling_block", {
 	description = ("Ceiling Block for maps\nBA.S Block\nUsed to fill free space in non-walkable area"),
-	tiles = {"fillblock.png"},
+	tiles = {"default_glass.png"},
 	is_ground_content = false,
 	groups = {immortal = 1},
 	sunlight_propagates = true,
