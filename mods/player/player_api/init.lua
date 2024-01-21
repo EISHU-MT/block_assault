@@ -25,7 +25,14 @@ minetest.register_on_joinplayer(function(player)
 	player_api.set_model(player, "character.b3d")
 	player:set_nametag_attributes({text=""})
 	player:set_properties({
+		nametag = " ",
+		nametag_color = {a=0,r=0,g=0,b=0},
+		nametag_bgcolor = {a=0,r=0,g=0,b=0},
 		is_visible = false,
 		pointable = false,
+	})
+	player:set_physics_override({
+		sneak_glitch = true,
+		new_move = false,
 	})
 end)
