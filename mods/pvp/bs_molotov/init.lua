@@ -13,7 +13,7 @@ local molotov_entity = {
 	},
 	timer = 0,
 	timer_to_check = 0,
-	center_light_node_pos = vector.zero(),
+	center_light_node_pos = {x=0,y=0,z=0},
 	dropper = nil,
 	is_fire = true,
 	on_step = function(self, dtime)
