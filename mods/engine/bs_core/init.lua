@@ -380,6 +380,7 @@ config = {
 	AllowPlayersModifyMaps = false,
 	StrictMapgenCheck = true, -- Avoid big lag
 	TypeOfPlayerTag = false, -- Classic: true, Modern: false
+	ForceUseOfCraftingTable = false,
 }
 
 bs.login_menu = "formspec_version[6]" ..
