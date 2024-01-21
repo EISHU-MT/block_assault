@@ -14,3 +14,4 @@ dofile(maps.modpath.."/proccesor.lua")
 dofile(maps.modpath.."/core.lua")
 dofile(maps.modpath.."/essential.lua")
 dofile(maps.modpath.."/api.lua")
+dofile(maps.modpath.."/physics.lua") -- handshake with empty-hand stamina
