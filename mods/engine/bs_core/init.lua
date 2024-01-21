@@ -238,8 +238,11 @@ function bs.get_team_players(team)
 	if bs.team[team] then
 		local players = {}
 		for name, value in pairs(bs.team[team].players) do
-			if bs.spectator[name] ~= true then
-				table.insert(players, name)
+			if bs.spectator[name] ~= true and Player(name) then
+				table.insert(players, Player(name))
+			elseif not Player(name) then
+				core.log("error", "A ghost player have been found on team "..team.." name = "..name)
+				bs.team[name].players[name] = nil
 			end
 		end
 		return players
@@ -264,8 +267,11 @@ function bs.get_team_players_index(team)
 	if bs.team[team] then
 		local players = {}
 		for name, value in pairs(bs.team[team].players) do
-			if bs.spectator[name] ~= true then
-				table.insert(players, name)
+			if bs.spectator[name] ~= true and Player(name) then
+				table.insert(players, Player(name))
+			elseif not Player(name) then
+				core.log("error", "A ghost player have been found on team "..team.." name = "..name)
+				bs.team[name].players[name] = nil
 			end
 		end
 		return C(players), players
@@ -506,7 +512,7 @@ end
 
 core.register_chatcommand("t", {
 	params = "<msg>",
-	description = "Send a private message to your team",
+	description = S("Send a private message to your team"),
 	privs = {shout=true},
 	func = function(name, params)
 		if bots then
@@ -518,6 +524,28 @@ core.register_chatcommand("t", {
 			local player_team = bs.get_player_team_css(name)
 			if player_team ~= "" then
 				bs.send_to_team(player_team, "### <"..name.."> "..params)
+			end
+		end
+	end
+})
+
+core.register_chatcommand("teams", {
+	params = "",
+	description = S("Returns a list of all players on each team"),
+	func = function(name, params)
+		if maps.current_map and maps.theres_loaded_map then
+			for team in pairs(maps.current_map.teams) do
+				local players = bs.get_team_players(team)
+				if players then
+					local names = {}
+					for _, obj in pairs(players) do
+						if Name(obj) and Name(obj) ~= "" then
+							table.insert(names, Name(obj))
+						end
+					end
+					local str = table.concat(names, ", ")
+					core.chat_send_player(name, core.colorize(team, "("..C(names)..") "..TransformTextReadable(team)..": ")..str)
+				end
 			end
 		end
 	end
