@@ -31,6 +31,12 @@ RestorePlayerHPOnEndRounds (Player HP Restoration) bool true
 #    Use PvP Match engine, for match control over kills
 UsePvpMatchEngine (PvP Match Engine) bool true
 
+#    Print and write every warning and error into the log (debug.txt or stdout)
+UseLogForWarnings (Print Warnings on log) bool false
+
+#    Ticks per server step, to heal players with the Medic Stand (PvP Section)
+MedicStandTicksRate (Ticks per server step) float 0.3 0.01 1
+
 [Basic]
 
 #    Use the BAS Builtin currency
@@ -40,6 +46,9 @@ UseEngineCurrency (Currency) bool true
 UseScoreSystem (Score) bool true
 
 [PvP]
+
+#    HP to heal players per tick, default: 3
+MedicStandHealPerTick (HP per tick) int 3 1 20
 
 #    Use PvP Engine (From BAS Builtin)
 PvpEngine (PvP Engine) bool true
@@ -118,6 +127,9 @@ AllowPlayersModifyMaps (Players Map Interact) bool false
 
 #    Give money to the killer of a player/bot
 GiveMoneyToKillerPlayer (Give to killer money) bool true
+
+#    Give to players a crafting table when he join a team
+ForceUseOfCraftingTable (Force Use of Crafting Table) bool false
 
 #    The amount of money that we need to give to the killer, depends on GiveMoneyToKillerPlayer
 GiveMoneyToKillerPlayer.amount (Give to killer money amount) int 10 10 65535
