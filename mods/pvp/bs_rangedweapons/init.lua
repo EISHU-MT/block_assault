@@ -148,18 +148,20 @@ hb.change_hudbar(player, "ammo", rangedweapons.bullets[Name(player)], rangedweap
 --player:hud_change(gunammo, "text", gunMeta:get_int("RW_bullets"))
 
 if GunCaps.gun_magazine ~= nil then
-		local pos = player:get_pos()
-		local dir = player:get_look_dir()
-		local yaw = player:get_look_horizontal()
-		if pos and dir and yaw then
-			pos.y = pos.y + 1.4
-local obj = minetest.add_entity(pos,"rangedweapons:mag")
-			if obj then
-obj:set_properties({textures = {GunCaps.gun_magazine}})
-	obj:set_velocity({x=dir.x*2, y=dir.y*2, z=dir.z*2})
-	obj:set_acceleration({x=0, y=-5, z=0})
-	obj:set_rotation({x=0,y=yaw,z=0})
-end end end
+	local pos = player:get_pos()
+	local dir = player:get_look_dir()
+	local yaw = player:get_look_horizontal()
+	if pos and dir and yaw then
+		pos.y = pos.y + 1.4
+		local obj = minetest.add_entity(pos,"rangedweapons:mag")
+		if obj then
+			obj:set_properties({textures = {GunCaps.gun_magazine}})
+			obj:set_velocity({x=dir.x*2, y=dir.y*2, z=dir.z*2})
+			obj:set_acceleration({x=0, y=-5, z=0})
+			obj:set_rotation({x=0,y=yaw,z=0})
+		end
+	end
+end
 
 if GunCaps.gun_unloaded ~= nil then
 itemstack:set_name(GunCaps.gun_unloaded)
@@ -363,6 +365,8 @@ end
 
 rangedweapons_shoot_gun = function(itemstack, player)
 
+if not bs_match.match_is_started then return end
+
 if minetest.find_node_near(player:getpos(), 10,"rangedweapons:antigun_block")
 then
 minetest.sound_play("rangedweapons_empty", {pos = player:get_pos(), gain = 0.3, max_hear_distance = 60})
@@ -433,7 +437,7 @@ local bullet_critEffc = 0
 local bullet_projMult = 1
 local bullet_mobPen = 0
 local bullet_nodePen = 0
-local bullet_shell_ent = "rangedweapons:empty_shell"
+local bullet_shell_ent = ""
 local bullet_shell_visual = "wielditem"
 local bullet_shell_texture = "rangedweapons:shelldrop"
 local bullet_dps = 0
@@ -499,7 +503,7 @@ bullet_critEffc = AmmoCaps.ammo_critEffc or 0
 bullet_projMult = AmmoCaps.ammo_projectile_multiplier or 1
 bullet_mobPen = AmmoCaps.ammo_mob_penetration or 0
 bullet_nodePen = AmmoCaps.ammo_node_penetration or 0
-bullet_shell_ent = AmmoCaps.shell_entity or "rangedweapons:empty_shell"
+bullet_shell_ent = ""
 bullet_shell_visual = AmmoCaps.shell_visual or "wielditem"
 bullet_shell_texture = AmmoCaps.shell_texture or "rangedweapons:shelldrop"
 bullet_dps = AmmoCaps.ammo_dps or 0
@@ -559,7 +563,7 @@ end end
 
 rangedweapons_shoot_powergun = function(itemstack, player)
 
-if minetest.find_node_near(player:getpos(), 10,"rangedweapons:antigun_block")
+if minetest.find_node_near(player:get_pos(), 10,"rangedweapons:antigun_block")
 then
 minetest.sound_play("rangedweapons_empty", {pos = player:get_pos(), gain = 0.3, max_hear_distance = 60})
    minetest.chat_send_player(player:get_player_name(), "" ..core.colorize("#ff0000","Guns are prohibited in this area!"))
@@ -666,7 +670,7 @@ end
 end end
 
 rangedweapons_launch_projectile = function(player,projNum,projDmg,projEnt,visualType,texture,shoot_sound,combined_velocity,accuracy,skill_value,ColResult,projCrit,projCritEffc,mobPen,nodePen,has_shell,shellEnt,shellTexture,shellVisual,dps,gravity,door_break,glass_break,bullet_particles,sparks,ignite,size,smokeSize,proj_wear,proj_glow)
-
+--print(projEnt)
 --minetest.chat_send_all(accuracy)
 
 ----------------------------------
@@ -679,15 +683,6 @@ rangedweapons_launch_projectile = function(player,projNum,projDmg,projEnt,visual
 		minetest.sound_play(shoot_sound, {pos = player:get_pos(), gain = 0.5, max_hear_distance = 60})
 		pos.y = pos.y + 1.45
 
-	if has_shell > 0 then
-	local shl = minetest.add_entity(pos, shellEnt)
-shl:setvelocity({x=dir.x * -10, y=dir.y * -10, z=dir.z * -10})
-shl:setacceleration({x=dir.x * -5, y= -10, z=dir.z * -5})
-shl:set_rotation({x=0,y=yaw + math.pi, z=-svertical})
-shl:set_properties({
-textures = {shellTexture},
-visual = shellVisual,})
-	end	
 if smokeSize > 0 then
 --[[ -- No more smoke!
 	minetest.add_particle({
@@ -716,8 +711,8 @@ local spawnpos_z = pos.z
 			local ent = obj:get_luaentity()
 
 obj:set_properties(
-{textures = {texture},
-visual = visualType,
+{textures = {"rangedweapons_bullet_fly.png"},
+visual = "sprite",
 collisionbox = {-size,-size,-size, size,size,size},
 glow = proj_glow,}
 )
@@ -764,7 +759,7 @@ minetest.sound_play(rldsound, {pos = player:get_pos(), gain = 0.5, max_hear_dist
 		local yaw = player:get_look_yaw()
 		if pos and dir and yaw then
 			pos.y = pos.y + 1.6
-			local obj = minetest.add_entity(pos, "rangedweapons:empty_shell")
+			
 
 if AmmoCaps and bulletStack ~= "" then
 AmmoCaps = bulletStack:get_definition().RW_ammo_capabilities
@@ -775,14 +770,14 @@ local bullet_shell_texture = "rangedweapons:shelldrop"
 bullet_shell_visual = AmmoCaps.shell_visual or "wielditem"
 bullet_shell_texture = AmmoCaps.shell_texture or "rangedweapons:shelldrop"
 
-obj:set_properties({textures = {bullet_shell_texture}})
-obj:set_properties({visual = bullet_shell_visual})
+--obj:set_properties({textures = {bullet_shell_texture}})
+--obj:set_properties({visual = bullet_shell_visual})
 
 end
 			if obj then
-obj:set_velocity({x=dir.x*-10, y=dir.y*-10, z=dir.z*-10})
-obj:set_acceleration({x=dir.x*-5, y=-10, z=dir.z*-5})
-	obj:set_yaw(yaw + math.pi)
+--obj:set_velocity({x=dir.x*-10, y=dir.y*-10, z=dir.z*-10})
+--obj:set_acceleration({x=dir.x*-5, y=-10, z=dir.z*-5})
+	--obj:set_yaw(yaw + math.pi)
 	end end end
 ---------------------------------------------------
 
@@ -879,39 +874,6 @@ if rweapons_glass_breaking == "true" then
 	dofile(modpath.."/glass_breaking.lua")
 end
 
-
-local rangedweapons_empty_shell = {
-	physical = false,
-	timer = 0,
-	visual = "wielditem",
-	visual_size = {x=0.3, y=0.3},
-	textures = {"rangedweapons:shelldrop"},
-	lastpos= {},
-	collisionbox = {0, 0, 0, 0, 0, 0},
-}
-rangedweapons_empty_shell.on_step = function(self, dtime, pos)
-	self.timer = self.timer + dtime
-	local pos = self.object:get_pos()
-	local node = minetest.get_node(pos)
-	if self.lastpos.y ~= nil then
-		if minetest.registered_nodes[node.name]~= nil then
-		if minetest.registered_nodes[node.name].walkable then
-	local vel = self.object:get_velocity()
-	local acc = self.object:get_acceleration()
-	self.object:set_velocity({x=vel.x*-0.3, y=vel.y*-0.75, z=vel.z*-0.3})
-			minetest.sound_play("rangedweapons_shellhit", {pos = self.lastpos, gain = 0.8, max_hear_distance = 45})
-	self.object:set_acceleration({x=acc.x, y=acc.y, z=acc.z})
-			end end
-	end
-	if self.timer > 1.69 then
-			minetest.sound_play("rangedweapons_bulletdrop", {pos = self.lastpos, gain = 0.8, max_hear_distance = 35})
-		self.object:remove()
-
-	end
-	self.lastpos= {x = pos.x, y = pos.y, z = pos.z}
-end
-
-minetest.register_entity("rangedweapons:empty_shell", rangedweapons_empty_shell )
 
 
 minetest.register_on_joinplayer(function(player)
