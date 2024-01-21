@@ -80,7 +80,7 @@ function Armor.OnGlobalStep(dtime)
 								color = "info",
 								quick = true,
 							})
-							Player(player_name):set_physics_override({speed=1})
+							Player(player_name):set_physics_override({speed=physics.speed})
 						else
 							local to_verify = hp + Armor.heal_hp_per_second
 							local hp_to_add = 0
@@ -90,7 +90,7 @@ function Armor.OnGlobalStep(dtime)
 								hp_to_add = to_verify
 							end
 							Player(player_name):set_hp(hp_to_add or 0)
-							Player(player_name):set_physics_override({speed=0.5})
+							Player(player_name):set_physics_override({speed=physics.speed - 0.5})
 						end
 					else
 						Armor.QueuedToFullHP[player_name] = nil
@@ -99,7 +99,7 @@ function Armor.OnGlobalStep(dtime)
 							color = "warning",
 							quick = true,
 						})
-						Player(player_name):set_physics_override({speed=1})
+						Player(player_name):set_physics_override({speed=physics.speed})
 					end
 				end
 			end
