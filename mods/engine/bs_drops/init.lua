@@ -1,4 +1,13 @@
-dropondie = {}
+dropondie = {
+	blacklisted = {
+		config.DefaultStartWeapon.weapon,
+		config.DefaultStartWeapon.sword,
+	}
+}
+
+function dropondie.blacklist_item(itemstring)
+	table.insert(dropondie.blacklisted, itemstring)
+end
 
 local function drop_list(pos, inv, list)
 	for _, item in ipairs(inv:get_list(list)) do
@@ -16,11 +25,11 @@ function dropondie.drop_all(player)
 	local inv = Inv(player)
 	local list = inv:get_list("main")
 	for _, itemstack in pairs(list) do
-		if itemstack:get_name() == config.DefaultStartWeapon.weapon then
-			itemstack:clear()
-		end
-		if itemstack:get_name() == config.DefaultStartWeapon.sword then
-			itemstack:clear()
+		-- check blacklisted items
+		for _, str in pairs(dropondie.blacklisted) do
+			if itemstack:get_name() == str then
+				itemstack:clear()
+			end
 		end
 		list[_] = itemstack
 	end
