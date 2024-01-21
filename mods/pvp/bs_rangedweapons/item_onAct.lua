@@ -288,10 +288,10 @@ local function on_step(dt)
 			do
 				rangedweapons.cooldown[Name(player)] = rangedweapons.cooldown[Name(player)] - dt
 				
-				if rangedweapons.cooldown[Name(player)] > 0.0 then
+				--if rangedweapons.cooldown[Name(player)] > 0.0 then
 					--print("mae"..rangedweapons.cooldown[Name(player)])
-					rangedweapons.cooldown[Name(player)] = rangedweapons.cooldown[Name(player)] - dt
-				end
+				--	rangedweapons.cooldown[Name(player)] = rangedweapons.cooldown[Name(player)] - dt
+				--end
 				
 				--minetest.chat_send_all(u_meta:get_float("rw_cooldown"))
 				
@@ -308,7 +308,7 @@ local function on_step(dt)
 						if player:get_wielded_item():get_definition().loaded_sound ~= nil then
 							minetest.sound_play(itemstack:get_definition().loaded_sound, {
 								pos = Player(player):get_pos(),
-								gain = 0.7,
+								gain = 0.5,
 								max_hear_distance = 32
 							})
 						end
