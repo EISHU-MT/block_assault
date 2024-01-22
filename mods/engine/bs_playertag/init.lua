@@ -106,43 +106,27 @@ minetest.register_entity("bs_playertag:name_tag", {
 	timer = 0,
 	on_step = function(self, dt)
 		self.timer = self.timer + dt
-		if self.timer >= 1 then
+		if self.timer >= 0.1 then
 			local attached = self.object:get_attach()
 			if not attached then
 				self.object:remove()
 			else
-				if config.TypeOfPlayerTag then --  Classic
+			--	if config.TypeOfPlayerTag then --  Classic
 					if bs.is_playing[Name(attached)] then
 						if bs.spectator[Name(attached)] then
 							self.object:remove()
-						else
-							
 						end
 					else
 						self.object:remove()
 					end
-					--local names = {}
-					--for _, p in pairs(core.get_connected_players()) do
-					--	names[Name(p)] = true
-					--end
-					--self.object:set_observers(names)
-				--[[else -- Modern
-					local players_obj = core.get_connected_players()
-					local attached_team = bs.get_player_team_css(attached)
-					local players = bs.get_team_players(attached_team)
+					--print("EXEC")
 					local pname = Name(attached)
-					local enemy_to_show = {}
-					for _, p in pairs(players_obj) do
-						local name = Name(p)
-						if not players[name] then
-							enemy_to_show[name] = true
-						end
+					if RespawnDelay.players[pname] then
+						self.object:set_properties({is_visible = false})
+					else
+						self.object:set_properties({is_visible = true})
 					end
-					enemy_to_show[pname] = nil
-					self.object:set_observers(enemy_to_show)
-					--player_tags.funcs.modernise_nametag_of_player(self.object, players)
-					--]]
-				end
+				--end
 			end
 			self.timer = 0
 		end
