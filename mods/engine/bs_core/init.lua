@@ -139,7 +139,7 @@ function bs.get_team_force(to_index)
 	return bs.player_team[name] or nil
 end
 
-function bs.allocate_to_team(to_allocate, teamm, force, use_dead_table) -- Applying this function again to a applied player dont crash
+function bs.allocate_to_team(to_allocate, teamm, force, use_dead_table, ann) -- Applying this function again to a applied player dont crash
 	if not to_allocate then return false end
 	if maps.theres_loaded_map or force then
 		
@@ -197,7 +197,9 @@ function bs.allocate_to_team(to_allocate, teamm, force, use_dead_table) -- Apply
 				hotbar = true,
 			})
 			player:set_properties({pointable = true, collide_with_objects = true, physical = true, is_visible = true})
-			bs.send_to_team(team, S("### @1 joined on this team!", name))
+			if not ann then
+				bs.send_to_team(team, S("### @1 joined on this team!", name))
+			end
 			return true
 		else
 			if bs.team[team] and name then
@@ -224,7 +226,9 @@ function bs.allocate_to_team(to_allocate, teamm, force, use_dead_table) -- Apply
 					hotbar = true,
 				})
 				player:set_properties({pointable = true, collide_with_objects = true, physical = true, is_visible = true})
-				bs.send_to_team(team, S("### @1 joined on this team!", name))
+				if not ann then
+					bs.send_to_team(team, S("### @1 joined on this team!", name))
+				end
 				return true
 			end
 		end
@@ -559,10 +563,6 @@ dofile(bs.modpath..DIR_DELIM.."callbacks.lua")
 dofile(bs.modpath..DIR_DELIM.."huds.lua")
 dofile(bs.modpath..DIR_DELIM.."timer.lua")
 dofile(bs.modpath..DIR_DELIM.."match.lua")
-
-minetest.register_on_respawnplayer(function(ObjectRef)
-	return true
-end)
 
 --minetest.send_join_message = function() end
 minetest.send_leave_message = function() end
