@@ -522,6 +522,9 @@ local abs = math.abs
 local deg = math.deg
 local basepos = vector.new(0, 6.35, 0)
 local lastdir = {}
+DoPhysics = {
+	--mao = {speed = 0, jump = 0, gravity = 1}
+}
 minetest.register_globalstep(function(dtime)
 	if config.TypeOfAnimation == "bas_default" then
 		for _, player in pairs(get_connected_players()) do
@@ -548,35 +551,45 @@ minetest.register_globalstep(function(dtime)
 			if bs_match.match_is_started then
 				if physics then
 					if not bs.spectator[Name(player)] then
-						local properties = player:get_properties()
-						properties.pointable = true
-						player:set_properties(properties)
-						if IsPointing(player) then
-							player:set_physics_override({
-								speed = physics.speed - 0.5,
-								jump = 0
-							})
-						else
-							if not Armor.QueuedToFullHP[Name(player)] then
-								local wield_item = player:get_wielded_item()
-								local item_name = wield_item:get_name()
-								if item_name == ":" or item_name == " " or item_name == "" then
-									player:set_physics_override({
-										speed = physics.speed + 0.5,
-										jump = physics.jump + 0.4
-									})
-								else
-									player:set_physics_override({
-										speed = physics.speed,
-										jump = physics.jump
-									})
-								end
-							else
+						if not RespawnDelay.players[Name(player)] then
+							local properties = player:get_properties()
+							properties.pointable = true
+							player:set_properties(properties)
+						end
+						if not DoPhysics[Name(player)] then
+							if IsPointing(player) then
 								player:set_physics_override({
 									speed = physics.speed - 0.5,
-									jump = physics.jump - 0.4
+									jump = 0,
+									gravity = physics.gravity,
 								})
+							else
+								if not Armor.QueuedToFullHP[Name(player)] then
+									local wield_item = player:get_wielded_item()
+									local item_name = wield_item:get_name()
+									if item_name == ":" or item_name == " " or item_name == "" then
+										player:set_physics_override({
+											speed = physics.speed + 0.5,
+											jump = physics.jump + 0.4,
+											gravity = physics.gravity,
+										})
+									else
+										player:set_physics_override({
+											speed = physics.speed,
+											jump = physics.jump,
+											gravity = physics.gravity,
+										})
+									end
+								else
+									player:set_physics_override({
+										speed = physics.speed - 0.5,
+										jump = physics.jump - 0.4,
+										gravity = physics.gravity,
+									})
+								end
 							end
+						else
+							player:set_physics_override(DoPhysics[Name(player)])
 						end
 					else
 						player:set_physics_override({
