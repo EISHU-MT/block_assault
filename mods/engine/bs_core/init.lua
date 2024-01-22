@@ -385,6 +385,7 @@ config = {
 	StrictMapgenCheck = true, -- Avoid big lag
 	TypeOfPlayerTag = false, -- Classic: true, Modern: false
 	ForceUseOfCraftingTable = false,
+	RespawnTimer = 6,
 }
 
 bs.login_menu = "formspec_version[6]" ..
