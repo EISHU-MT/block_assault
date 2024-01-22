@@ -132,12 +132,6 @@ function OnPlayerGetHurt(player, hp, reason)
 							RunCallbacks(PvpCallbacks.Callbacks, {died = player, killer = reason.type, teams = {died = bs.get_team(player), killer = nil}})
 							bs.allocate_to_spectator(player, true)
 						end
-					elseif reason.type == "set_hp" then
-						if PlayerKills[Name(player)] then
-							PlayerKills[Name(player)].deaths = PlayerKills[Name(player)].deaths + 1
-							RunCallbacks(PvpCallbacks.Callbacks, {died = player, killer = reason.type, teams = {died = bs.get_team(player), killer = nil}})
-							bs.allocate_to_spectator(player, true)
-						end
 					end
 				elseif PvpMode.Mode == 2 then
 					if reason.object then
@@ -155,19 +149,16 @@ function OnPlayerGetHurt(player, hp, reason)
 								if config.GiveMoneyToKillerPlayer.bool then
 									bank.player_add_value(Name(hitter), config.GiveMoneyToKillerPlayer.amount)
 								end
-								player:set_pos(maps.current_map.teams[bs.get_team(player)])
+								--player:set_pos(maps.current_map.teams[bs.get_team(player)])
+								RespawnDelay.DoRespawnDelay(player)
 							end
 						end
-					elseif reason.type == "fall" or reason.type == "node_damage" or reason.type == "drown" then
+					else
 						if PlayerKills[Name(player)] then
 							PlayerKills[Name(player)].deaths = PlayerKills[Name(player)].deaths + 1
 							RunCallbacks(PvpCallbacks.Callbacks, {died = player, killer = reason.type, teams = {died = bs.get_team(player), killer = nil}})
-							player:set_pos(maps.current_map.teams[bs.get_team(player)])
-						end
-					elseif reason.type == "set_hp" then
-						if PlayerKills[Name(player)] then
-							PlayerKills[Name(player)].deaths = PlayerKills[Name(player)].deaths + 1
-							RunCallbacks(PvpCallbacks.Callbacks, {died = player, killer = reason.type, teams = {died = bs.get_team(player), killer = nil}})
+							--player:set_pos(maps.current_map.teams[bs.get_team(player)])
+							RespawnDelay.DoRespawnDelay(player)
 						end
 					end
 				elseif PvpMode.Mode == 3 then
@@ -231,14 +222,40 @@ function OnPlayerGetHurt(player, hp, reason)
 				error("\nPvP Engine:\nOn Calling external function [config.PvpEngine.func]:\nVariable is nil.\n")
 			end
 		end
+	elseif reason.type and reason.type ~= "set_hp" then
+		if reason.object and not reason.object:is_player() then return end -- no infinity respawns
+		if player:get_hp() - damage <= 0 then
+			if PvpMode.Mode == 1 then
+				if PlayerKills[Name(player)] then
+					PlayerKills[Name(player)].deaths = PlayerKills[Name(player)].deaths + 1
+					RunCallbacks(PvpCallbacks.Callbacks, {died = player, killer = reason.type, teams = {died = bs.get_team(player), killer = nil}})
+					bs.allocate_to_spectator(player, true)
+				end
+			elseif PvpMode.Mode == 2 then
+				if PlayerKills[Name(player)] then
+					PlayerKills[Name(player)].deaths = PlayerKills[Name(player)].deaths + 1
+					RunCallbacks(PvpCallbacks.Callbacks, {died = player, killer = reason.type, teams = {died = bs.get_team(player), killer = nil}})
+					RespawnDelay.DoRespawnDelay(player)
+				end
+			elseif PvpMode.Mode == 3 then
+				if PlayerKills[Name(player)] then
+					PlayerKills[Name(player)].deaths = PlayerKills[Name(player)].deaths + 1
+					RunCallbacks(PvpCallbacks.Callbacks, {died = player, killer = reason.type, teams = {died = bs.get_team(player), killer = nil}})
+					local response = PvpMode.ThirdModeFunction(player, reason.object)
+					if response == true then
+						bs.allocate_to_spectator(player, true)
+					elseif response == false then
+						player:set_pos(maps.current_map.teams[bs.get_team(player)])
+						player:set_hp(20) -- This is here because this is not handled by 1st callback function
+					else
+						error("\nPvP Engine:\nOn getting response of ThirdModeFunction:\nCannot find boolean in response.\n")
+					end
+				end
+			end
+		end
 	end
 end
 
-PvpCallbacks.RegisterFunction(function(data)
-	if PvpMode.Mode == 2 then
-		data.died:set_hp(20)
-	end
-end, "PvP Engine")
 PvpCallbacks.RegisterFunction(function(data)
 	if config.UsePvpMatchEngine.bool then
 		if PvpMode.Mode == 1 then
@@ -258,8 +275,8 @@ PvpCallbacks.RegisterFunction(function(data)
 					end
 				end, data)
 			end
-		elseif PvpMode.Mode == 2 then
-			bs.allocate_to_team(data.died, data.teams.died, true, false)
+		elseif PvpMode.Mode == 2 then --bs_respawn_delay
+			--bs.allocate_to_team(data.died, data.teams.died, true, false)
 		end
 	end
 end, "Match Shared Function")
