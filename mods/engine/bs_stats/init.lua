@@ -87,7 +87,7 @@ PvpCallbacks.RegisterFunction(function(data)
 	local killer = Name(data.killer)
 	if victim and victim ~= "" then
 		stats.deaths.add_to(victim)
-		if data.killer:is_player() and killer and killer ~= "" then
+		if type(data.killer) == "userdata" and data.killer:is_player() and killer and killer ~= "" then
 			stats.kills.add_to(killer)
 		end
 	end
