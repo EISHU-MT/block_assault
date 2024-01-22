@@ -67,6 +67,7 @@ local DefaultStartWeaponWeapon = Get("DefaultStartWeapon.weapon", "rangedweapons
 
 -- Int, Float
 
+local RespawnTimer = GetNumber("RespawnTimer", 6)
 local LimitForBombsCount = GetNumber("LimitForBombsCount", 5)
 local MedicStandTicksRate = GetNumber("MedicStandTicksRate", 0.3)
 local MedicStandHealPerTick = GetNumber("MedicStandHealPerTick", 3)
@@ -83,6 +84,7 @@ local TypeOfAnimation = Get("TypeOfAnimation", "bas_default")
 
 -- Proccess
 
+config.RespawnTimer = RespawnTimer
 config.DisableTimer = DisableTimer
 config.PvpEngine.enable = PvpEngine
 config.TypeOfStorage = TypeOfStorage
