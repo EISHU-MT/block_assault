@@ -513,8 +513,19 @@ local function update_hud(player)
 	if not player_exists(player) then return end
 	if minetest.settings:get_bool("enable_damage") then
 		if hb.settings.forceload_default_hudbars then
-			if bs.spectator[Name(player)] ~= true then
-				hb.unhide_hudbar(player, "health")
+			if RespawnDelay then
+				if bs.spectator[Name(player)] ~= true and RespawnDelay.players[Name(player)] ~= true then
+					hb.unhide_hudbar(player, "health")
+				end
+				if RespawnDelay.players[Name(player)] then
+					hb.hide_hudbar(player, "health")
+				end
+			else
+				if bs.spectator[Name(player)] ~= true then
+					hb.unhide_hudbar(player, "health")
+				else
+					hb.hide_hudbar(player, "health")
+				end
 			end
 		end
 		--air
@@ -572,10 +583,18 @@ minetest.register_globalstep(function(dtime)
 			for _, player in pairs(hb.players) do
 				-- update all hud elements
 				update_hud(player)
-				if bs.spectator[Name(player)] then
-					hb.hide_hudbar(player, "ammo")
+				if RespawnDelay then
+					if bs.spectator[Name(player)] or RespawnDelay.players[Name(player)] then
+						hb.hide_hudbar(player, "ammo")
+					else
+						hb.unhide_hudbar(player, "ammo")
+					end
 				else
-					hb.unhide_hudbar(player, "ammo")
+					if bs.spectator[Name(player)] then
+						hb.hide_hudbar(player, "ammo")
+					else
+						hb.unhide_hudbar(player, "ammo")
+					end
 				end
 			end
 		end
