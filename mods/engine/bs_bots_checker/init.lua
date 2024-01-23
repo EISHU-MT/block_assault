@@ -29,10 +29,10 @@ if core.is_singleplayer() then
 		if formname == "::bc" then
 			if fields.ok then
 				core.after(10, bs.auto_allocate_team, Player(player))
-				core.show_formspec(Name(player), "core:menu", bs.login_menu)
+				core.show_formspec(Name(player), "core:menu", bs.login_menu())
 			else
 				core.after(10, bs.auto_allocate_team, Player(player))
-				core.show_formspec(Name(player), "core:menu", bs.login_menu)
+				core.show_formspec(Name(player), "core:menu", bs.login_menu())
 			end
 		end
 	end)
