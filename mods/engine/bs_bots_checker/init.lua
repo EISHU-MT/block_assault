@@ -41,7 +41,7 @@ if core.is_singleplayer() then
 			core.show_formspec("singleplayer", "::bc", return_formspec())
 		else
 			core.after(10, bs.auto_allocate_team, Player(player))
-			core.show_formspec("singleplayer", "core:menu", bs.login_menu)
+			core.show_formspec("singleplayer", "core:menu", bs.login_menu())
 		end
 	end)
 else
