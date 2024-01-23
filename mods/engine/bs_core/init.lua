@@ -3,7 +3,7 @@
 --]]
 local S = core.get_translator("bs_core")
 _OID = S("BlockAssault Classic") -- To be overriden by modes
-_V  = "Beta V4"
+_V  = "Beta V4.5"
 _ID = "BlockAssault" -- Real engine name
 C = CountTable
 bs = {
@@ -28,6 +28,7 @@ bs = {
 	modpath = core.get_modpath(core.get_current_modname()),
 	died = {},
 	spectator = {},
+	version = 4.5,
 }
 
 local to_assign_each_team = {
@@ -388,7 +389,8 @@ config = {
 	RespawnTimer = 6,
 }
 
-bs.login_menu = "formspec_version[6]" ..
+bs.login_menu = function()
+	return "formspec_version[6]" ..
 	"size[13.7,9.1]" ..
 	"box[0,0;13.7,1.1;#00DB00]" ..
 	"label[0.2,0.5;"..S("Welcome to").." "..(config.GameClass or _OID).."!]" ..
@@ -402,6 +404,7 @@ bs.login_menu = "formspec_version[6]" ..
 	"image_button[4.6,5.5;4.5,3.5;team_green_color.png;green;Green Team;false;false]" ..
 	"image_button[9.1,2;4.5,3.5;team_null_color.png;spect;"..S("No team")..";false;false]" ..
 	"image_button[9.1,5.5;4.5,3.5;quit.png;exit;"..S("Disconnect")..";false;false]"
+end
 
 function bs.send_to_team(team, msg)
 	if bots then
@@ -445,7 +448,7 @@ local function on_login(player)
 	if config.RegisterInitialFunctions.join then
 		if config.LoadOnLoginMenu then
 			core.after(10, bs.auto_allocate_team, Player(player))
-			core.show_formspec(Name(player), "core:menu", bs.login_menu)
+			core.show_formspec(Name(player), "core:menu", bs.login_menu())
 		end
 	end
 end
