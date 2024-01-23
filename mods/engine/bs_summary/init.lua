@@ -48,7 +48,7 @@ function summary.return_sub_elements(players, auth_player)
 	local y_level = 0.35
 	local sub_y_scale_level = 28
 	for _, pname in pairs(players) do
-		i = i + 1
+		i = i + 1.5
 		elements[FormRandomString(5)] = {
 			alignment = { x = 0, y = i + 0.5 },
 			offset = {x = 0, y = -130},
