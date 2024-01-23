@@ -24,9 +24,14 @@ function RespawnDelay.DoRespawnDelay(player)
 		hud:add(name, "timer_of_respawn", {
 			hud_elem_type = "text",
 			position = {x = 0.5, y = 0.5},
-			alignment = {x = "center", y = "down"},
-			text_scale = 2,
+			alignment = {x = "center", y = "center"},
+			text_scale = 3,
 			color = 0xA000B3,
+		})
+		player:hud_set_flags({
+			hotbar = false,
+			wielditem = false,
+			crosshair = false
 		})
 		RespawnDelay.players[name] = true
 		player:set_properties({hp_max = 0})
@@ -54,6 +59,11 @@ function RespawnDelay.RespawnPlayer(player)
 		player:set_hp(20)
 		player:set_armor_groups({immortal=0,fleshy=100})
 		DoPhysics[Name(player)] = nil
+		player:hud_set_flags({
+			hotbar = true,
+			wielditem = true,
+			crosshair = true
+		})
 		--if bs.get_team_force(name) then
 		--	SpawnPlayerAtRandomPosition(Player(name), bs.get_team_force(name))
 		--end
