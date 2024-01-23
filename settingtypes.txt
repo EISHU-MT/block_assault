@@ -59,6 +59,11 @@ PvpEngine.FriendShoot (FriendShoot) bool false
 #    Count Players kills, to cache
 PvpEngine.CountPlayersKills (CPK) bool true
 
+#    Respawn delay for players
+#    Used on PvpMode:2
+#    Seconds to wait for player respawn
+RespawnTimer (Respawn Delay) int 6 1 15
+
 [Match]
 
 #    Reset player balance when the rounds count reachs the limit
