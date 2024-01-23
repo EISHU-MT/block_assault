@@ -27,7 +27,7 @@ function bs_match.finish_match(winner) -- PlayerKills, it resets every round.
 		annouce.winner(winner)
 	end
 	RunCallbacks(bs_match.cbs.OnEndMatch, winner, table.copy(PlayerKills))
-	if bs_match.current_rounds - 1 >= 1 then
+	if bs_match.current_rounds - 1 >= 0 then
 		bs_match.current_rounds = bs_match.current_rounds - 1
 		bs_match.match_is_started = false
 		for name in pairs(bs.team[winner].players) do
