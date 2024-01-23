@@ -287,9 +287,3 @@ core.register_on_player_hpchange(OnPlayerGetHurt)
 
 
 
-
-
-
-
-
-
