@@ -63,5 +63,6 @@ local function update_frames()
 	end
 
 end
-bs.cbs.register_OnAssignTeam(update_frames)
+--bs.cbs.register_OnAssignTeam(update_frames)
 UpdateTeamHuds = update_frames
+hooks.register_hook(update_frames, 1, {repeat_time = -10, name = "Update Teams Hud", cancel_true_event = false})
