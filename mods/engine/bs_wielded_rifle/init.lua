@@ -16,7 +16,7 @@ local def = {
 			selectionbox = { -0.05, -0.05, -0.05, 0.05, 0.05, 0.05, rotate = false },
 			pointable = false,
 			visual = "wielditem",
-			visual_size = {x = 0.1, y = 0.1},
+			visual_size = {x = 0.2, y = 0.2},
 			textures = {"bs_wielded_rifle:invisible"},
 			colors = {},
 			use_texture_alpha = false,
