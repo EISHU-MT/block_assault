@@ -81,28 +81,28 @@ local fragdef = {
 		remove_flora(pos, radius/2)
 
 		for _, v in pairs(minetest.get_objects_inside_radius(pos, radius)) do
-			if v:is_player() and v:get_hp() > 0 and v:get_properties().pointable then
-				local footpos = vector.offset(v:get_pos(), 0, 0.1, 0)
-				local headpos = vector.offset(v:get_pos(), 0, v:get_properties().eye_height, 0)
-				local footdist = vector.distance(pos, footpos)
-				local headdist = vector.distance(pos, headpos)
-				local target_head = false
-
-				if footdist >= headdist then
-					target_head = true
-				end
-
-				local hit_pos1 = check_hit(pos, target_head and headpos or footpos, v)
-
-				-- Check the closest distance, but if that fails try targeting the farther one
-				if hit_pos1 or check_hit(pos, target_head and footpos or headpos, v) then
-					v:punch(player, 1, {
-						punch_interval = 1,
-						damage_groups = {
-							grenade = 1,
-							fleshy = def.explode_damage - ( (radius/3) * (target_head and headdist or footdist) )
-						}
-					}, nil)
+			if v:get_properties() then --verify if object is not dead
+				if v:get_hp() > 0 and v:get_properties().pointable then
+					local footpos = vector.offset(v:get_pos(), 0, 0.1, 0)
+					local headpos = vector.offset(v:get_pos(), 0, v:get_properties().eye_height, 0)
+					local footdist = vector.distance(pos, footpos)
+					local headdist = vector.distance(pos, headpos)
+					local target_head = false
+					if footdist >= headdist then
+						target_head = true
+					end
+					local hit_pos1 = check_hit(pos, target_head and headpos or footpos, v)
+					-- Check the closest distance, but if that fails try targeting the farther one
+					if hit_pos1 or check_hit(pos, target_head and footpos or headpos, v) then
+						v:punch(player, 1, {
+							punch_interval = 1,
+							damage_groups = {
+								grenade = 1,
+								fleshy = def.explode_damage - ( (radius/3) * (target_head and headdist or footdist) )
+							}
+						}, nil)
+						bs.latest_used_item[Name(player)] = ItemStack("grenades:frag")
+					end
 				end
 			end
 		end
