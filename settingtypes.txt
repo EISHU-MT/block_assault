@@ -22,6 +22,9 @@ DisableTimer (Disable timer) bool false
 #    Game class name
 GameClass (Game Class name) string BA Hunt & Kill
 
+#    Check Bots if they dissapeared from map, for the users with low view range this might be useful
+ReCheckAliveBots (Check Bots Object) bool true
+
 #    Show again the TeamSelector for players when the rounds count reachs the limit
 ShowMenuToPlayerWhenEndedRounds (Show TeamSelector on EndRounds) bool true
 
