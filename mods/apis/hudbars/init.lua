@@ -467,7 +467,7 @@ end
 
 --register built-in HUD bars
 if minetest.settings:get_bool("enable_damage") or hb.settings.forceload_default_hudbars then
-	hb.register_hudbar("health", 0xFFFFFF, S("Health"), { bar = "hudbars_bar_health.png", icon = "hudbars_icon_health.png", bgicon = "hudbars_bgicon_health.png" }, 20, 20, false)
+	--hb.register_hudbar("health", 0xFFFFFF, S("Health"), { bar = "hudbars_bar_health.png", icon = "hudbars_icon_health.png", bgicon = "hudbars_bgicon_health.png" }, 20, 20, false)
 	hb.register_hudbar("breath", 0xFFFFFF, S("Breath"), { bar = "hudbars_bar_breath.png", icon = "hudbars_icon_breath.png", bgicon = "hudbars_bgicon_breath.png" }, 10, 10, true)
 	hb.register_hudbar("ammo", 0xFFFFFF, S("Ammo"), { bar = "grey_bar.png", icon = "rangedweapons_762mm.png"}, 0, 150, false)
 	--hb.register_hudbar("armor" , 0xFFFFFF, S("Armor") , { bar = "cs_files_armor_bar.png", icon = "cs_files_armor_icon.png"}, 0, 100, false, ("@1: @2%"), { order = { "label", "value" }, textdomain = "armor" })
@@ -484,15 +484,18 @@ end
 local function custom_hud(player)
 	if minetest.settings:get_bool("enable_damage") or hb.settings.forceload_default_hudbars then
 		local hide
-		if minetest.settings:get_bool("enable_damage") then
-			hide = false
-		else
-			hide = true
-		end
-		local hp = player:get_hp()
-		local hp_max = player:get_properties().hp_max
-		hb.init_hudbar(player, "health", math.min(hp, hp_max), hp_max, hide)
+		--if minetest.settings:get_bool("enable_damage") then
+		--	hide = false
+		--else
+		--	hide = true
+		--end
+		--local hp = player:get_hp()
+		--local hp_max = player:get_properties().hp_max
+		--hb.init_hudbar(player, "health", math.min(hp, hp_max), hp_max, hide)
 		--hb.init_hudbar(player, "dummy", 0, 0)
+		if health_bar[Name(player)] and health_bar[Name(player)].hd then
+			player:hud_change(health_bar[Name(player)].hd, "number", player:get_hp())
+		end
 		local breath = player:get_breath()
 		local breath_max = player:get_properties().breath_max
 		local hide_breath
@@ -502,10 +505,7 @@ local function custom_hud(player)
 end
 
 local function update_health(player)
-	local hp_max = player:get_properties().hp_max
-	if bs.spectator[Name(player)] ~= true then
-		hb.change_hudbar(player, "health", player:get_hp(), hp_max)
-	end
+	player:hud_change(health_bar[Name(player)].hd, "number", player:get_hp())
 end
 
 -- update built-in HUD bars
@@ -515,20 +515,29 @@ local function update_hud(player)
 		if hb.settings.forceload_default_hudbars then
 			if RespawnDelay then
 				if bs.spectator[Name(player)] ~= true and RespawnDelay.players[Name(player)] ~= true then
-					hb.unhide_hudbar(player, "health")
+					player:hud_change(health_bar[Name(player)].bg, "text", "health_bar_bg.png")
+					player:hud_change(health_bar[Name(player)].hd, "text", "health_bar.png")
+					player:hud_change(health_bar[Name(player)].tx, "text", "HP: "..player:get_hp().."/20")
 				end
 				if RespawnDelay.players[Name(player)] then
-					hb.hide_hudbar(player, "health")
+					player:hud_change(health_bar[Name(player)].bg, "text", "blank.png")
+					player:hud_change(health_bar[Name(player)].hd, "text", "blank.png")
+					player:hud_change(health_bar[Name(player)].tx, "text", "")
 				end
 			else
 				if bs.spectator[Name(player)] ~= true then
-					hb.unhide_hudbar(player, "health")
+					player:hud_change(health_bar[Name(player)].bg, "text", "health_bar_bg.png")
+					player:hud_change(health_bar[Name(player)].hd, "text", "health_bar.png")
+					player:hud_change(health_bar[Name(player)].tx, "text", "HP: "..player:get_hp().."/20")
 				else
-					hb.hide_hudbar(player, "health")
+					player:hud_change(health_bar[Name(player)].bg, "text", "blank.png")
+					player:hud_change(health_bar[Name(player)].hd, "text", "blank.png")
+					player:hud_change(health_bar[Name(player)].tx, "text", "")
 				end
 			end
 		end
 		--air
+		player:hud_change(health_bar[Name(player)].hd, "number", player:get_hp())
 		local breath_max = player:get_properties().breath_max
 		local breath = player:get_breath()
 		
@@ -541,7 +550,6 @@ local function update_hud(player)
 			end
 		end
 		--health
-		update_health(player)
 	elseif hb.settings.forceload_default_hudbars then
 		hb.hide_hudbar(player, "health")
 		hb.hide_hudbar(player, "breath")
@@ -551,24 +559,80 @@ end
 minetest.register_on_player_hpchange(function(player)
 	if hb.players[player:get_player_name()] ~= nil then
 		if bs.spectator[Name(player)] ~= true then
-			update_health(player)
+			player:hud_change(health_bar[Name(player)].hd, "number", player:get_hp())
+			--player:hud_change(health_bar[Name(player)].tx, "text", "HP: "..player:get_hp().."/20")
 		end
+		update_hud(player)
 	end
 end)
 
 minetest.register_on_respawnplayer(function(player)
-	update_health(player)
 	hb.hide_hudbar(player, "breath")
+	update_hud(player)
 end)
 
-minetest.register_on_joinplayer(function(player)
+
+local position = {x=0,y=1}
+local offset = {x=10,y=-30}
+health_bar = {}
+bs.cbs.register_OnAssignTeam(function(player, team)
 	hide_builtin(player)
+	if team == "" then
+		if health_bar[Name(player)] then
+			for _, id in pairs(health_bar[Name(player)]) do
+				if _ ~= "tx" then
+					player:hud_change(id, "text", "blank.png")
+				else
+					player:hud_change(id, "text", " ")
+				end
+			end
+			return
+		end
+	end
 	custom_hud(player)
 	hb.players[player:get_player_name()] = player
+	
+	-- health bar
+	
+	health_bar[Name(player)] = {}
+	
+	health_bar[Name(player)].bg = player:hud_add({
+		hud_elem_type = "statbar",
+		position = position,
+		scale = {x=1,y=1},
+		text = "health_bar_bg.png",
+		number = 20,
+		alignment = {x=-1,y=-1},
+		offset = offset,
+		direction = 0,
+		size = {x = 23, y = 23},
+	})
+	
+	health_bar[Name(player)].hd = player:hud_add({
+		hud_elem_type = "statbar",
+		position = position,
+		text = "health_bar.png",
+		number = player:get_hp(),
+		alignment = {x=-1,y=-1},
+		offset = offset,
+		direction = 0,
+		size = {x = 23, y = 23},
+	})
+	
+	health_bar[Name(player)].tx = player:hud_add({
+		hud_elem_type = "text",
+		scale = {x = 1.5, y = 1.5},
+		position = position,
+		offset = {x = 50, y = -17},
+		alignment = {x = "center", y = "up"},
+		text = "HP: "..player:get_hp().."/20",
+		number = 0x000000,
+	})
 end)
 
 minetest.register_on_leaveplayer(function(player)
 	hb.players[player:get_player_name()] = nil
+	health_bar[Name(player)] = nil
 end)
 
 local main_timer = 0
