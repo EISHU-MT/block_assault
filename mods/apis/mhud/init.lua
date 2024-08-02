@@ -1,3 +1,4 @@
+-- init
 mhud = {}
 
 function mhud.init()
