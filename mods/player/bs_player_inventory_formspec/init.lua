@@ -92,7 +92,7 @@ function bs_pif.ReturnSpectatorFormspec()
 end
 
 
-
+--[[
 local ticks = 0
 local function on_step(dtime)
 	ticks = ticks + dtime
@@ -117,3 +117,71 @@ local function on_step(dtime)
 end
 
 core.register_globalstep(on_step)
+--]]
+
+local function get_dead_teammates(team)
+	local int = 0
+	if bots then
+		for a, b in pairs(bots.data) do
+			if b.team == team then
+				if b.object and type(b.object) == "userdata" then
+					if (not b.object:get_yaw()) or (not b.object:get_properties()) then
+						int = int + 1
+					end
+				end
+			end
+		end
+	end
+	local c_dead_players = 0
+	for name, data in pairs(bs.died) do
+		if data and data == bs.get_player_team_css(player) then
+			c_dead_players = c_dead_players + 1
+		end
+	end
+	int = int + c_dead_players
+end
+
+function bs_pif.ReloadGlobalInventory()
+	for _, player in pairs(core.get_connected_players()) do
+		local name = Name(player)
+		if bs.spectator[name] then
+			player:set_inventory_formspec(bs_pif.ReturnSpectatorFormspec())
+		else
+			local c_dead_players =  get_dead_teammates(bs.get_player_team_css(player))
+			local c_alive_players = bs.get_team_players_index(bs.get_player_team_css(player))
+			player:set_inventory_formspec(bs_pif.ReturnFormspec(c_alive_players or "0", c_dead_players or "0", get_player_names_on_table(bs.get_team_players(bs.get_player_team_css(player))) or {}))
+		end
+	end
+end
+
+KillHistory.CallbackRegister(function()
+	for _, player in pairs(core.get_connected_players()) do
+		local name = Name(player)
+		if bs.spectator[name] then
+			player:set_inventory_formspec(bs_pif.ReturnSpectatorFormspec())
+		else
+			local c_dead_players =  get_dead_teammates(bs.get_player_team_css(player))
+			local c_alive_players = bs.get_team_players_index(bs.get_player_team_css(player))
+			player:set_inventory_formspec(bs_pif.ReturnFormspec(c_alive_players or "0", c_dead_players or "0", get_player_names_on_table(bs.get_team_players(bs.get_player_team_css(player))) or {}))
+		end
+	end
+end)
+
+--core.register_on_joinplayer(function(player)
+bs.cbs.register_OnAssignTeam(function(player, team)
+	if team == "" then
+		player:set_inventory_formspec(bs_pif.ReturnSpectatorFormspec())
+	else
+		local c_dead_players =  get_dead_teammates(bs.get_player_team_css(player))
+		local c_alive_players = bs.get_team_players_index(bs.get_player_team_css(player))
+		player:set_inventory_formspec(bs_pif.ReturnFormspec(c_alive_players or "0", c_dead_players or "0", get_player_names_on_table(bs.get_team_players(bs.get_player_team_css(player))) or {}))
+	end
+end)
+--end)
+
+bs_match.register_SecondOnEndMatch(bs_pif.ReloadGlobalInventory)
+
+if bots then
+	BotsCallbacks.RegisterOnKillBot(bs_pif.ReloadGlobalInventory)
+	BotsCallbacks.RegisterOnRespawnBots(bs_pif.ReloadGlobalInventory)
+end
