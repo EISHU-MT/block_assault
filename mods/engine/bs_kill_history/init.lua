@@ -128,6 +128,16 @@ minetest.register_on_joinplayer(function(player)
 	update_kill_list_hud(player)
 end)
 
+KillHistory.callbacks = {}
+function KillHistory.CallbackRegister(func)
+	table.insert(KillHistory.callbacks, func)
+end
+function KillHistory.RunCallbacks(killer, victim, weapon_image, comment, color)
+	for _, func in pairs(KillHistory.callbacks) do
+		func(killer, victim, weapon_image, comment, color)
+	end
+end
+
 function KillHistory.add(killer, victim, weapon_image, comment, color, imgS)
 	local s = imgS or 1.5
 	KillHistory.RawAdd(
@@ -136,6 +146,7 @@ function KillHistory.add(killer, victim, weapon_image, comment, color, imgS)
 		{text = victim .. (comment or ""), color = bs.get_team_color(bs.get_team(victim), "number") or 0xFFF},
 		s
 	)
+	KillHistory.RunCallbacks(killer, victim, weapon_image, comment, color)
 end
 
 
