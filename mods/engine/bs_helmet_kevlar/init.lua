@@ -96,7 +96,7 @@ bs.cbs.register_OnAssignTeam(function(player, team)
 			hud_elem_type = "statbar",
 			position = position,
 			scale = {x=1,y=1},
-			text = "armor_bar_bg.png",
+			text = (team == "" and "") or "armor_bar_bg.png",
 			number = 20,
 			alignment = {x=-1,y=-1},
 			offset = offset,
@@ -106,7 +106,7 @@ bs.cbs.register_OnAssignTeam(function(player, team)
 		bar = player:hud_add({
 			hud_elem_type = "statbar",
 			position = position,
-			text = "armor_bar.png",
+			text = (team == "" and "") or "armor_bar.png",
 			number = player:get_hp(),
 			alignment = {x=-1,y=-1},
 			offset = offset,
@@ -119,7 +119,7 @@ bs.cbs.register_OnAssignTeam(function(player, team)
 			position = position,
 			offset = {x = 60, y = -47},
 			alignment = {x = "center", y = "up"},
-			text = "Armor: 0/100",
+			text = (team == "" and " ") or "Armor: 0/100",
 			number = 0x000000,
 		})
 	}
@@ -187,9 +187,12 @@ end
 function PlayerArmor.UpdateHud(pname)
 	local data = PlayerArmor.Huds[pname]
 	if data and Player(pname) then
-		print((((PlayerArmor.HeadHPDifference[pname] + PlayerArmor.DifferenceOfHP[pname]) * 10) / 10))
-		Player(pname):hud_change(data.bar, "number", (((PlayerArmor.HeadHPDifference[pname] + PlayerArmor.DifferenceOfHP[pname]) * 10) / 10))
-		Player(pname):hud_change(data.txt, "text", "Armor: "..tostring(((((PlayerArmor.HeadHPDifference[pname] + PlayerArmor.DifferenceOfHP[pname]) * 10) / 2)).."/100"))
+		if bs.spectator[pname] ~= true then
+			Player(pname):hud_change(data.bar, "number", (((PlayerArmor.HeadHPDifference[pname] + PlayerArmor.DifferenceOfHP[pname]) * 10) / 10))
+			Player(pname):hud_change(data.txt, "text", "Armor: "..tostring(((((PlayerArmor.HeadHPDifference[pname] + PlayerArmor.DifferenceOfHP[pname]) * 10) / 2)).."/100"))
+		else
+			Player(pname):hud_change(data.txt, "text", " ")
+		end
 	else
 		PlayerArmor.Huds[pname] = nil
 	end
