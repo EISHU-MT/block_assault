@@ -30,3 +30,15 @@ if config.UseDefaultMatchEngine then
 	bs_match.register_SecondOnEndMatch(to_use)
 	bs_match.register_OnMatchStart(to_use_two)
 end
+
+-- Clear objects in area
+bs_match.register_SecondOnEndMatch(function()
+	local objs = core.get_objects_in_area(maps.current_map.pos1, maps.current_map.pos2)
+	for _, obj in pairs(objs) do
+		local ent = obj:get_luaentity()
+		if ent then
+			if ent.itemstring then obj:remove() end -- clear items
+			print(obj)
+		end
+	end
+end)
