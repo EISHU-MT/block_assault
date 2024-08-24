@@ -20,15 +20,17 @@ minetest.register_on_leaveplayer(function(player)
 	annouce.huds[Name(player)] = nil
 end)
 
-function annouce.publish_to_players(msg, colored)
+annouce.huds_turns = {}
+
+function annouce.publish_to_players(msg, colored, ypos)
 	local ID = FormRandomString(10)
 	for ee, player in pairs(core.get_connected_players()) do
 		if player then
 			annouce.huds[Name(player)][ID] = player:hud_add({
 				hud_elem_type = "text",
 				scale = {x = 100.6, y = 20.6},
-				position = {x = 0.485, y = 0.21},
-				offset = {x = 30, y = 100},
+				position = {x = 0.5, y = ypos or 0.3},
+				offset = {x = 0, y = 0},
 				size = {x = 2},
 				alignment = {x = 0, y = -1},
 				text = msg,
@@ -59,6 +61,4 @@ function annouce.winner(team, str)
 		local id = annouce.publish_to_players(annouce.transform(team)..str, color)
 		core.after(2, make_dissapear_mess, id)
 	end
-	
-	
 end
