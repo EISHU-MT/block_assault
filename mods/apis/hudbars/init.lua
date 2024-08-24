@@ -469,7 +469,7 @@ end
 if minetest.settings:get_bool("enable_damage") or hb.settings.forceload_default_hudbars then
 	--hb.register_hudbar("health", 0xFFFFFF, S("Health"), { bar = "hudbars_bar_health.png", icon = "hudbars_icon_health.png", bgicon = "hudbars_bgicon_health.png" }, 20, 20, false)
 	hb.register_hudbar("breath", 0xFFFFFF, S("Breath"), { bar = "hudbars_bar_breath.png", icon = "hudbars_icon_breath.png", bgicon = "hudbars_bgicon_breath.png" }, 10, 10, true)
-	hb.register_hudbar("ammo", 0xFFFFFF, S("Ammo"), { bar = "grey_bar.png", icon = "rangedweapons_762mm.png"}, 0, 150, false)
+	--hb.register_hudbar("ammo", 0xFFFFFF, S("Ammo"), { bar = "grey_bar.png", icon = "rangedweapons_762mm.png"}, 0, 150, false)
 	--hb.register_hudbar("armor" , 0xFFFFFF, S("Armor") , { bar = "cs_files_armor_bar.png", icon = "cs_files_armor_icon.png"}, 0, 100, false, ("@1: @2%"), { order = { "label", "value" }, textdomain = "armor" })
 end
 
@@ -647,19 +647,6 @@ minetest.register_globalstep(function(dtime)
 			for _, player in pairs(hb.players) do
 				-- update all hud elements
 				update_hud(player)
-				if RespawnDelay then
-					if bs.spectator[Name(player)] or RespawnDelay.players[Name(player)] then
-						hb.hide_hudbar(player, "ammo")
-					else
-						hb.unhide_hudbar(player, "ammo")
-					end
-				else
-					if bs.spectator[Name(player)] then
-						hb.hide_hudbar(player, "ammo")
-					else
-						hb.unhide_hudbar(player, "ammo")
-					end
-				end
 			end
 		end
 	end
