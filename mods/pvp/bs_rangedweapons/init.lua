@@ -774,6 +774,16 @@ bs.cbs.register_OnAssignTeam(function(player, team)
 				number = 0xFFFFFF,
 			})
 		}
+	else
+		if team == "" then
+			player:hud_change(rangedweapons.hud_bars[Name(player)].bg, "text", "blank.png")
+			player:hud_change(rangedweapons.hud_bars[Name(player)].fi, "text", "blank.png")
+			player:hud_change(rangedweapons.hud_bars[Name(player)].tx, "text", " ")
+		else
+			player:hud_change(rangedweapons.hud_bars[Name(player)].bg, "text", "ammo_bar_bg.png")
+			player:hud_change(rangedweapons.hud_bars[Name(player)].fi, "text", "ammo_bar.png")
+			player:hud_change(rangedweapons.hud_bars[Name(player)].tx, "text", "Ammo: 0/0")
+		end
 	end
 end)
 
