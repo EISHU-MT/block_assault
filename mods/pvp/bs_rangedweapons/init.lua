@@ -37,6 +37,7 @@ end
 
 rangedweapons.make_sparks = make_sparks
 rangedweapons_gain_skill = function() end -- *sigh*
+rangedweapons.bullets_max = {}
 
 rangedweapons_reload_gun = function(itemstack, player)
 	local GunCaps = itemstack:get_definition().RW_gun_capabilities
@@ -80,7 +81,7 @@ rangedweapons_reload_gun = function(itemstack, player)
 		if reload_ammo:get_definition().inventory_image ~= nil then
 			ammo_icon = reload_ammo:get_definition().inventory_image
 		end
-		hb.change_hudbar(player, "ammo", nil, nil, gun_icon, nil, nil)
+		--hb.change_hudbar(player, "ammo", nil, nil, gun_icon, nil, nil)
 		local gunMeta = itemstack:get_meta()
 		local ammoCount = rangedweapons.bullets[Name(player)]
 		local ammoName = rangedweapons.ammo_names[Name(player)]
@@ -94,7 +95,12 @@ rangedweapons_reload_gun = function(itemstack, player)
 			inv:remove_item("main",reload_ammo:get_name().." "..reload_ammo:get_count())
 		end
 		rangedweapons.ammo_names[Name(player)] = reload_ammo:get_name()
-		hb.change_hudbar(player, "ammo", rangedweapons.bullets[Name(player)], rangedweapons.bullets[Name(player)])
+		--hb.change_hudbar(player, "ammo", rangedweapons.bullets[Name(player)], rangedweapons.bullets[Name(player)])
+		rangedweapons.bullets_max[Name(player)] = clipSize
+		if rangedweapons.hud_bars[player:get_player_name()] and rangedweapons.hud_bars[player:get_player_name()].fi then
+			player:hud_change(rangedweapons.hud_bars[player:get_player_name()].fi, "number", ((rangedweapons.bullets[Name(player)]/rangedweapons.bullets_max[Name(player)]) * 20))
+			player:hud_change(rangedweapons.hud_bars[player:get_player_name()].tx, "text", "Ammo: "..rangedweapons.bullets[Name(player)].."/"..rangedweapons.bullets_max[Name(player)])
+		end
 		if GunCaps.gun_magazine ~= nil then
 			local pos = player:get_pos()
 			local dir = player:get_look_dir()
@@ -159,7 +165,7 @@ rangedweapons_single_load_gun = function(itemstack, player)
 		if reload_ammo:get_definition().inventory_image ~= nil then
 			ammo_icon = reload_ammo:get_definition().inventory_image
 		end
-		hb.change_hudbar(player, "ammo", nil, nil, gun_icon, nil, nil)
+		--hb.change_hudbar(player, "ammo", nil, nil, gun_icon, nil, nil)
 		local gunMeta = itemstack:get_meta()
 		local ammoCount = rangedweapons.bullets[Name(player)]
 		local ammoName = rangedweapons.ammo_names[Name(player)]
@@ -173,7 +179,12 @@ rangedweapons_single_load_gun = function(itemstack, player)
 			rangedweapons.bullets[Name(player)] = rangedweapons.bullets[Name(player)] + 1
 		end
 		rangedweapons.ammo_names[Name(player)] = reload_ammo:get_name()
-		hb.change_hudbar(player, "ammo", rangedweapons.bullets[Name(player)], rangedweapons.bullets[Name(player)])
+		rangedweapons.bullets_max[Name(player)] = clipSize
+		--hb.change_hudbar(player, "ammo", rangedweapons.bullets[Name(player)], rangedweapons.bullets[Name(player)])
+		if rangedweapons.hud_bars[player:get_player_name()] and rangedweapons.hud_bars[player:get_player_name()].fi then
+			player:hud_change(rangedweapons.hud_bars[player:get_player_name()].fi, "number", ((rangedweapons.bullets[Name(player)]/rangedweapons.bullets_max[Name(player)]) * 20))
+			player:hud_change(rangedweapons.hud_bars[player:get_player_name()].tx, "text", "Ammo: "..rangedweapons.bullets[Name(player)].."/"..rangedweapons.bullets_max[Name(player)])
+		end
 		if GunCaps.gun_unloaded ~= nil then
 			itemstack:set_name(GunCaps.gun_unloaded)
 		end
@@ -278,12 +289,17 @@ rangedweapons_shoot_gun = function(itemstack, player)
 		local playerMeta = player:get_meta()
 		if rangedweapons.bullets[Name(player)] and rangedweapons.cooldown[Name(player)] and rangedweapons.bullets[Name(player)] > 0 and rangedweapons.cooldown[Name(player)] <= 0 then
 			rangedweapons.cooldown[Name(player)] = gun_cooldown
-			hb.change_hudbar(player, "ammo", rangedweapons.bullets[Name(player)])
+			rangedweapons.bullets[Name(player)] = rangedweapons.bullets[Name(player)] - 1
+			--hb.change_hudbar(player, "ammo", rangedweapons.bullets[Name(player)])
+			if rangedweapons.hud_bars[player:get_player_name()] and rangedweapons.hud_bars[player:get_player_name()].fi then
+				player:hud_change(rangedweapons.hud_bars[player:get_player_name()].fi, "number", ((rangedweapons.bullets[Name(player)]/rangedweapons.bullets_max[Name(player)]) * 20))
+				player:hud_change(rangedweapons.hud_bars[player:get_player_name()].tx, "text", "Ammo: "..rangedweapons.bullets[Name(player)].."/"..rangedweapons.bullets_max[Name(player)])
+			end
 			local gun_icon = "rangedweapons_emergency_gun_icon.png"
 			if GunCaps.gun_icon ~= nil then
 				gun_icon = GunCaps.gun_icon
 			end
-			hb.change_hudbar(player, "ammo", nil, nil, gun_icon, nil, nil)
+			--hb.change_hudbar(player, "ammo", nil, nil, gun_icon, nil, nil)
 			local OnCollision = function() end
 			local bulletStack = ItemStack({name = rangedweapons.ammo_names[Name(player)]})
 			local AmmoCaps = bulletStack:get_definition().RW_ammo_capabilities
@@ -702,10 +718,12 @@ if rweapons_glass_breaking == "true" then
 	dofile(modpath.."/glass_breaking.lua")
 end
 
+rangedweapons.hud_bars = {}
 
-
+local position = {x=0.75,y=1}
+local offset = {x=0,y=-30}
 minetest.register_on_joinplayer(function(player)
-	hb.init_hudbar(player, "ammo", 0, 150, false)
+	--hb.init_hudbar(player, "ammo", 0, 150, false)
 	hits[Name(player)] = player:hud_add({
 		hud_elem_type = "image",
 		text = "invisible.png",
@@ -720,6 +738,43 @@ minetest.register_on_joinplayer(function(player)
 		scale = { x=2.5, y=2.5},
 		text = "invisible.png",
 	})
+end)
+bs.cbs.register_OnAssignTeam(function(player, team)
+	-- hud bars ammo
+	if not rangedweapons.hud_bars[player:get_player_name()] then
+		rangedweapons.hud_bars[player:get_player_name()] = {
+			bg = player:hud_add({
+				hud_elem_type = "statbar",
+				position = position,
+				scale = {x=1,y=1},
+				text = (team == "" and "") or "ammo_bar_bg.png",
+				number = 20,
+				alignment = {x=-1,y=-1},
+				offset = offset,
+				direction = 0,
+				size = {x = 23, y = 23},
+			}),
+			fi = player:hud_add({
+				hud_elem_type = "statbar",
+				position = position,
+				text = (team == "" and "") or "ammo_bar.png",
+				number = 0,
+				alignment = {x=-1,y=-1},
+				offset = offset,
+				direction = 0,
+				size = {x = 23, y = 23},
+			}),
+			tx = player:hud_add({
+				hud_elem_type = "text",
+				scale = {x = 1.5, y = 1.5},
+				position = position,
+				offset = {x = 60, y = -17},
+				alignment = {x = "center", y = "up"},
+				text = "Ammo: 0/0",
+				number = 0xFFFFFF,
+			})
+		}
+	end
 end)
 
 --[[
