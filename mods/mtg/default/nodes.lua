@@ -752,6 +752,7 @@ minetest.register_node("default:leaves", {
 	tiles = {"snow.png^default_leaves.png",},
 	special_tiles = {"default_leaves_simple.png"},
 	paramtype = "light",
+	walkable = false,
 	is_ground_content = false,
 	groups = {snappy = 3, leafdecay = 3, flammable = 2, leaves = 1},
 	drop = {
@@ -858,6 +859,7 @@ minetest.register_node("default:jungleleaves", {
 	tiles = {"snow.png^default_jungleleaves.png"},
 	special_tiles = {"default_jungleleaves_simple.png"},
 	paramtype = "light",
+	walkable = false,
 	is_ground_content = false,
 	groups = {snappy = 3, leafdecay = 3, flammable = 2, leaves = 1},
 	drop = {
@@ -973,6 +975,7 @@ minetest.register_node("default:pine_needles",{
 	waving = 1,
 	paramtype = "light",
 	is_ground_content = false,
+	walkable = false,
 	groups = {snappy = 3, leafdecay = 3, flammable = 2, leaves = 1},
 	drop = {
 		max_items = 1,
@@ -1052,6 +1055,7 @@ minetest.register_node("default:acacia_leaves", {
 	special_tiles = {"default_acacia_leaves_simple.png"},
 	waving = 1,
 	paramtype = "light",
+	walkable = false,
 	is_ground_content = false,
 	groups = {snappy = 3, leafdecay = 3, flammable = 2, leaves = 1},
 	drop = {
@@ -1130,6 +1134,7 @@ minetest.register_node("default:aspen_leaves", {
 	tiles = {"snow.png^default_aspen_leaves.png"},
 	waving = 1,
 	paramtype = "light",
+	walkable = false,
 	is_ground_content = false,
 	groups = {snappy = 3, leafdecay = 3, flammable = 2, leaves = 1},
 	drop = {
@@ -1693,6 +1698,7 @@ minetest.register_node("default:bush_leaves", {
 	drawtype = "allfaces_optional",
 	tiles = {"default_leaves_simple.png"},
 	paramtype = "light",
+	walkable = false,
 	groups = {snappy = 3, flammable = 2, leaves = 1},
 	drop = {
 		max_items = 1,
@@ -1748,6 +1754,7 @@ minetest.register_node("default:blueberry_bush_leaves_with_berries", {
 	paramtype = "light",
 	groups = {snappy = 3, flammable = 2, leaves = 1, dig_immediate = 3},
 	drop = "default:blueberries",
+	walkable = false,
 	sounds = default.node_sound_leaves_defaults(),
 	node_dig_prediction = "default:blueberry_bush_leaves",
 
@@ -1762,6 +1769,7 @@ minetest.register_node("default:blueberry_bush_leaves", {
 	drawtype = "allfaces_optional",
 	tiles = {"default_blueberry_bush_leaves.png"},
 	paramtype = "light",
+	walkable = false,
 	groups = {snappy = 3, flammable = 2, leaves = 1},
 	drop = {
 		max_items = 1,
@@ -1840,6 +1848,7 @@ minetest.register_node("default:acacia_bush_leaves", {
 	drawtype = "allfaces_optional",
 	tiles = {"default_acacia_leaves_simple.png"},
 	paramtype = "light",
+	walkable = false,
 	groups = {snappy = 3, flammable = 2, leaves = 1},
 	drop = {
 		max_items = 1,
@@ -1910,6 +1919,7 @@ minetest.register_node("default:pine_bush_needles", {
 	drawtype = "allfaces_optional",
 	tiles = {"default_pine_needles.png"},
 	paramtype = "light",
+	walkable = false,
 	groups = {snappy = 3, flammable = 2, leaves = 1},
 	drop = {
 		max_items = 1,
