@@ -46,3 +46,30 @@ core.register_on_punchplayer(function(player, hitter, time_from_last_punch, tool
 end)
 
 minetest.register_on_leaveplayer(dropondie.drop_all)
+
+----------------------------
+--- @Python-Sargent Code ---
+----------------------------
+
+minetest.register_on_item_pickup(function(itemstack, picker, pointed_thing, time_from_last_punch)
+	if bs.spectator[Name(picker)] or bs.spectator[Name(picker)] then
+		return Itemstack("")
+	end
+end)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
