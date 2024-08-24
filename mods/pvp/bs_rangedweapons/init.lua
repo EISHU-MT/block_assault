@@ -770,7 +770,7 @@ bs.cbs.register_OnAssignTeam(function(player, team)
 				position = position,
 				offset = {x = 60, y = -17},
 				alignment = {x = "center", y = "up"},
-				text = "Ammo: 0/0",
+				text = (team == "" and "") or "Ammo: 0/0",
 				number = 0xFFFFFF,
 			})
 		}
