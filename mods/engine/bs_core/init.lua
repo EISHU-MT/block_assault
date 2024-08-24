@@ -3,7 +3,7 @@
 --]]
 local S = core.get_translator("bs_core")
 _OID = S("BlockAssault Classic") -- To be overriden by modes
-_V  = "Beta V4.5"
+_V  = "V5.0"
 _ID = "BlockAssault" -- Real engine name
 C = CountTable
 bs = {
