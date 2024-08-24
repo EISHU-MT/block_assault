@@ -512,7 +512,7 @@ end
 local function update_hud(player)
 	if not player_exists(player) then return end
 	if minetest.settings:get_bool("enable_damage") then
-		if hb.settings.forceload_default_hudbars then
+		--if hb.settings.forceload_default_hudbars then
 			if RespawnDelay then
 				if bs.spectator[Name(player)] ~= true and RespawnDelay.players[Name(player)] ~= true then
 					player:hud_change(health_bar[Name(player)].bg, "text", "health_bar_bg.png")
@@ -523,6 +523,7 @@ local function update_hud(player)
 					player:hud_change(health_bar[Name(player)].bg, "text", "blank.png")
 					player:hud_change(health_bar[Name(player)].hd, "text", "blank.png")
 					player:hud_change(health_bar[Name(player)].tx, "text", "")
+					return
 				end
 			else
 				if bs.spectator[Name(player)] ~= true then
@@ -533,9 +534,10 @@ local function update_hud(player)
 					player:hud_change(health_bar[Name(player)].bg, "text", "blank.png")
 					player:hud_change(health_bar[Name(player)].hd, "text", "blank.png")
 					player:hud_change(health_bar[Name(player)].tx, "text", "")
+					return
 				end
 			end
-		end
+		--end
 		--air
 		player:hud_change(health_bar[Name(player)].hd, "number", player:get_hp())
 		local breath_max = player:get_properties().breath_max
@@ -577,6 +579,8 @@ local offset = {x=10,y=-30}
 health_bar = {}
 bs.cbs.register_OnAssignTeam(function(player, team)
 	hide_builtin(player)
+	custom_hud(player)
+	hb.players[player:get_player_name()] = player
 	if team == "" then
 		if health_bar[Name(player)] then
 			for _, id in pairs(health_bar[Name(player)]) do
@@ -589,18 +593,13 @@ bs.cbs.register_OnAssignTeam(function(player, team)
 			return
 		end
 	end
-	custom_hud(player)
-	hb.players[player:get_player_name()] = player
-	
 	-- health bar
-	
 	health_bar[Name(player)] = {}
-	
 	health_bar[Name(player)].bg = player:hud_add({
 		hud_elem_type = "statbar",
 		position = position,
 		scale = {x=1,y=1},
-		text = "health_bar_bg.png",
+		text = (team == "" and "") or "health_bar_bg.png",
 		number = 20,
 		alignment = {x=-1,y=-1},
 		offset = offset,
@@ -611,7 +610,7 @@ bs.cbs.register_OnAssignTeam(function(player, team)
 	health_bar[Name(player)].hd = player:hud_add({
 		hud_elem_type = "statbar",
 		position = position,
-		text = "health_bar.png",
+		text = (team == "" and "") or "health_bar.png",
 		number = player:get_hp(),
 		alignment = {x=-1,y=-1},
 		offset = offset,
@@ -625,7 +624,7 @@ bs.cbs.register_OnAssignTeam(function(player, team)
 		position = position,
 		offset = {x = 50, y = -17},
 		alignment = {x = "center", y = "up"},
-		text = "HP: "..player:get_hp().."/20",
+		text = (team == "" and "") or "HP: "..player:get_hp().."/20",
 		number = 0x000000,
 	})
 end)
