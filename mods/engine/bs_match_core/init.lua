@@ -9,8 +9,8 @@ local function to_use()
 	end)
 	core.after(0.7, function()
 		bs_timer.pause()
-		local id = annouce.publish_to_players("Prepare!", 0xFFFFF, 0.2)
-		core.after(1.5, make_dissapear_mess, id)
+		--local id = annouce.publish_to_players("Prepare!", 0xFFFFF, {img = 215, txt = 180})
+		--core.after(1.5, make_dissapear_mess, id)
 	end)
 end
 
