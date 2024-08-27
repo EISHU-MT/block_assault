@@ -1,6 +1,7 @@
 --
 -- - CENTRAL -
 --
+
 function maps.update_core()
 	for name, def in pairs(maps.reg_maps) do
 		if name and def then
@@ -8,15 +9,30 @@ function maps.update_core()
 		end
 	end
 end
+
+maps.to_be_used_maps = {}
+function maps.update_cache_maps()
+	maps.to_be_used_maps = table.copy(maps.maps_name)
+end
+
 function maps.select_map()
-	local maps_numb = #maps.maps_name
-	local random_numb = math.random(1, maps_numb)
-	if maps.next_map and maps.next_map.name ~= nil then
-		return maps.next_map
+	--local maps_numb = #maps.maps_name
+	--local random_numb = math.random(1, maps_numb)
+	--if maps.next_map and maps.next_map.name ~= nil then
+	--	return maps.next_map
+	--else
+	--	local map_name = maps.maps_name[random_numb]
+	--	local map_def = maps.reg_maps[map_name]
+	--	return map_def
+	--end
+	if maps.to_be_used_maps[1] ~= nil then
+		local selected_map_number = math.random(1, #maps.to_be_used_maps)
+		local name = maps.to_be_used_maps[selected_map_number]
+		table.remove(maps.to_be_used_maps, selected_map_number)
+		return maps.reg_maps[name]
 	else
-		local map_name = maps.maps_name[random_numb]
-		local map_def = maps.reg_maps[map_name]
-		return map_def
+		maps.update_cache_maps()
+		return maps.reg_maps[maps.maps_name[1]]
 	end
 end
 
@@ -48,9 +64,13 @@ function maps.place_map(map_def)
 	end
 end
 
+function maps.re_place_current_map()
+	maps.place_map(maps.current_map)
+end
+
 function maps.new_map()
 	core.log("action", "Searching a map for the game....")
-	core.after(0.5, function()
+	--core.after(0.5, function()
 		local def = maps.select_map()
 		--print(dump(def))
 		maps.place_map(def)
@@ -94,7 +114,16 @@ function maps.new_map()
 		core.after(1, function(def)
 			RunCallbacks(maps.on_load, def)
 		end, def)
-	end)
+		
+		if maps.queued_function then
+			maps.queued_function()
+			maps.queued_function = nil
+		end
+	--end)
+end
+
+function maps.LoadAfterMapPlaced(func)
+	maps.queued_function = func
 end
 
 function maps.get_team_pos(team)
