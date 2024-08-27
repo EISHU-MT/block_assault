@@ -550,6 +550,8 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 			core.close_formspec(Name(player), "core:menu")
 		elseif fields.exit then
 			core.disconnect_player(Name(player), S("Disconnected from GUI"))
+		elseif fields.autoselect then
+			bs.auto_allocate_team(player)
 		end
 	end
 end)
