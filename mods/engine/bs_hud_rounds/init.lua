@@ -71,9 +71,16 @@ function UpdateRoundsHud(team)
 	end
 end
 
-bs_match.register_OnNewMatches(function()
+function ResetRoundsHud()
 	bshud.blue = 0
 	bshud.red = 0
 	bshud.green = 0
 	bshud.yellow = 0
-end)
+	for _, player in pairs(core.get_connected_players()) do
+		for teamm, id in pairs(bshud.rounds[Name(player)]) do
+			player:hud_change(id, "text", tostring(get(teamm)))
+		end
+	end
+end
+
+bs_match.register_OnNewMatches(ResetRoundsHud)
