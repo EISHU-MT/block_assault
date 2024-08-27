@@ -36,8 +36,6 @@ function bs_match.finish_match(winner) -- PlayerKills, it resets every round.
 			score.add_score_to(name, 30)
 		end
 		RunCallbacks(bs_match.cbs.SecondOnEndMatch)
-		summary.show_to_all()
-		QueueCloseForms(3)
 		maps.re_place_current_map()
 		if C(maps.current_map.teams) > 2 then
 			bs.team.red.state = "alive"
@@ -50,7 +48,6 @@ function bs_match.finish_match(winner) -- PlayerKills, it resets every round.
 		end
 	else
 		RunCallbacks(bs_match.cbs.SecondOnEndMatch)
-		RunCallbacks(bs_match.cbs.OnNewMatches)
 		bs_match.reset_rounds()
 		summary.show_to_all()
 		QueueCloseForms(5)
@@ -59,17 +56,21 @@ function bs_match.finish_match(winner) -- PlayerKills, it resets every round.
 		maps.LoadAfterMapPlaced(function()
 			if config.ShowMenuToPlayerWhenEndedRounds.bool then
 				for _, player in pairs(core.get_connected_players()) do
-					bs.show_menu_and_expire(player)
+					core.after(10, bs.auto_allocate_team, player)
+					core.show_formspec(Name(player), "core:menu", bs.login_menu())
 					if config.ResetPlayerMoneyOnEndRounds then
 						if bank.player[Name(player)].money then
 							bank.player[Name(player)].money = 10 -- Reset his money
 							score.add_score_to(name, 5)
 						end
 					end
+					
 				end
 			else
 				config.ShowMenuToPlayerWhenEndedRounds.func() -- Call to the function if it are disabled.
 			end
+			
+			RunCallbacks(bs_match.cbs.OnNewMatches)
 			core.after(1, function()
 				for _, p in pairs(core.get_connected_players()) do
 					if not bs.spectator[Name(p)] then
