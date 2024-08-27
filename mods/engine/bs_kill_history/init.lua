@@ -180,12 +180,14 @@ PvpCallbacks.RegisterFunction(function(data)
 		-- Extreme code beggining
 		if data.killer:is_player() then
 			local hand_item = bs.latest_used_item[Name(data.killer)] or data.killer:get_wielded_item()
-			local desc = hand_item:get_definition()
-			if desc.RW_gun_capabilities then
-				image = desc.RW_gun_capabilities.gun_icon.."^[transformFX"
-			else
-				if desc.inventory_image and desc.inventory_image ~= "" then
-					image = desc.inventory_image
+			if hand_item then
+				local desc = hand_item:get_definition()
+				if desc.RW_gun_capabilities then
+					image = desc.RW_gun_capabilities.gun_icon.."^[transformFX"
+				else
+					if desc.inventory_image and desc.inventory_image ~= "" then
+						image = desc.inventory_image
+					end
 				end
 			end
 			s = 1
@@ -194,12 +196,14 @@ PvpCallbacks.RegisterFunction(function(data)
 			local ent = data.killer:get_luaentity()
 			if ent.bot_name then
 				local hand_item = ItemStack(bots.in_hand_weapon[ent.bot_name])
-				local desc = hand_item:get_definition()
-				if desc.RW_gun_capabilities then
-					image = desc.RW_gun_capabilities.gun_icon.."^[transformFX"
-				else
-					if desc.inventory_image and desc.inventory_image ~= "" then
-						image = desc.inventory_image
+				if hand_item then
+					local desc = hand_item:get_definition()
+					if desc.RW_gun_capabilities then
+						image = desc.RW_gun_capabilities.gun_icon.."^[transformFX"
+					else
+						if desc.inventory_image and desc.inventory_image ~= "" then
+							image = desc.inventory_image
+						end
 					end
 				end
 				s = 1
