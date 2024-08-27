@@ -144,13 +144,13 @@ function grenades.register_grenade(name, def)
 	newdef.description = def.description
 	newdef.inventory_image = def.image
 	local on_use = function(itemstack, user, pointed_thing)
-		if pointed_thing.type ~= "node" then
+		--if pointed_thing.type ~= "node" then
 			grenades.throw_grenade(name, 17, user)
 
-			if not minetest.settings:get_bool("creative_mode") then
+			--if not minetest.settings:get_bool("creative_mode") then
 				itemstack:take_item(1)
-			end
-		end
+			--end
+		--end
 
 		return itemstack
 	end
