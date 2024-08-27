@@ -48,12 +48,14 @@ local function reg_glb(dtime)
 			time = time - 1
 			if time < 10 then
 				bs_timer.color = 0xFF5454
+			else
+				bs_timer.color = 0x64C864
 			end
 			if time == 0 then
 				bs_match.match_is_started = true
 				RunCallbacks(bs_match.cbs.OnMatchStart)
 				bs_timer.color = 0xFFFFFF
-				local id = annouce.publish_to_players("Match Starts now!", 0xFFFFFF, 0.2)
+				local id = annouce.publish_to_players("Go!", 0xFFFFFF, {img = 175, txt = 140})
 				core.after(1.5, make_dissapear_mess, id)
 				time = 300
 			end
@@ -63,6 +65,8 @@ local function reg_glb(dtime)
 				time = time - 1
 				if time < 60 then
 					bs_timer.color = 0xFF5454
+				elseif time < 120 then
+					bs_timer.color = 0xFFE346
 				end
 				if time == 0 then
 					if #maps.current_map.teams > 2 then
