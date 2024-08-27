@@ -101,7 +101,7 @@ local fragdef = {
 								fleshy = def.explode_damage - ( (radius/3) * (target_head and headdist or footdist) )
 							}
 						}, nil)
-						bs.latest_used_item[Name(player)] = ItemStack("grenades:frag")
+						bs.latest_used_item[Name(player)] = "grenades:frag"
 					end
 				end
 			end
