@@ -15,7 +15,7 @@ bs = {
 	},
 	team_data = {
 		red = {color = "#FF0000", code = 0xFF0000},
-		blue = {color = "#4E4EFF", code = 0x4E4EFF},
+		blue = {color = "#0000FF", code = 0x0000FF},
 		yellow = {color = "#FFFF00", code = 0xFFFF00},
 		green = {color = "#00FF00", code = 0x00FF00},
 	},
@@ -388,7 +388,7 @@ config = {
 	ForceUseOfCraftingTable = false,
 	RespawnTimer = 6,
 }
-
+--[[
 bs.login_menu = function()
 	return "formspec_version[6]" ..
 	"size[13.7,9.1]" ..
@@ -404,6 +404,36 @@ bs.login_menu = function()
 	"image_button[4.6,5.5;4.5,3.5;team_green_color.png;green;Green Team;false;false]" ..
 	"image_button[9.1,2;4.5,3.5;team_null_color.png;spect;"..S("No team")..";false;false]" ..
 	"image_button[9.1,5.5;4.5,3.5;quit.png;exit;"..S("Disconnect")..";false;false]"
+end
+--]]
+
+function bs.login_menu()
+	local formspec = "formspec_version[6]"..
+	"size[9,10]"..
+	"box[0,0;13.7,1.1;#00DB00]"..
+	"style_type[button;bgcolor=#006699]"..
+	"style[red;bgcolor=red;textcolor=white]"..
+	"style[blue;bgcolor=blue;textcolor=white]"
+	if maps.theres_loaded_map then
+		if C(maps.current_map.teams) > 2 then
+			formspec = formspec.."style[green;bgcolor=green;textcolor=white]style[yellow;bgcolor=yellow;textcolor=white]button[0.1,4.2;8.8,1;green;Green Team]button[0.1,5.3.1;8.8,1;yellow;Yellow Team]"
+		else
+			formspec = formspec.."style[green;bgcolor=gray;textcolor=white]style[yellow;bgcolor=gray;textcolor=white]button[0.1,4.2;8.8,1;green;Green Team (Unavailable)]button[0.1,5.3.1;8.8,1;yellow;Yellow Team (Unavailable)]"
+		end
+	end
+	local other_form = "style[spect;bgcolor=white;textcolor=black]"..
+	"style[exit;bgcolor=black;textcolor=yellow]"..
+	"label[0.1,0.3;"..S("Welcome to").." "..(config.GameClass or _OID).."!]"..
+	"label[0.1,0.8;".._ID.."]"..
+	"label[2.4,0.8;".._V.."]"..
+	"box[0,1.1;9,0.7;#267026]"..
+	"label[3.4,1.45;"..S("Please select a team to join").."]"..
+	"button[0.1,2;8.8,1;red;Red team]"..
+	"button[0.1,3.1;8.8,1;blue;Blue Team]"..
+	"button[0.1,6.4;8.8,1;spect;"..S("No team").."]"..
+	"button[0.1,7.5;8.8,1;autoselect;Auto-select team]"..
+	"button[0.1,8.6;8.8,1;exit;"..S("Disconnect").."]"
+	return formspec..other_form
 end
 
 function bs.send_to_team(team, msg)
@@ -486,24 +516,34 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 				core.close_formspec(Name(player), "core:menu")
 			end
 		elseif fields.yellow then
-			if C(maps.current_map.teams) > 2 then
-				local response = bs.allocate_to_team(player, "yellow")
-				if response == true then
+			if maps.theres_loaded_map then
+				if C(maps.current_map.teams) > 2 then
+					local response = bs.allocate_to_team(player, "yellow")
+					if response == true then
+						core.close_formspec(Name(player), "core:menu")
+					end
 					core.close_formspec(Name(player), "core:menu")
+				else
+					core.chat_send_player(Name(player), c("#FF0000", S("-!- Current map dont support 2+ teams map.")))
 				end
-				core.close_formspec(Name(player), "core:menu")
 			else
-				core.chat_send_player(Name(player), c("#FF0000", S("-!- Current map dont support 2+ teams map.")))
+				SendError(player, S("Unable to allocate you in @1, map system not started.", "yellow"))
+				core.log("error", "Unable to allocate player in team \"".."yellow".."\". There are not loaded map")
 			end
 		elseif fields.green then
-			if C(maps.current_map.teams) > 2 then
-				local response = bs.allocate_to_team(player, "green")
-				if response == true then
+			if maps.theres_loaded_map then
+				if C(maps.current_map.teams) > 2 then
+					local response = bs.allocate_to_team(player, "green")
+					if response == true then
+						core.close_formspec(Name(player), "core:menu")
+					end
 					core.close_formspec(Name(player), "core:menu")
+				else
+					core.chat_send_player(Name(player), c("#FF0000", S("-!- Current map dont support 2+ teams map.")))
 				end
-				core.close_formspec(Name(player), "core:menu")
 			else
-				core.chat_send_player(Name(player), c("#FF0000", S("-!- Current map dont support 2+ teams map.")))
+				SendError(player, S("Unable to allocate you in @1, map system not started.", "green"))
+				core.log("error", "Unable to allocate player in team \"".."green".."\". There are not loaded map")
 			end
 		elseif fields.spect then
 			bs.allocate_to_spectator(player, false)
