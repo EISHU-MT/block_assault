@@ -92,6 +92,11 @@ function wield_entity:on_activate(staticdata)
 	self.object:remove()
 end
 
+OnChangeItemTable = {}
+RegisterOnChangeWieldItem = function(func)
+	table.insert(OnChangeItemTable, func)
+end
+
 function wield_entity:on_step(dtime)
 	if self.wielder == nil then
 		return
@@ -99,11 +104,7 @@ function wield_entity:on_step(dtime)
 	if bs.get_team(self.wielder) == "" then
 		self.object:set_properties({is_visible=false})
 	end
-	
-	self.timer = self.timer + dtime
-	if self.timer < update_time then
-		return
-	end
+
 	local player = minetest.get_player_by_name(self.wielder)
 	if player == nil or not player:is_player() or
 			sq_dist(player:get_pos(), self.object:get_pos()) > 3 then
@@ -113,30 +114,32 @@ function wield_entity:on_step(dtime)
 	local wield = player_wielding[self.wielder]
 	local stack = player:get_wielded_item()
 	local item = stack:get_name() or ""
-	if wield and item ~= wield.item then
-		if has_wieldview then
-			local def = minetest.registered_items[item] or {}
-			if def.inventory_image ~= "" then
-				item = ""
+	if wield then
+		if item ~= wield.item then
+			RunCallbacks(OnChangeItemTable, player, stack:get_name())
+			if has_wieldview then
+				local def = minetest.registered_items[item] or {}
+				if def.inventory_image ~= "" then
+					item = ""
+				end
 			end
+			wield.item = item
+			if item == "" then
+				item = "wield3d:hand"
+			end
+			local loc = wield3d.location[item] or location
+			if loc[1] ~= wield.location[1] or
+					not vector.equals(loc[2], wield.location[2]) or
+					not vector.equals(loc[3], wield.location[3]) then
+				self.object:set_attach(player, loc[1], loc[2], loc[3])
+				wield.location = {loc[1], loc[2], loc[3]}
+			end
+			self.object:set_properties({
+				textures = {item},
+				visual_size = loc[4],
+			})
 		end
-		wield.item = item
-		if item == "" then
-			item = "wield3d:hand"
-		end
-		local loc = wield3d.location[item] or location
-		if loc[1] ~= wield.location[1] or
-				not vector.equals(loc[2], wield.location[2]) or
-				not vector.equals(loc[3], wield.location[3]) then
-			self.object:set_attach(player, loc[1], loc[2], loc[3])
-			wield.location = {loc[1], loc[2], loc[3]}
-		end
-		self.object:set_properties({
-			textures = {item},
-			visual_size = loc[4],
-		})
 	end
-	self.timer = 0
 end
 
 local function table_iter(t)
