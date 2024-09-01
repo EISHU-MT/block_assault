@@ -1,4 +1,4 @@
-bs.cbs.register_OnAssignTeam(function(player, team)
+StartInventoryFunction = function(player, team)
 	if team ~= "" then
 		if Player(player) and Inv(player) then
 			--correct
@@ -33,4 +33,6 @@ bs.cbs.register_OnAssignTeam(function(player, team)
 			end
 		end
 	end
-end)
+end
+
+bs.cbs.register_OnAssignTeam(StartInventoryFunction)
