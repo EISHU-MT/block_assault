@@ -23,6 +23,7 @@ local wield_entity = {
 	pointable = false,
 	timer = 0,
 	static_save = false,
+	dont_remove = true,
 }
 core.register_entity("bs_flag:entity", wield_entity)
 
