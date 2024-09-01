@@ -41,7 +41,7 @@ maps.used_load_area = false
 function maps.place_map(map_def)
 	if config.MapsLoadAreaType == "emerge" then
 		core.log("action", "Using \"Emerge\" type.")
-		steps.FreezeTicks()
+		--steps.FreezeTicks()
 		maps.emerge_with_callbacks(nil, map_def.pos1, map_def.pos2, function()
 			core.log("info", "Placing map: "..map_def.name)
 			local bool = minetest.place_schematic(map_def.pos1, map_def.mcore, map_def.rotation == "z" and "0" or "90")
@@ -49,7 +49,9 @@ function maps.place_map(map_def)
 			core.log("info", "ON-PLACE-MAP: Map light areas fix starting")
 			local function fix_light(...) core.fix_light(...) core.log("action", "ON-PLACE-MAP: Map light areas fix complete") end
 			core.after(5, fix_light, map_def.pos1, map_def.pos2)
-			steps.UnFreezeTicks()
+			--steps.UnFreezeTicks()
+			-- replace the shop table
+			PlaceAllTradingTables()
 		end, nil)
 	elseif config.MapsLoadAreaType == "load_area" then -- Only in singlenode mapgen
 		core.log("action", "Using \"LoadArea\" type. This might glitch map if mapgen wanst singlenode!")
@@ -61,6 +63,7 @@ function maps.place_map(map_def)
 		local function fix_light(...) core.fix_light(...) core.log("action", "ON-PLACE-MAP: Map light areas fix complete") end
 		core.after(5, fix_light, map_def.pos1, map_def.pos2)
 		maps.used_load_area = true
+		PlaceAllTradingTables()
 	end
 end
 
@@ -68,7 +71,7 @@ function maps.re_place_current_map()
 	maps.place_map(maps.current_map)
 end
 
-function maps.new_map()
+function maps.new_map(func)
 	core.log("action", "Searching a map for the game....")
 	--core.after(0.5, function()
 		local def = maps.select_map()
@@ -89,7 +92,7 @@ function maps.new_map()
 			for _, obj in pairs(objs) do
 				local ent = obj:get_luaentity()
 				if ent and obj then
-					if (not ent.wield_hand) and (not ent.is_nametag) and (not ent.bot_name) then
+					if (not ent.wield_hand) and (not ent.is_nametag) and (not ent.bot_name) and (not ent.dont_remove) then
 						core.log("action", "Removing obj "..tostring(obj).." on ClearNewMapArea")
 						obj:remove()
 					end
@@ -97,15 +100,18 @@ function maps.new_map()
 			end
 		end, def)
 		
-		core.set_node(def.teams.blue, {name="air"})
-		core.set_node(def.teams.red, {name="air"})
+		local nodename = "air"
+		if config.EnableShopTable then nodename = "bs_shop:trading_table" end
+		
+		core.set_node(def.teams.blue, {name=nodename})
+		core.set_node(def.teams.red, {name=nodename})
 		
 		bs.team.red.state = "alive"
 		bs.team.blue.state = "alive"
 		
 		if def.teams.yellow and def.teams.green then
-			core.set_node(def.teams.yellow, {name="air"})
-			core.set_node(def.teams.green, {name="air"})
+			core.set_node(def.teams.yellow, {name=nodename})
+			core.set_node(def.teams.green, {name=nodename})
 			bs.team.yellow.state = "alive"
 			bs.team.green.state = "alive"
 		end
@@ -118,6 +124,9 @@ function maps.new_map()
 		if maps.queued_function then
 			maps.queued_function()
 			maps.queued_function = nil
+		end
+		if func then
+			func()
 		end
 	--end)
 end
