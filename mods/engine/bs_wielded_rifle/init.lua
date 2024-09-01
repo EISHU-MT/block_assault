@@ -34,10 +34,6 @@ local def = {
 		local attached = self.object:get_attach()
 		if attached and attached:is_player() then
 			
-			if bs.get_team(attached) == "" then
-				self.object:remove()
-				return
-			end
 			
 			-- Check if player has a rifle or not
 			-- With all rifle types
