@@ -148,27 +148,21 @@ function grenades.register_grenade(name, def)
 			grenades.throw_grenade(name, 17, user)
 
 			--if not minetest.settings:get_bool("creative_mode") then
-				itemstack:take_item(1)
+				itemstack:set_count(itemstack:get_count() - 1)
 			--end
 		--end
 
-		return itemstack
-	end
-	
-	if def.throw_cooldown then
-		newdef.on_use = function(itemstack, user, ...)
-			if not cooldown:is_zero(Name(user)) then
-				return
-			else
-				cooldown:set(def.throw_cooldown, Name(user))
-			end
-
-			return on_use(itemstack, user, ...)
+		if itemstack:is_empty() then
+			itemstack = ItemStack("")
 		end
-	else
-		newdef.on_use = on_use
+
+		user:set_wielded_item(ItemStack(""))
+
+		return nil
 	end
 	
+
+		newdef.on_use = on_use
 	minetest.register_craftitem(name, newdef)
 end
 
