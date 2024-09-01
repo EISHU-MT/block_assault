@@ -214,6 +214,10 @@ function Shop.BuyWeaponFor(player, weapon_data)
 		Inv(player):add_item("main", ItemStack(weapon_data.item_name))
 		if weapon_data.ammo.uses_ammo then
 			Inv(player):add_item("main", ItemStack(weapon_data.ammo.type.." "..tostring(weapon_data.ammo.count)))
+			local GunCaps = ItemStack(weapon_data.item_name):get_definition().RW_gun_capabilities
+			rangedweapons.bullets[weapon_data.type][Name(player)] = GunCaps.suitable_ammo[1][2]
+			rangedweapons.bullets_max[weapon_data.type][Name(player)] = GunCaps.suitable_ammo[1][2]
+			rangedweapons.ammo_names[weapon_data.type][Name(player)] = GunCaps.suitable_ammo[1][1]
 		end
 		Send(player, "-"..tostring(weapon_data.price).."$, From buying "..weapon_data.name, "#00FF00")
 		bank.rm_player_value(player, weapon_data.price, true)
