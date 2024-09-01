@@ -37,21 +37,30 @@ end
 
 rangedweapons.make_sparks = make_sparks
 rangedweapons_gain_skill = function() end -- *sigh*
-rangedweapons.bullets_max = {}
+rangedweapons.bullets_max = {
+	rifle = {},
+	shotgun = {},
+	smg = {},
+	pistol = {},
+}
 
 rangedweapons_reload_gun = function(itemstack, player)
+	local typo_d = Shop.IdentifyWeapon(itemstack:get_name())
+	if not typo_d then return end
+	local typo = typo_d.type
 	local GunCaps = itemstack:get_definition().RW_gun_capabilities
 	if GunCaps ~= nil then
 		gun_unload_sound = GunCaps.gun_unload_sound or ""
 	end
 	minetest.sound_play(gun_unload_sound, {pos = player:get_pos(), gain = 0.3, max_hear_distance = 20})
-	local gun_reload = 0.25
+	local gun_reload = 0.45
 	if GunCaps ~= nil then
-		gun_reload = GunCaps.gun_reload or 0.25
+		gun_reload = GunCaps.gun_reload or 0.45
 	end
+	if gun_reload <= 0.2 then gun_reload = gun_reload + 0.3 end
 	local playerMeta = player:get_meta()
 	local gunMeta = itemstack:get_meta()
-	rangedweapons.delays[Name(player)] = gun_reload or 0.2
+	rangedweapons.delays[Name(player)] = gun_reload or 0.45
 	rangedweapons.cooldown[Name(player)] = gun_reload
 	local player_has_ammo = 0
 	local clipSize = 0
@@ -83,23 +92,23 @@ rangedweapons_reload_gun = function(itemstack, player)
 		end
 		--hb.change_hudbar(player, "ammo", nil, nil, gun_icon, nil, nil)
 		local gunMeta = itemstack:get_meta()
-		local ammoCount = rangedweapons.bullets[Name(player)]
-		local ammoName = rangedweapons.ammo_names[Name(player)]
+		local ammoCount = rangedweapons.bullets[typo][Name(player)]
+		local ammoName = rangedweapons.ammo_names[typo][Name(player)]
 		local inv = player:get_inventory()
 		inv:add_item("main",ammoName.." "..ammoCount)
 		if inv:contains_item("main",reload_ammo:get_name().." "..clipSize) then
 			inv:remove_item("main",reload_ammo:get_name().." "..clipSize)
-			rangedweapons.bullets[Name(player)] = clipSize
+			rangedweapons.bullets[typo][Name(player)] = clipSize
 		else
-			rangedweapons.bullets[Name(player)] = reload_ammo:get_count()
+			rangedweapons.bullets[typo][Name(player)] = reload_ammo:get_count()
 			inv:remove_item("main",reload_ammo:get_name().." "..reload_ammo:get_count())
 		end
-		rangedweapons.ammo_names[Name(player)] = reload_ammo:get_name()
+		rangedweapons.ammo_names[typo][Name(player)] = reload_ammo:get_name()
 		--hb.change_hudbar(player, "ammo", rangedweapons.bullets[Name(player)], rangedweapons.bullets[Name(player)])
-		rangedweapons.bullets_max[Name(player)] = clipSize
+		rangedweapons.bullets_max[typo][Name(player)] = clipSize
 		if rangedweapons.hud_bars[player:get_player_name()] and rangedweapons.hud_bars[player:get_player_name()].fi then
-			player:hud_change(rangedweapons.hud_bars[player:get_player_name()].fi, "number", ((rangedweapons.bullets[Name(player)]/rangedweapons.bullets_max[Name(player)]) * 20))
-			player:hud_change(rangedweapons.hud_bars[player:get_player_name()].tx, "text", "Ammo: "..rangedweapons.bullets[Name(player)].."/"..rangedweapons.bullets_max[Name(player)])
+			player:hud_change(rangedweapons.hud_bars[player:get_player_name()].fi, "number", ((rangedweapons.bullets[typo][Name(player)]/rangedweapons.bullets_max[typo][Name(player)]) * 20))
+			player:hud_change(rangedweapons.hud_bars[player:get_player_name()].tx, "text", "Ammo: "..rangedweapons.bullets[typo][Name(player)].."/"..rangedweapons.bullets_max[typo][Name(player)])
 		end
 		if GunCaps.gun_magazine ~= nil then
 			local pos = player:get_pos()
@@ -124,15 +133,19 @@ rangedweapons_reload_gun = function(itemstack, player)
 end
 
 rangedweapons_single_load_gun = function(itemstack, player)
+	local typo_d = Shop.IdentifyWeapon(itemstack:get_name())
+	if not typo_d then return end
+	local typo = typo_d.type
 	local GunCaps = itemstack:get_definition().RW_gun_capabilities
 	if GunCaps ~= nil then
 		gun_unload_sound = GunCaps.gun_unload_sound or ""
 	end
 	minetest.sound_play(gun_unload_sound, {pos = player:get_pos(), gain = 0.3, max_hear_distance = 20})
-	local gun_reload = 0.25
+	local gun_reload = 0.45
 	if GunCaps ~= nil then
-		gun_reload = GunCaps.gun_reload or 0.25
+		gun_reload = GunCaps.gun_reload or 0.45
 	end
+	if gun_reload <= 0.2 then gun_reload = gun_reload + 0.3 end
 	local playerMeta = player:get_meta()
 	local gunMeta = itemstack:get_meta()
 	rangedweapons.reload_delays[Name(player)] = gun_reload
@@ -167,23 +180,22 @@ rangedweapons_single_load_gun = function(itemstack, player)
 		end
 		--hb.change_hudbar(player, "ammo", nil, nil, gun_icon, nil, nil)
 		local gunMeta = itemstack:get_meta()
-		local ammoCount = rangedweapons.bullets[Name(player)]
-		local ammoName = rangedweapons.ammo_names[Name(player)]
+		local ammoCount = rangedweapons.bullets[typo][Name(player)]
+		local ammoName = rangedweapons.ammo_names[typo][Name(player)]
 		local inv = player:get_inventory()
 		if ammoName ~= reload_ammo:get_name() then
 			inv:add_item("main",ammoName.." "..ammoCount)
-			rangedweapons.bullets[Name(player)] = 0
+			rangedweapons.bullets[typo][Name(player)] = 0
 		end
-		if inv:contains_item("main",reload_ammo:get_name()) and rangedweapons.bullets[Name(player)] < clipSize then
+		if inv:contains_item("main",reload_ammo:get_name()) and rangedweapons.bullets[typo][Name(player)] < clipSize then
 			inv:remove_item("main", reload_ammo:get_name())
-			rangedweapons.bullets[Name(player)] = rangedweapons.bullets[Name(player)] + 1
+			rangedweapons.bullets[typo][Name(player)] = rangedweapons.bullets[typo][Name(player)] + 1
 		end
-		rangedweapons.ammo_names[Name(player)] = reload_ammo:get_name()
-		rangedweapons.bullets_max[Name(player)] = clipSize
-		--hb.change_hudbar(player, "ammo", rangedweapons.bullets[Name(player)], rangedweapons.bullets[Name(player)])
+		rangedweapons.ammo_names[typo][Name(player)] = reload_ammo:get_name()
+		rangedweapons.bullets_max[typo][Name(player)] = clipSize
 		if rangedweapons.hud_bars[player:get_player_name()] and rangedweapons.hud_bars[player:get_player_name()].fi then
-			player:hud_change(rangedweapons.hud_bars[player:get_player_name()].fi, "number", ((rangedweapons.bullets[Name(player)]/rangedweapons.bullets_max[Name(player)]) * 20))
-			player:hud_change(rangedweapons.hud_bars[player:get_player_name()].tx, "text", "Ammo: "..rangedweapons.bullets[Name(player)].."/"..rangedweapons.bullets_max[Name(player)])
+			player:hud_change(rangedweapons.hud_bars[player:get_player_name()].fi, "number", ((rangedweapons.bullets[typo][Name(player)]/rangedweapons.bullets_max[typo][Name(player)]) * 20))
+			player:hud_change(rangedweapons.hud_bars[player:get_player_name()].tx, "text", "Ammo: "..rangedweapons.bullets[typo][Name(player)].."/"..rangedweapons.bullets_max[typo][Name(player)])
 		end
 		if GunCaps.gun_unloaded ~= nil then
 			itemstack:set_name(GunCaps.gun_unloaded)
@@ -217,7 +229,7 @@ rangedweapons_yeet = function(itemstack, player)
 			local throw_skill = ""
 			local throw_skillChance =0
 			local throw_smokeSize =0
-			local throw_ent = "rangedweapons:shot_bullet"
+			local throw_ent = "rangedweapons:shot_bullet"Shop.IdentifyWeapon(item_or_name)
 			local throw_visual = "wielditem"
 			local throw_texture = "rangedweapons:shot_bullet_visual"
 			local throw_glass_breaking = 0
@@ -272,7 +284,10 @@ rangedweapons_yeet = function(itemstack, player)
 	end
 end
 
-rangedweapons_shoot_gun = function(itemstack, player)
+rangedweapons_shoot_gun = function(itemstack, player, typo)
+	local typo_d = Shop.IdentifyWeapon(itemstack:get_name())
+	if not typo_d then return end
+	local typo = typo_d.type
 	if not bs_match.match_is_started then return end
 	if minetest.find_node_near(player:getpos(), 10,"rangedweapons:antigun_block") then
 		minetest.sound_play("rangedweapons_empty", {pos = player:get_pos(), gain = 0.3, max_hear_distance = 60})
@@ -287,139 +302,142 @@ rangedweapons_shoot_gun = function(itemstack, player)
 		end
 		local gunMeta = itemstack:get_meta()
 		local playerMeta = player:get_meta()
-		if rangedweapons.bullets[Name(player)] and rangedweapons.cooldown[Name(player)] and rangedweapons.bullets[Name(player)] > 0 and rangedweapons.cooldown[Name(player)] <= 0 then
-			rangedweapons.cooldown[Name(player)] = gun_cooldown
-			rangedweapons.bullets[Name(player)] = rangedweapons.bullets[Name(player)] - 1
-			--hb.change_hudbar(player, "ammo", rangedweapons.bullets[Name(player)])
-			if rangedweapons.hud_bars[player:get_player_name()] and rangedweapons.hud_bars[player:get_player_name()].fi then
-				player:hud_change(rangedweapons.hud_bars[player:get_player_name()].fi, "number", ((rangedweapons.bullets[Name(player)]/rangedweapons.bullets_max[Name(player)]) * 20))
-				player:hud_change(rangedweapons.hud_bars[player:get_player_name()].tx, "text", "Ammo: "..rangedweapons.bullets[Name(player)].."/"..rangedweapons.bullets_max[Name(player)])
-			end
-			local gun_icon = "rangedweapons_emergency_gun_icon.png"
-			if GunCaps.gun_icon ~= nil then
-				gun_icon = GunCaps.gun_icon
-			end
-			--hb.change_hudbar(player, "ammo", nil, nil, gun_icon, nil, nil)
-			local OnCollision = function() end
-			local bulletStack = ItemStack({name = rangedweapons.ammo_names[Name(player)]})
-			local AmmoCaps = bulletStack:get_definition().RW_ammo_capabilities
-			local gun_damage = {fleshy=1}
-			local gun_sound = "rangedweapons_glock"
-			local gun_velocity = 20
-			local gun_accuracy = 100
-			local gun_cooling = 0
-			local gun_crit = 0
-			local gun_critEffc = 1
-			local gun_mobPen = 0
-			local gun_nodePen = 0
-			local gun_shell = 0
-			local gun_durability = 0
-			local gun_dps = 0
-			local gun_gravity = 0
-			local gun_door_breaking = 0
-			local gun_skill = ""
-			local gun_skillChance =0
-			local gun_smokeSize =0
-			local bullet_damage = {fleshy=0}
-			local bullet_velocity = 0
-			local bullet_ent = "rangedweapons:shot_bullet"
-			local bullet_visual = "wielditem"
-			local bullet_texture = "rangedweapons:shot_bullet_visual"
-			local bullet_crit = 0
-			local bullet_critEffc = 0
-			local bullet_projMult = 1
-			local bullet_mobPen = 0
-			local bullet_nodePen = 0
-			local bullet_shell_ent = ""
-			local bullet_shell_visual = "wielditem"
-			local bullet_shell_texture = "rangedweapons:shelldrop"
-			local bullet_dps = 0
-			local bullet_gravity = 0
-			local bullet_glass_breaking = 0
-			local bullet_particles = {}
-			local bullet_sparks = 0
-			local bullet_bomb_ignite = 0
-			local bullet_size = 0
-			local bullet_glow = 20
-			if GunCaps ~= nil then
-				gun_damage = GunCaps.gun_damage or {fleshy=1}
-				gun_sound = GunCaps.gun_sound or "rangedweapons_glock"
-				gun_velocity = GunCaps.gun_velocity or 20
-				gun_accuracy = GunCaps.gun_accuracy or 100
-				gun_cooling = GunCaps.gun_cooling or itemstack:get_name()
-				gun_crit = GunCaps.gun_crit or 0
-				gun_critEffc = GunCaps.gun_critEffc or 1
-				gun_projectiles = GunCaps.gun_projectiles or 1
-				gun_mobPen = GunCaps.gun_mob_penetration or 0
-				gun_nodePen = GunCaps.gun_node_penetration or 0
-				gun_shell = GunCaps.has_shell or 0
-				gun_durability = GunCaps.gun_durability or 0
-				gun_dps = GunCaps.gun_dps or 0
-				gun_ammo_save = GunCaps.ammo_saving or 0
-				gun_gravity = GunCaps.gun_gravity or 0
-				gun_door_breaking = GunCaps.gun_door_breaking or 0
-				gun_smokeSize = GunCaps.gun_smokeSize or 0
-				if GunCaps.gun_skill ~= nil then
-					gun_skill = GunCaps.gun_skill[1] or ""
-					gun_skillChance = GunCaps.gun_skill[2] or 0
-				else
-					gun_skill = ""
-					gun_skillChance = 0
+		if rangedweapons.cooldown[Name(player)] and rangedweapons.cooldown[Name(player)] <= 0 then
+			if rangedweapons.bullets[typo][Name(player)] and rangedweapons.bullets[typo][Name(player)] > 0 then
+				rangedweapons.cooldown[Name(player)] = gun_cooldown
+				rangedweapons.bullets[typo][Name(player)] = rangedweapons.bullets[typo][Name(player)] - 1
+				if rangedweapons.hud_bars[player:get_player_name()] and rangedweapons.hud_bars[player:get_player_name()].fi then
+					player:hud_change(rangedweapons.hud_bars[player:get_player_name()].fi, "number", ((rangedweapons.bullets[typo][Name(player)]/rangedweapons.bullets_max[typo][Name(player)]) * 20))
+					player:hud_change(rangedweapons.hud_bars[player:get_player_name()].tx, "text", "Ammo: "..rangedweapons.bullets[typo][Name(player)].."/"..rangedweapons.bullets_max[typo][Name(player)])
 				end
-			end
-			if gun_skillChance > 0 and gun_skill ~= "" then
-				rangedweapons_gain_skill(player,gun_skill,gun_skillChance)
-			end
-			local ammo_icon = "rangedweapons_emergency_ammo_icon.png"
-			if bulletStack:get_definition().inventory_image ~= nil then
-				ammo_icon = bulletStack:get_definition().inventory_image
-			end
-			if AmmoCaps ~= nil then
-				OnCollision = AmmoCaps.OnCollision or function()end
-				bullet_damage = AmmoCaps.ammo_damage or {fleshy=1}
-				bullet_velocity = AmmoCaps.ammo_velocity or 3
-				bullet_ent = AmmoCaps.ammo_entity or "rangedweapons:shot_bullet"
-				bullet_visual = AmmoCaps.ammo_visual or "wielditem"
-				bullet_texture = AmmoCaps.ammo_texture or "rangedweapons:shot_bullet_visual"
-				bullet_crit = AmmoCaps.ammo_crit or 0
-				bullet_critEffc = AmmoCaps.ammo_critEffc or 0
-				bullet_projMult = AmmoCaps.ammo_projectile_multiplier or 1
-				bullet_mobPen = AmmoCaps.ammo_mob_penetration or 0
-				bullet_nodePen = AmmoCaps.ammo_node_penetration or 0
-				bullet_shell_ent = ""
-				bullet_shell_visual = AmmoCaps.shell_visual or "wielditem"
-				bullet_shell_texture = AmmoCaps.shell_texture or "rangedweapons:shelldrop"
-				bullet_dps = AmmoCaps.ammo_dps or 0
-				bullet_gravity = AmmoCaps.ammo_gravity or 0
-				bullet_glass_breaking = AmmoCaps.ammo_glass_breaking or 0
-				bullet_particles = AmmoCaps.ammo_particles or nil
-				bullet_sparks = AmmoCaps.has_sparks or 0
-				bullet_bomb_ignite = AmmoCaps.ignites_explosives or 0
-				bullet_size = AmmoCaps.ammo_projectile_size or 0.0025
-				bullet_glow = AmmoCaps.ammo_projectile_glow or 20
-			end
-			local combined_crit = gun_crit + bullet_crit
-			local combined_critEffc = gun_critEffc + bullet_critEffc
-			local combined_velocity = gun_velocity + bullet_velocity * 2
-			local combined_projNum = math.ceil(gun_projectiles * bullet_projMult)
-			local combined_mobPen = gun_mobPen + bullet_mobPen
-			local combined_nodePen = gun_nodePen + bullet_nodePen
-			local combined_dps = gun_dps + bullet_dps
-			local combined_dmg = {}
-			local combined_gravity = gun_gravity + bullet_gravity
-			for _, gunDmg in pairs(gun_damage) do
-				if bullet_damage[_] ~= nil then
-					combined_dmg[_] = gun_damage[_] + bullet_damage[_]
-				else
-					combined_dmg[_] = gun_damage[_]
+				local gun_icon = "rangedweapons_emergency_gun_icon.png"
+				if GunCaps.gun_icon ~= nil then
+					gun_icon = GunCaps.gun_icon
 				end
-			end
-			for _, bulletDmg in pairs(bullet_damage) do
-				if gun_damage[_] == nil then
-					combined_dmg[_] = bullet_damage[_]
+				--hb.change_hudbar(player, "ammo", nil, nil, gun_icon, nil, nil)
+				local OnCollision = function() end
+				local bulletStack = ItemStack({name = rangedweapons.ammo_names[typo][Name(player)]})
+				local AmmoCaps = bulletStack:get_definition().RW_ammo_capabilities
+				local gun_damage = {fleshy=1}
+				local gun_sound = "rangedweapons_glock"
+				local gun_velocity = 20
+				local gun_accuracy = 100
+				local gun_cooling = 0
+				local gun_crit = 0
+				local gun_critEffc = 1
+				local gun_mobPen = 0
+				local gun_nodePen = 0
+				local gun_shell = 0
+				local gun_durability = 0
+				local gun_dps = 0
+				local gun_gravity = 0
+				local gun_door_breaking = 0
+				local gun_skill = ""
+				local gun_skillChance =0
+				local gun_smokeSize =0
+				local bullet_damage = {fleshy=0}
+				local bullet_velocity = 0
+				local bullet_ent = "rangedweapons:shot_bullet"
+				local bullet_visual = "wielditem"
+				local bullet_texture = "rangedweapons:shot_bullet_visual"
+				local bullet_crit = 0
+				local bullet_critEffc = 0
+				local bullet_projMult = 1
+				local bullet_mobPen = 0
+				local bullet_nodePen = 0
+				local bullet_shell_ent = ""
+				local bullet_shell_visual = "wielditem"
+				local bullet_shell_texture = "rangedweapons:shelldrop"
+				local bullet_dps = 0
+				local bullet_gravity = 0
+				local bullet_glass_breaking = 0
+				local bullet_particles = {}
+				local bullet_sparks = 0
+				local bullet_bomb_ignite = 0
+				local bullet_size = 0
+				local bullet_glow = 20
+				if GunCaps ~= nil then
+					gun_damage = GunCaps.gun_damage or {fleshy=1}
+					gun_sound = GunCaps.gun_sound or "rangedweapons_glock"
+					gun_velocity = GunCaps.gun_velocity or 20
+					gun_accuracy = GunCaps.gun_accuracy or 100
+					gun_cooling = GunCaps.gun_cooling or itemstack:get_name()
+					gun_crit = GunCaps.gun_crit or 0
+					gun_critEffc = GunCaps.gun_critEffc or 1
+					gun_projectiles = GunCaps.gun_projectiles or 1
+					gun_mobPen = GunCaps.gun_mob_penetration or 0
+					gun_nodePen = GunCaps.gun_node_penetration or 0
+					gun_shell = GunCaps.has_shell or 0
+					gun_durability = GunCaps.gun_durability or 0
+					gun_dps = GunCaps.gun_dps or 0
+					gun_ammo_save = GunCaps.ammo_saving or 0
+					gun_gravity = GunCaps.gun_gravity or 0
+					gun_door_breaking = GunCaps.gun_door_breaking or 0
+					gun_smokeSize = GunCaps.gun_smokeSize or 0
+					if GunCaps.gun_skill ~= nil then
+						gun_skill = GunCaps.gun_skill[1] or ""
+						gun_skillChance = GunCaps.gun_skill[2] or 0
+					else
+						gun_skill = ""
+						gun_skillChance = 0
+					end
 				end
+				if gun_skillChance > 0 and gun_skill ~= "" then
+					rangedweapons_gain_skill(player,gun_skill,gun_skillChance)
+				end
+				local ammo_icon = "rangedweapons_emergency_ammo_icon.png"
+				if bulletStack:get_definition().inventory_image ~= nil then
+					ammo_icon = bulletStack:get_definition().inventory_image
+				end
+				if AmmoCaps ~= nil then
+					OnCollision = AmmoCaps.OnCollision or function()end
+					bullet_damage = AmmoCaps.ammo_damage or {fleshy=1}
+					bullet_velocity = AmmoCaps.ammo_velocity or 3
+					bullet_ent = AmmoCaps.ammo_entity or "rangedweapons:shot_bullet"
+					bullet_visual = AmmoCaps.ammo_visual or "wielditem"
+					bullet_texture = AmmoCaps.ammo_texture or "rangedweapons:shot_bullet_visual"
+					bullet_crit = AmmoCaps.ammo_crit or 0
+					bullet_critEffc = AmmoCaps.ammo_critEffc or 0
+					bullet_projMult = AmmoCaps.ammo_projectile_multiplier or 1
+					bullet_mobPen = AmmoCaps.ammo_mob_penetration or 0
+					bullet_nodePen = AmmoCaps.ammo_node_penetration or 0
+					bullet_shell_ent = ""
+					bullet_shell_visual = AmmoCaps.shell_visual or "wielditem"
+					bullet_shell_texture = AmmoCaps.shell_texture or "rangedweapons:shelldrop"
+					bullet_dps = AmmoCaps.ammo_dps or 0
+					bullet_gravity = AmmoCaps.ammo_gravity or 0
+					bullet_glass_breaking = AmmoCaps.ammo_glass_breaking or 0
+					bullet_particles = AmmoCaps.ammo_particles or nil
+					bullet_sparks = AmmoCaps.has_sparks or 0
+					bullet_bomb_ignite = AmmoCaps.ignites_explosives or 0
+					bullet_size = AmmoCaps.ammo_projectile_size or 0.0025
+					bullet_glow = AmmoCaps.ammo_projectile_glow or 20
+				end
+				local combined_crit = gun_crit + bullet_crit
+				local combined_critEffc = gun_critEffc + bullet_critEffc
+				local combined_velocity = gun_velocity + bullet_velocity * 2
+				local combined_projNum = math.ceil(gun_projectiles * bullet_projMult)
+				local combined_mobPen = gun_mobPen + bullet_mobPen
+				local combined_nodePen = gun_nodePen + bullet_nodePen
+				local combined_dps = gun_dps + bullet_dps
+				local combined_dmg = {}
+				local combined_gravity = gun_gravity + bullet_gravity
+				for _, gunDmg in pairs(gun_damage) do
+					if bullet_damage[_] ~= nil then
+						combined_dmg[_] = gun_damage[_] + bullet_damage[_]
+					else
+						combined_dmg[_] = gun_damage[_]
+					end
+				end
+				for _, bulletDmg in pairs(bullet_damage) do
+					if gun_damage[_] == nil then
+						combined_dmg[_] = bullet_damage[_]
+					end
+				end
+				rangedweapons_launch_projectile(player,combined_projNum,combined_dmg,bullet_ent,bullet_visual,bullet_texture,gun_sound,combined_velocity,gun_accuracy,skill_value,OnCollision,combined_crit,combined_critEffc,combined_mobPen,combined_nodePen,gun_shell,bullet_shell_ent,bullet_shell_texture,bullet_shell_visual,combined_dps,combined_gravity,gun_door_breaking,bullet_glass_breaking,bullet_particles,bullet_sparks,bullet_bomb_ignite,bullet_size,gun_smokeSize,0,bullet_glow)
+			else
+				rangedweapons_reload_gun(itemstack, player)
 			end
-			rangedweapons_launch_projectile(player,combined_projNum,combined_dmg,bullet_ent,bullet_visual,bullet_texture,gun_sound,combined_velocity,gun_accuracy,skill_value,OnCollision,combined_crit,combined_critEffc,combined_mobPen,combined_nodePen,gun_shell,bullet_shell_ent,bullet_shell_texture,bullet_shell_visual,combined_dps,combined_gravity,gun_door_breaking,bullet_glass_breaking,bullet_particles,bullet_sparks,bullet_bomb_ignite,bullet_size,gun_smokeSize,0,bullet_glow)
 		end
 	end
 end
@@ -589,42 +607,44 @@ end
 
 
 eject_shell = function(itemstack,player,rld_item,rld_time,rldsound,shell)
+	do
+		return
+	end
 	itemstack:set_name(rld_item)
-		local meta = player:get_meta()
-		rangedweapons.cooldown[Name(player)] = rld_time
-
-local gunMeta = itemstack:get_meta()
-
-local bulletStack = ItemStack({name = rangedweapons.ammo_names[Name(player)]})
-
-minetest.sound_play(rldsound, {pos = player:get_pos(), gain = 0.5, max_hear_distance = 20})
-		local pos = player:get_pos()
-		local dir = player:get_look_dir()
-		local yaw = player:get_look_yaw()
-		if pos and dir and yaw then
-			pos.y = pos.y + 1.6
-			
-
-if AmmoCaps and bulletStack ~= "" then
-AmmoCaps = bulletStack:get_definition().RW_ammo_capabilities
-
-local bullet_shell_visual = "wielditem"
-local bullet_shell_texture = "rangedweapons:shelldrop"
-
-bullet_shell_visual = AmmoCaps.shell_visual or "wielditem"
-bullet_shell_texture = AmmoCaps.shell_texture or "rangedweapons:shelldrop"
-
---obj:set_properties({textures = {bullet_shell_texture}})
---obj:set_properties({visual = bullet_shell_visual})
-
+	local meta = player:get_meta()
+	rangedweapons.cooldown[Name(player)] = rld_time
+	local gunMeta = itemstack:get_meta()
+	local bulletStack = ItemStack({name = rangedweapons.ammo_names[typo][Name(player)]})
+	minetest.sound_play(rldsound, {pos = player:get_pos(), gain = 0.5, max_hear_distance = 20})
+	local pos = player:get_pos()
+	local dir = player:get_look_dir()
+	local yaw = player:get_look_yaw()
+	if pos and dir and yaw then
+		pos.y = pos.y + 1.6
+		if AmmoCaps and bulletStack ~= "" then
+			AmmoCaps = bulletStack:get_definition().RW_ammo_capabilities
+			local bullet_shell_visual = "wielditem"
+			local bullet_shell_texture = "rangedweapons:shelldrop"
+			bullet_shell_visual = AmmoCaps.shell_visual or "wielditem"
+			bullet_shell_texture = AmmoCaps.shell_texture or "rangedweapons:shelldrop"
+		end
+	end
 end
-			if obj then
---obj:set_velocity({x=dir.x*-10, y=dir.y*-10, z=dir.z*-10})
---obj:set_acceleration({x=dir.x*-5, y=-10, z=dir.z*-5})
-	--obj:set_yaw(yaw + math.pi)
-	end end end
 ---------------------------------------------------
 
+--Bullet
+RegisterOnChangeWieldItem(function(player, weapon)
+	local weapon = Shop.IdentifyWeapon(weapon)
+	if weapon then
+		local typo = weapon.type
+		if rangedweapons.bullets[typo] then
+			if rangedweapons.hud_bars[player:get_player_name()] and rangedweapons.hud_bars[player:get_player_name()].fi then
+				player:hud_change(rangedweapons.hud_bars[player:get_player_name()].fi, "number", ((rangedweapons.bullets[typo][Name(player)]/rangedweapons.bullets_max[typo][Name(player)]) * 20))
+				player:hud_change(rangedweapons.hud_bars[player:get_player_name()].tx, "text", "Ammo: "..rangedweapons.bullets[typo][Name(player)].."/"..rangedweapons.bullets_max[typo][Name(player)])
+			end
+		end
+	end
+end)
 
 dofile(modpath.."/item_onAct.lua")
 dofile(modpath.."/settings.lua")
@@ -741,6 +761,30 @@ minetest.register_on_joinplayer(function(player)
 end)
 bs.cbs.register_OnAssignTeam(function(player, team)
 	-- hud bars ammo
+	if not rangedweapons.cooldown[Name(player)] then
+		rangedweapons.cooldown[Name(player)] = 0
+	end
+	if not rangedweapons.reload_delays[Name(player)] then
+		rangedweapons.reload_delays[Name(player)] = 0
+	end
+	for typo in pairs(rangedweapons.ammo_names) do
+		if not rangedweapons.ammo_names[typo][Name(player)] then
+			rangedweapons.ammo_names[typo][Name(player)] = 0
+		end
+	end
+	for typo in pairs(rangedweapons.bullets) do
+		if not rangedweapons.bullets[typo][Name(player)] then
+			rangedweapons.bullets[typo][Name(player)] = 0
+		end
+	end
+	for typo in pairs(rangedweapons.bullets_max) do
+		if not rangedweapons.bullets_max[typo][Name(player)] then
+			rangedweapons.bullets_max[typo][Name(player)] = 0
+		end
+	end
+	if not rangedweapons.aux_delay[Name(player)] then
+		rangedweapons.aux_delay[Name(player)] = 0
+	end
 	if not rangedweapons.hud_bars[player:get_player_name()] then
 		rangedweapons.hud_bars[player:get_player_name()] = {
 			bg = player:hud_add({
@@ -779,14 +823,58 @@ bs.cbs.register_OnAssignTeam(function(player, team)
 			player:hud_change(rangedweapons.hud_bars[Name(player)].bg, "text", "blank.png")
 			player:hud_change(rangedweapons.hud_bars[Name(player)].fi, "text", "blank.png")
 			player:hud_change(rangedweapons.hud_bars[Name(player)].tx, "text", " ")
-		else
-			player:hud_change(rangedweapons.hud_bars[Name(player)].bg, "text", "ammo_bar_bg.png")
-			player:hud_change(rangedweapons.hud_bars[Name(player)].fi, "text", "ammo_bar.png")
-			player:hud_change(rangedweapons.hud_bars[Name(player)].tx, "text", "Ammo: 0/0")
+		end
+	end
+	if team ~= "" then
+		for _, typo in pairs({"smg", "pistol", "shotgun", "rifle"}) do
+			local weapon = Shop.GetPlayerWeaponByType(player, typo)
+			if weapon and weapon.ammo and weapon.item_name then
+				if weapon.ammo.uses_ammo then
+					if Inv(player) then
+						local GunCaps = ItemStack(weapon.item_name):get_definition().RW_gun_capabilities
+						local inv = player:get_inventory()
+						local dobreak = false
+						for i = 1,inv:get_size("main") do
+							for _, ammo in pairs(GunCaps.suitable_ammo) do
+								if inv:get_stack("main",i):get_name() == ammo[1] then
+									rangedweapons.bullets[weapon.type][Name(player)] = ammo[2]
+									rangedweapons.ammo_names[weapon.type][Name(player)] = ammo[1]
+									rangedweapons.bullets_max[weapon.type][Name(player)] = ammo[2]
+									dobreak = true
+									break
+								end
+								if dobreak then
+									break
+								end
+							end
+						end
+					end
+				end
+			end
+		end
+		player:hud_change(rangedweapons.hud_bars[Name(player)].bg, "text", "ammo_bar_bg.png")
+		player:hud_change(rangedweapons.hud_bars[Name(player)].fi, "text", "ammo_bar.png")
+		for _, typo in pairs({"smg", "pistol", "shotgun", "rifle"}) do
+			player:hud_change(rangedweapons.hud_bars[Name(player)].tx, "text", "Ammo: "..rangedweapons.bullets[typo][Name(player)].."/"..rangedweapons.bullets_max[typo][Name(player)])
+			player:hud_change(rangedweapons.hud_bars[player:get_player_name()].fi, "number", ((rangedweapons.bullets[typo][Name(player)]/rangedweapons.bullets_max[typo][Name(player)]) * 20))
 		end
 	end
 end)
 
+core.register_on_leaveplayer(function(player)
+	--delete all
+	for _, typo in pairs({"smg", "pistol", "shotgun", "rifle"}) do
+		rangedweapons.bullets[typo][Name(player)] = nil
+		rangedweapons.ammo_names[typo][Name(player)] = nil
+		rangedweapons.bullets_max[typo][Name(player)] = nil
+	end
+	hits[Name(player)] = nil
+	scope_huds[Name(player)] = nil
+	rangedweapons.hud_bars[Name(player)] = nil
+	rangedweapons.cooldown[Name(player)] = nil
+	rangedweapons.aux_delay[Name(player)] = nil
+	rangedweapons.reload_delays[Name(player)] = nil
+end)
 --[[
 	local timer = 0
 minetest.register_globalstep(function(dtime, player)
