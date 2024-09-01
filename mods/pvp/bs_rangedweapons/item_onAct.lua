@@ -185,7 +185,7 @@ local function on_load()
 					type = types[name],
 					uses_ammo = true,
 					ammo_item_string = def.RW_gun_capabilities.suitable_ammo[1][1],
-					ammo_item_count = def.RW_gun_capabilities.suitable_ammo[1][2] * 90,
+					ammo_item_count = def.RW_gun_capabilities.suitable_ammo[1][2] * 20,
 				})
 			end
 		end
@@ -196,8 +196,18 @@ rangedweapons.is_recharging = {}
 rangedweapons.last_pressedAUX = {}
 rangedweapons.already_shot = {}
 rangedweapons.delays = {} -- Prevent use of meta()
-rangedweapons.bullets = {}
-rangedweapons.ammo_names = {}
+rangedweapons.bullets = {
+	shotgun = {},
+	pistol = {},
+	rifle = {},
+	smg = {}
+}
+rangedweapons.ammo_names = {
+	shotgun = {},
+	pistol = {},
+	rifle = {},
+	smg = {}
+}
 rangedweapons.reload_delays = {}
 rangedweapons.cooldown = {}
 rangedweapons.aux_delay = {}
@@ -232,11 +242,20 @@ local function on_step(dt)
 		if not rangedweapons.reload_delays[Name(player)] then
 			rangedweapons.reload_delays[Name(player)] = 0
 		end
-		if not rangedweapons.ammo_names[Name(player)] then
-			rangedweapons.ammo_names[Name(player)] = ""
+		for typo in pairs(rangedweapons.ammo_names) do
+			if not rangedweapons.ammo_names[typo][Name(player)] then
+				rangedweapons.ammo_names[typo][Name(player)] = 0
+			end
 		end
-		if not rangedweapons.bullets[Name(player)] then
-			rangedweapons.bullets[Name(player)] = 0
+		for typo in pairs(rangedweapons.bullets) do
+			if not rangedweapons.bullets[typo][Name(player)] then
+				rangedweapons.bullets[typo][Name(player)] = 0
+			end
+		end
+		for typo in pairs(rangedweapons.bullets_max) do
+			if not rangedweapons.bullets_max[typo][Name(player)] then
+				rangedweapons.bullets_max[typo][Name(player)] = 0
+			end
 		end
 		if not rangedweapons.aux_delay[Name(player)] then
 			rangedweapons.aux_delay[Name(player)] = 0
@@ -269,14 +288,14 @@ local function on_step(dt)
 				if controls.dig then -- Dont shoot if player is recharging his gun
 					if bs_match.match_is_started then
 						if player:get_wielded_item():get_definition().RW_gun_capabilities and player:get_wielded_item():get_definition().RW_gun_capabilities.automatic_gun and player:get_wielded_item():get_definition().RW_gun_capabilities.automatic_gun > 0 then
-							rangedweapons_shoot_gun(item, player)
+							rangedweapons_shoot_gun(item, player, typo)
 							--player:set_wielded_item(item)
 						else
-							if rangedweapons.already_shot[Name(player)] ~= true then
-								rangedweapons_shoot_gun(item, player)
+							--if rangedweapons.already_shot[Name(player)] ~= true then
+							--	rangedweapons_shoot_gun(item, player)
 								--player:set_wielded_item(item)
-								rangedweapons.already_shot[Name(player)] = true
-							end
+							--	rangedweapons.already_shot[Name(player)] = true
+							--end
 						end
 					end
 				else
