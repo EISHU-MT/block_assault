@@ -53,7 +53,7 @@ minetest.register_on_leaveplayer(dropondie.drop_all)
 
 minetest.register_on_item_pickup(function(itemstack, picker, pointed_thing, time_from_last_punch)
 	if bs.spectator[Name(picker)] or bs.spectator[Name(picker)] then
-		return Itemstack("")
+		return ItemStack("")
 	end
 end)
 
