@@ -406,12 +406,16 @@ end
 local ticks = 0
 
 local function on_prepare_all_map()
-	if maps.current_map and maps.current_map.teams then
-		for _, data in pairs(maps.current_map.teams) do
-			core.set_node(data, {name="bs_shop:trading_table"})
+	if config.EnableShopTable then
+		if maps.current_map and maps.current_map.teams then
+			for _, data in pairs(maps.current_map.teams) do
+				core.set_node(data, {name="bs_shop:trading_table"})
+			end
 		end
 	end
 end
+
+PlaceAllTradingTables = on_prepare_all_map
 
 local function on_step(dt)
 	if config.EnableShopTable then
@@ -423,9 +427,9 @@ local function on_step(dt)
 	end
 end
 
-core.register_globalstep(on_step)
+--core.register_globalstep(on_step)
 
---maps.register_on_load(on_prepare_all_map)
+maps.register_on_load(on_prepare_all_map)
 core.register_on_mods_loaded(on_load)
 
 -- Add more ammo to players
@@ -433,11 +437,29 @@ bs_match.register_OnEndMatch(function()
 	for _, player in pairs(core.get_connected_players()) do
 		for _, typo in pairs({"smg", "pistol", "shotgun", "rifle"}) do
 			local weapon = Shop.GetPlayerWeaponByType(player, typo)
-			if weapon and weapon.ammo then
+			if weapon and weapon.ammo and weapon.item_name then
 				if weapon.ammo.uses_ammo then
 					if Inv(player) then
 						local ammo_item = ItemStack(weapon.ammo.type.." "..weapon.ammo.count)
 						Inv(player):add_item("main", ammo_item)
+						-- ammo
+						local GunCaps = ItemStack(weapon.item_name):get_definition().RW_gun_capabilities
+						local inv = player:get_inventory()
+						local dobreak = false
+						for i = 1,inv:get_size("main") do
+							for _, ammo in pairs(GunCaps.suitable_ammo) do
+								if inv:get_stack("main",i):get_name() == ammo[1] then
+									rangedweapons.bullets[weapon.type][Name(player)] = ammo[2]
+									rangedweapons.ammo_names[weapon.type][Name(player)] = ammo[1]
+									rangedweapons.bullets_max[weapon.type][Name(player)] = ammo[2]
+									dobreak = true
+									break
+								end
+								if dobreak then
+									break
+								end
+							end
+						end
 					end
 				end
 			end
