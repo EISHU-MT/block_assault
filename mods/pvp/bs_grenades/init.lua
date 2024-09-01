@@ -148,7 +148,8 @@ function grenades.register_grenade(name, def)
 			grenades.throw_grenade(name, 17, user)
 
 			--if not minetest.settings:get_bool("creative_mode") then
-				itemstack:set_count(itemstack:get_count() - 1)
+				--itemstack:set_count(itemstack:get_count() - 1)
+				itemstack:take_item(1)
 			--end
 		--end
 
@@ -156,7 +157,7 @@ function grenades.register_grenade(name, def)
 			itemstack = ItemStack("")
 		end
 
-		user:set_wielded_item(ItemStack(""))
+		user:set_wielded_item(itemstack)
 
 		return nil
 	end
