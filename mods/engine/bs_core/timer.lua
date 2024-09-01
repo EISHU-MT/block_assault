@@ -84,8 +84,10 @@ local function reg_glb(dtime)
 		end
 		for _, player in pairs(core.get_connected_players()) do
 			if time ~= -1 and (timehud) and time and color then
-				player:hud_change(timehud[player:get_player_name()], "text", bs_timer.disp_time(time)) -- Time
-				player:hud_change(timehud[player:get_player_name()], "number", bs_timer.color)  -- Color
+				if timehud[Name(player)] then
+					player:hud_change(timehud[player:get_player_name()], "text", bs_timer.disp_time(time)) -- Time
+					player:hud_change(timehud[player:get_player_name()], "number", bs_timer.color)  -- Color
+				end
 			end
 		end
 	timed = 0
