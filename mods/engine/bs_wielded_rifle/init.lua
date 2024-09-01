@@ -50,9 +50,10 @@ local def = {
 						local obj = get_wieldhand_entity(attached)
 						if obj then
 							obj:set_properties({textures = {hstac:get_name()}})
+							RunCallbacks(OnChangeItemTable, attached, hstac:get_name())
 						end
 					else
-						
+						RunCallbacks(OnChangeItemTable, attached, hstac:get_name())
 						self.object:set_properties({textures = {stack:get_name()}})
 					end
 					return
@@ -68,9 +69,10 @@ local def = {
 						local obj = get_wieldhand_entity(attached)
 						if obj then
 							obj:set_properties({textures = {hstac:get_name()}})
+							RunCallbacks(OnChangeItemTable, attached, hstac:get_name())
 						end
 					else
-						
+						RunCallbacks(OnChangeItemTable, attached, hstac:get_name())
 						self.object:set_properties({textures = {stack:get_name()}})
 					end
 					return
@@ -82,6 +84,7 @@ local def = {
 		end
 	end,
 	animated_rifle = true,
+	dont_remove = true,
 }
 
 minetest.register_tool("bs_wielded_rifle:invisible", {
@@ -90,7 +93,7 @@ minetest.register_tool("bs_wielded_rifle:invisible", {
 	inventory_image = "blank.png",
 })
 core.register_entity(":bs_shop:animated_rifle", def)
-
+--[[
 local function on_step(id, team)
 	for _, id in pairs(core.get_connected_players()) do
 		local team = bs.get_player_team_css(id)
@@ -118,6 +121,34 @@ end
 
 --bs.cbs.register_OnAssignTeam(on_join)
 core.register_globalstep(on_step)
+--]]
+
+wielded_rifle_objs = {}
+
+local function on_join_p(player, team)
+	if team ~= "" then
+		local obj = core.add_entity(player:get_pos(), "bs_shop:animated_rifle")
+		if obj then
+			obj:set_attach(player, "", vector.new(-0.9, 9, -1.6), vector.new(0,0,-45))
+			wielded_rifle_objs[Name(player)] = obj
+		end
+	else
+		if wielded_rifle_objs[Name(player)] then
+			wielded_rifle_objs[Name(player)]:remove()
+			wielded_rifle_objs[Name(player)] = nil
+		end
+	end
+end
+
+local function on_leave_p(player)
+	wielded_rifle_objs[Name(player)] = nil
+end
+
+bs.cbs.register_OnAssignTeam(on_join_p)
+core.register_on_leaveplayer(on_leave_p)
+
+
+
 
 
 
