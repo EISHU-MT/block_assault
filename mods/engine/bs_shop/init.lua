@@ -231,7 +231,7 @@ function Shop.GetWeapon(item, player, data)
 	player = Player(player)
 	local name = Name(player)
 	local weapon_data = Shop.IdentifyWeapon(item:get_name())
-	
+	if not Name(player) then return end
 	local detected_conflict_weapon
 	for i, itemstack in pairs(Inv(player):get_list("main")) do
 		local item_name = itemstack:get_name()
