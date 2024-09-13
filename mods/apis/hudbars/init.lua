@@ -595,38 +595,40 @@ bs.cbs.register_OnAssignTeam(function(player, team)
 	end
 	-- health bar
 	health_bar[Name(player)] = {}
-	health_bar[Name(player)].bg = player:hud_add({
-		hud_elem_type = "statbar",
-		position = position,
-		scale = {x=1,y=1},
-		text = (team == "" and "") or "health_bar_bg.png",
-		number = 20,
-		alignment = {x=-1,y=-1},
-		offset = offset,
-		direction = 0,
-		size = {x = 23, y = 23},
-	})
-	
-	health_bar[Name(player)].hd = player:hud_add({
-		hud_elem_type = "statbar",
-		position = position,
-		text = (team == "" and "") or "health_bar.png",
-		number = player:get_hp(),
-		alignment = {x=-1,y=-1},
-		offset = offset,
-		direction = 0,
-		size = {x = 23, y = 23},
-	})
-	
-	health_bar[Name(player)].tx = player:hud_add({
-		hud_elem_type = "text",
-		scale = {x = 1.5, y = 1.5},
-		position = position,
-		offset = {x = 50, y = -17},
-		alignment = {x = "center", y = "up"},
-		text = (team == "" and "") or "HP: "..player:get_hp().."/20",
-		number = 0x000000,
-	})
+	if not health_bar[Name(player)] then
+		health_bar[Name(player)].bg = player:hud_add({
+			hud_elem_type = "statbar",
+			position = position,
+			scale = {x=1,y=1},
+			text = (team == "" and "") or "health_bar_bg.png",
+			number = 20,
+			alignment = {x=-1,y=-1},
+			offset = offset,
+			direction = 0,
+			size = {x = 23, y = 23},
+		})
+		
+		health_bar[Name(player)].hd = player:hud_add({
+			hud_elem_type = "statbar",
+			position = position,
+			text = (team == "" and "") or "health_bar.png",
+			number = player:get_hp(),
+			alignment = {x=-1,y=-1},
+			offset = offset,
+			direction = 0,
+			size = {x = 23, y = 23},
+		})
+		
+		health_bar[Name(player)].tx = player:hud_add({
+			hud_elem_type = "text",
+			scale = {x = 1.5, y = 1.5},
+			position = position,
+			offset = {x = 50, y = -17},
+			alignment = {x = "center", y = "up"},
+			text = (team == "" and "") or "HP: "..player:get_hp().."/20",
+			number = 0x000000,
+		})
+	end
 end)
 
 minetest.register_on_leaveplayer(function(player)
