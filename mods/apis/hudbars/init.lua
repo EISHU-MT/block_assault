@@ -594,8 +594,8 @@ bs.cbs.register_OnAssignTeam(function(player, team)
 		end
 	end
 	-- health bar
-	health_bar[Name(player)] = {}
-	if not health_bar[Name(player)] then
+	if team ~= "" and not health_bar[Name(player)] then
+		health_bar[Name(player)] = {}
 		health_bar[Name(player)].bg = player:hud_add({
 			hud_elem_type = "statbar",
 			position = position,
