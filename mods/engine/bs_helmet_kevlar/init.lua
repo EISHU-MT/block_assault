@@ -74,55 +74,57 @@ bs.cbs.register_OnAssignTeam(function(player, team)
 	PlayerArmor.HeadHPDifference[Name(player)] = 0
 	PlayerArmor.DifferenceOfHP[Name(player)] = 0
 	PlayerArmor.PerDoubleUse[Name(player)] = 0
-	PlayerArmor.Huds[Name(player)] = {
---		kevlar = player:hud_add({
---			hud_elem_type = "text",
---			position = {x = 0.01, y = 0.94},
---			offset = {x=50, y = 1},
---			scale = {x = 100, y = 100},
---			text = "Kevlar: 0%",
---			number = 0xFFFFFF,
---		}),
---		helmet = player:hud_add({
---			hud_elem_type = "text",
---			position = {x = 0.01, y = 0.98},
---			offset = {x=50, y = 1},
---			scale = {x = 100, y = 100},
---			text = "Helmet: 0%",
---			number = 0xFFFFFF,
---		}),
-		
-		bg = player:hud_add({
-			hud_elem_type = "statbar",
-			position = position,
-			scale = {x=1,y=1},
-			text = (team == "" and "") or "armor_bar_bg.png",
-			number = 20,
-			alignment = {x=-1,y=-1},
-			offset = offset,
-			direction = 0,
-			size = {x = 23, y = 23},
-		}),
-		bar = player:hud_add({
-			hud_elem_type = "statbar",
-			position = position,
-			text = (team == "" and "") or "armor_bar.png",
-			number = player:get_hp(),
-			alignment = {x=-1,y=-1},
-			offset = offset,
-			direction = 0,
-			size = {x = 23, y = 23},
-		}),
-		txt = player:hud_add({
-			hud_elem_type = "text",
-			scale = {x = 1.5, y = 1.5},
-			position = position,
-			offset = {x = 60, y = -47},
-			alignment = {x = "center", y = "up"},
-			text = (team == "" and " ") or "Armor: 0/100",
-			number = 0x000000,
-		})
-	}
+	if not PlayerArmor.Huds[Name(player)] and team ~= "" then
+		PlayerArmor.Huds[Name(player)] = {
+	--		kevlar = player:hud_add({
+	--			hud_elem_type = "text",
+	--			position = {x = 0.01, y = 0.94},
+	--			offset = {x=50, y = 1},
+	--			scale = {x = 100, y = 100},
+	--			text = "Kevlar: 0%",
+	--			number = 0xFFFFFF,
+	--		}),
+	--		helmet = player:hud_add({
+	--			hud_elem_type = "text",
+	--			position = {x = 0.01, y = 0.98},
+	--			offset = {x=50, y = 1},
+	--			scale = {x = 100, y = 100},
+	--			text = "Helmet: 0%",
+	--			number = 0xFFFFFF,
+	--		}),
+			
+			bg = player:hud_add({
+				hud_elem_type = "statbar",
+				position = position,
+				scale = {x=1,y=1},
+				text = (team == "" and "") or "armor_bar_bg.png",
+				number = 20,
+				alignment = {x=-1,y=-1},
+				offset = offset,
+				direction = 0,
+				size = {x = 23, y = 23},
+			}),
+			bar = player:hud_add({
+				hud_elem_type = "statbar",
+				position = position,
+				text = (team == "" and "") or "armor_bar.png",
+				number = player:get_hp(),
+				alignment = {x=-1,y=-1},
+				offset = offset,
+				direction = 0,
+				size = {x = 23, y = 23},
+			}),
+			txt = player:hud_add({
+				hud_elem_type = "text",
+				scale = {x = 1.5, y = 1.5},
+				position = position,
+				offset = {x = 60, y = -47},
+				alignment = {x = "center", y = "up"},
+				text = (team == "" and " ") or "Armor: 0/100",
+				number = 0x000000,
+			})
+		}
+	end
 	PlayerArmor.UpdateHud(Name(player))
 end)
 
