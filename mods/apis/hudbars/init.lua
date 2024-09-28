@@ -512,34 +512,36 @@ end
 local function update_hud(player)
 	if not player_exists(player) then return end
 	if minetest.settings:get_bool("enable_damage") then
-		--if hb.settings.forceload_default_hudbars then
-			if RespawnDelay then
-				if bs.spectator[Name(player)] ~= true and RespawnDelay.players[Name(player)] ~= true then
-					player:hud_change(health_bar[Name(player)].bg, "text", "health_bar_bg.png")
-					player:hud_change(health_bar[Name(player)].hd, "text", "health_bar.png")
-					player:hud_change(health_bar[Name(player)].tx, "text", "HP: "..player:get_hp().."/20")
-				end
-				if RespawnDelay.players[Name(player)] then
-					player:hud_change(health_bar[Name(player)].bg, "text", "blank.png")
-					player:hud_change(health_bar[Name(player)].hd, "text", "blank.png")
-					player:hud_change(health_bar[Name(player)].tx, "text", "")
-					return
-				end
-			else
-				if bs.spectator[Name(player)] ~= true then
-					player:hud_change(health_bar[Name(player)].bg, "text", "health_bar_bg.png")
-					player:hud_change(health_bar[Name(player)].hd, "text", "health_bar.png")
-					player:hud_change(health_bar[Name(player)].tx, "text", "HP: "..player:get_hp().."/20")
+		if health_bar[Name(player)] then
+			--if hb.settings.forceload_default_hudbars then
+				if RespawnDelay then
+					if bs.spectator[Name(player)] ~= true and RespawnDelay.players[Name(player)] ~= true then
+						player:hud_change(health_bar[Name(player)].bg, "text", "health_bar_bg.png")
+						player:hud_change(health_bar[Name(player)].hd, "text", "health_bar.png")
+						player:hud_change(health_bar[Name(player)].tx, "text", "HP: "..player:get_hp().."/20")
+					end
+					if RespawnDelay.players[Name(player)] then
+						player:hud_change(health_bar[Name(player)].bg, "text", "blank.png")
+						player:hud_change(health_bar[Name(player)].hd, "text", "blank.png")
+						player:hud_change(health_bar[Name(player)].tx, "text", "")
+						return
+					end
 				else
-					player:hud_change(health_bar[Name(player)].bg, "text", "blank.png")
-					player:hud_change(health_bar[Name(player)].hd, "text", "blank.png")
-					player:hud_change(health_bar[Name(player)].tx, "text", "")
-					return
+					if bs.spectator[Name(player)] ~= true then
+						player:hud_change(health_bar[Name(player)].bg, "text", "health_bar_bg.png")
+						player:hud_change(health_bar[Name(player)].hd, "text", "health_bar.png")
+						player:hud_change(health_bar[Name(player)].tx, "text", "HP: "..player:get_hp().."/20")
+					else
+						player:hud_change(health_bar[Name(player)].bg, "text", "blank.png")
+						player:hud_change(health_bar[Name(player)].hd, "text", "blank.png")
+						player:hud_change(health_bar[Name(player)].tx, "text", "")
+						return
+					end
 				end
-			end
-		--end
-		--air
-		player:hud_change(health_bar[Name(player)].hd, "number", player:get_hp())
+			--end
+			--air
+			player:hud_change(health_bar[Name(player)].hd, "number", player:get_hp())
+		end
 		local breath_max = player:get_properties().breath_max
 		local breath = player:get_breath()
 		
