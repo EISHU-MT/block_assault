@@ -93,6 +93,9 @@ rangedweapons_reload_gun = function(itemstack, player)
 		--hb.change_hudbar(player, "ammo", nil, nil, gun_icon, nil, nil)
 		local gunMeta = itemstack:get_meta()
 		local ammoCount = rangedweapons.bullets[typo][Name(player)]
+		if config.BsDebugMode then
+			clipSize = math.huge
+		end
 		local ammoName = rangedweapons.ammo_names[typo][Name(player)]
 		local inv = player:get_inventory()
 		inv:add_item("main",ammoName.." "..ammoCount)
@@ -100,8 +103,12 @@ rangedweapons_reload_gun = function(itemstack, player)
 			inv:remove_item("main",reload_ammo:get_name().." "..clipSize)
 			rangedweapons.bullets[typo][Name(player)] = clipSize
 		else
-			rangedweapons.bullets[typo][Name(player)] = reload_ammo:get_count()
-			inv:remove_item("main",reload_ammo:get_name().." "..reload_ammo:get_count())
+			if not config.BsDebugMode then
+				rangedweapons.bullets[typo][Name(player)] = reload_ammo:get_count()
+				inv:remove_item("main",reload_ammo:get_name().." "..reload_ammo:get_count())
+			else
+				rangedweapons.bullets[typo][Name(player)] = math.huge
+			end
 		end
 		rangedweapons.ammo_names[typo][Name(player)] = reload_ammo:get_name()
 		--hb.change_hudbar(player, "ammo", rangedweapons.bullets[Name(player)], rangedweapons.bullets[Name(player)])
@@ -186,10 +193,15 @@ rangedweapons_single_load_gun = function(itemstack, player)
 		if ammoName ~= reload_ammo:get_name() then
 			inv:add_item("main",ammoName.." "..ammoCount)
 			rangedweapons.bullets[typo][Name(player)] = 0
+			if config.BsDebugMode then
+				rangedweapons.bullets[typo][Name(player)] = math.huge
+			end
 		end
 		if inv:contains_item("main",reload_ammo:get_name()) and rangedweapons.bullets[typo][Name(player)] < clipSize then
 			inv:remove_item("main", reload_ammo:get_name())
-			rangedweapons.bullets[typo][Name(player)] = rangedweapons.bullets[typo][Name(player)] + 1
+			if not config.BsDebugMode then
+				rangedweapons.bullets[typo][Name(player)] = rangedweapons.bullets[typo][Name(player)] + 1
+			end
 		end
 		rangedweapons.ammo_names[typo][Name(player)] = reload_ammo:get_name()
 		rangedweapons.bullets_max[typo][Name(player)] = clipSize
@@ -305,7 +317,9 @@ rangedweapons_shoot_gun = function(itemstack, player, typo)
 		if rangedweapons.cooldown[Name(player)] and rangedweapons.cooldown[Name(player)] <= 0 then
 			if rangedweapons.bullets[typo][Name(player)] and rangedweapons.bullets[typo][Name(player)] > 0 then
 				rangedweapons.cooldown[Name(player)] = gun_cooldown
-				rangedweapons.bullets[typo][Name(player)] = rangedweapons.bullets[typo][Name(player)] - 1
+				if not config.BsDebugMode then
+					rangedweapons.bullets[typo][Name(player)] = rangedweapons.bullets[typo][Name(player)] - 1
+				end
 				if rangedweapons.hud_bars[player:get_player_name()] and rangedweapons.hud_bars[player:get_player_name()].fi then
 					player:hud_change(rangedweapons.hud_bars[player:get_player_name()].fi, "number", ((rangedweapons.bullets[typo][Name(player)]/rangedweapons.bullets_max[typo][Name(player)]) * 20))
 					player:hud_change(rangedweapons.hud_bars[player:get_player_name()].tx, "text", "Ammo: "..rangedweapons.bullets[typo][Name(player)].."/"..rangedweapons.bullets_max[typo][Name(player)])
@@ -774,7 +788,11 @@ bs.cbs.register_OnAssignTeam(function(player, team)
 	end
 	for typo in pairs(rangedweapons.bullets) do
 		if not rangedweapons.bullets[typo][Name(player)] then
-			rangedweapons.bullets[typo][Name(player)] = 0
+			if not config.BsDebugMode then
+				rangedweapons.bullets[typo][Name(player)] = 0
+			else
+				rangedweapons.bullets[typo][Name(player)] = math.huge
+			end
 		end
 	end
 	for typo in pairs(rangedweapons.bullets_max) do
