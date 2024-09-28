@@ -1,5 +1,5 @@
 ![BlockAssaultLogo](menu/header.png)
-BlockAssault is a subgame of Minetest, made for playing PvP or PvE. For training PvP, Aim. Made from scratch
+CS:MT is a subgame of Minetest, made for playing PvP or PvE. For training PvP, Aim. Made from scratch
 
 This game has [bots](https://github.com/EISHU-MT/bs_bots) feature!
 
