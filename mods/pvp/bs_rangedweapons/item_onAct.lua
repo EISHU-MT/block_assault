@@ -169,6 +169,7 @@ for weapon_name, weapon_type in pairs(types) do
 	table.insert(rangedweapons.weapon_types[weapon_type], weapon_name)
 end
 
+rangedweapons.weapons_data = {}
 local function on_load()
 	for name, def in pairs(core.registered_tools) do
 		if name:find("rangedweapon") and def.RW_gun_capabilities then
@@ -187,6 +188,10 @@ local function on_load()
 					ammo_item_string = def.RW_gun_capabilities.suitable_ammo[1][1],
 					ammo_item_count = def.RW_gun_capabilities.suitable_ammo[1][2] * 20,
 				})
+				rangedweapons.weapons_data[name] = {
+					gun_damage = def.RW_gun_capabilities.gun_damage,
+					ammo_full = def.RW_gun_capabilities.suitable_ammo[1][2],
+				}
 			end
 		end
 	end
