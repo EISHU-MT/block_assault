@@ -19,6 +19,9 @@ RegisterInitialFunctions.leave (PlayerInitialFunction Leave) bool true
 #    The default timer 00:00 of the game
 DisableTimer (Disable timer) bool false
 
+#    Debug Mode for CS:MT
+BsDebugMode (Debug Mode) bool false
+
 #    Game class name
 GameClass (Game Class name) string BA Hunt & Kill
 
