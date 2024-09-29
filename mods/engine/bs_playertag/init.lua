@@ -232,7 +232,7 @@ local function DoFixNametags()
 	end
 end
 
-local function ResetAllNametags()
+function ResetAllNametags()
 	for name, obj in pairs(player_tags.objs_classic) do
 		player_tags.objs_classic[name]:remove()
 		player_tags.objs_classic[name] = nil
