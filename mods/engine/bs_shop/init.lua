@@ -232,6 +232,8 @@ function Shop.GetWeapon(item, player, data)
 	local name = Name(player)
 	local weapon_data = Shop.IdentifyWeapon(item:get_name())
 	if not Name(player) then return end
+	if not player:is_player() then return end
+	if vector.distance(player:get_pos(), data.ref:get_pos()) > 2 then return end -- shoots
 	local detected_conflict_weapon
 	for i, itemstack in pairs(Inv(player):get_list("main")) do
 		local item_name = itemstack:get_name()
