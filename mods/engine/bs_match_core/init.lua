@@ -38,7 +38,6 @@ bs_match.register_SecondOnEndMatch(function()
 		local ent = obj:get_luaentity()
 		if ent then
 			if ent.itemstring then obj:remove() end -- clear items
-			print(obj)
 		end
 	end
 end)
