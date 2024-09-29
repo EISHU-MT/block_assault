@@ -14,9 +14,11 @@ function process_meta(content)
 	content.offset = request_offset(#maps.maps_name + 1)
 	local r = tonumber(content.meta:get("r"))
 	local h = tonumber(content.meta:get("h"))
+	local tnamepng = content.technical_name..".png"
 	local map = {
 		mcore = content.dirname.."/core.mts",
 		dirname = content.dirname,
+		image = content.image or tnamepng,
 		name = content.name,
 		r = tonumber(content.meta:get("r")),
 		h = tonumber(content.meta:get("h")),
