@@ -2,9 +2,9 @@
 	BulletStorm Engine
 --]]
 local S = core.get_translator("bs_core")
-_OID = S("BlockAssault Classic") -- To be overriden by modes
+_OID = S("CS:MT Hunt & Win") -- To be overriden by modes
 _V  = "V5.5"
-_ID = "BlockAssault" -- Real engine name
+_ID = "CS:MT" -- Real engine name
 C = CountTable
 bs = {
 	team = {
@@ -557,7 +557,13 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 end)
 
 if config.RegisterInitialFunctions.join then
-	minetest.register_on_joinplayer(on_login)
+	minetest.register_on_joinplayer(function(player)
+		core.after(1, function()
+			if (not Modes.CurrentlyVoting) or (not maps.Votes.CurrentlyVoting) then
+				--on_login(player) -- the other part is on cs_modes_registry mod
+			end
+		end)
+	end)
 end
 if config.RegisterInitialFunctions.leave then
 	minetest.register_on_leaveplayer(on_leave)
