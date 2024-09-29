@@ -7,6 +7,7 @@
 local modpath = core.get_modpath(core.get_current_modname())
 maps.register_map("medieval_town", {
 	name = "Medieval Town",
+	image = "medieval_town_MAP.png",
 	dirname = modpath,
 })
 --- END OF GEN. FILE ---
