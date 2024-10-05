@@ -7,6 +7,10 @@
 
 --Should we load bots
 if not config.EnableBots then
+	bots = {
+		data = {}, -- Failsafe
+		IsLoaded = false,
+	}
 	return
 end
 
@@ -14,6 +18,7 @@ dofile(core.get_modpath(core.get_current_modname()).."/EntityEngine/init.lua")
 
 local switcher = false
 bots = {
+	IsLoaded = true,
 	dead_bots = {},
 	callbacks = {OnSpawnBots = {}, OnDieBot = {}, OnBotBuyWeapon = {}},
 	weapon_location = { -- Wield item for bots
