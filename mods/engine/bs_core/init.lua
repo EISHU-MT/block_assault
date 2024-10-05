@@ -427,7 +427,7 @@ function bs.login_menu()
 	"label[0.1,0.8;".._ID.."]"..
 	"label[2.4,0.8;".._V.."]"..
 	"box[0,1.1;9,0.7;#267026]"..
-	"label[3.4,1.45;"..S("Please select a team to join").."]"..
+	"label[0.2,1.45;"..S("Please select a team to join").."]"..
 	"button[0.1,2;8.8,1;red;Red team]"..
 	"button[0.1,3.1;8.8,1;blue;Blue Team]"..
 	"button[0.1,6.4;8.8,1;spect;"..S("No team").."]"..
@@ -557,13 +557,13 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 end)
 
 if config.RegisterInitialFunctions.join then
-	minetest.register_on_joinplayer(function(player)
+	--[[minetest.register_on_joinplayer(function(player)
 		core.after(1, function()
 			if (not Modes.CurrentlyVoting) or (not maps.Votes.CurrentlyVoting) then
 				--on_login(player) -- the other part is on cs_modes_registry mod
 			end
 		end)
-	end)
+	end)--]]
 end
 if config.RegisterInitialFunctions.leave then
 	minetest.register_on_leaveplayer(on_leave)
