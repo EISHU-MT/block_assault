@@ -5,6 +5,11 @@
 	This will override the entire BA engine for compatibility
 --]]
 
+--Should we load bots
+if not config.EnableBots then
+	return
+end
+
 dofile(core.get_modpath(core.get_current_modname()).."/EntityEngine/init.lua")
 
 local switcher = false
