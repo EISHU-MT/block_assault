@@ -43,6 +43,7 @@ stats = {
 			local kn = kill[player] or 0
 			local dn = death[player] or 0
 			local to_return = kn / dn or 0
+			if to_return > 0 then to_return = tonumber(tostring(to_return):sub(1,3)) end
 			return to_return or 0
 		end,
 		get_deaths = function(player)
