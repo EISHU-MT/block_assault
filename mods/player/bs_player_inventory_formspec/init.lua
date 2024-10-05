@@ -181,7 +181,7 @@ end)
 
 bs_match.register_SecondOnEndMatch(bs_pif.ReloadGlobalInventory)
 
-if bots then
+if bots and bots.IsLoaded then
 	BotsCallbacks.RegisterOnKillBot(bs_pif.ReloadGlobalInventory)
 	BotsCallbacks.RegisterOnRespawnBots(bs_pif.ReloadGlobalInventory)
 end
