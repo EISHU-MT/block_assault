@@ -202,8 +202,9 @@ core.register_globalstep(function(dtime)
 					core.close_formspec(p:get_player_name(), "MAPS:VOTE")
 				end
 				maps.Votes.CurrentlyVoting = false
-				local map = maps.ProceedWithNewMap(maps.Votes.CACHE_FUNC)
+				local map, maut = maps.ProceedWithNewMap(maps.Votes.CACHE_FUNC)
 				core.chat_send_all(core.colorize("#00FF81", ">>>> Now playing for the next "..bs_match.rounds.." rounds: ")..core.colorize("#00D5FF", map))
+				core.chat_send_all(core.colorize("#00FF81", ">>>> Map made by: ")..core.colorize("#00D5FF", maut)..core.colorize("#00FF81", ". Enjoy!!"))
 			end
 		else
 			time_of_timedout = nil
@@ -314,6 +315,7 @@ function maps.ProceedWithNewMap(func)
 	--core.after(0.5, function()
 		local def = maps.reg_maps[maps.Votes.WinnerMap]
 		local to_return = def.name
+		local map_author = def.author
 		maps.place_map(def)
 		maps.current_map = def
 		maps.update_env()
@@ -376,7 +378,7 @@ function maps.ProceedWithNewMap(func)
 		CACHE_FUNC = function() end,
 		HasVoted = {},
 	}
-	return to_return
+	return to_return, map_author
 end
 
 
