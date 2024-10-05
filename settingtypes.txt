@@ -1,4 +1,15 @@
-[BAS Advanced Configuration]
+[Basic]
+
+#    Enable Bots ingame
+EnableBots (Bots) bool true
+
+#    Use the BAS Builtin currency
+UseEngineCurrency (Currency) bool true
+
+#    Use the BAS Builtin Score engine
+UseScoreSystem (Score) bool true
+
+[CS:MT Advanced Configuration]
 
 #    PopUp the Team Selector when the player joins in the game
 LoadOnLoginMenu (TeamSelectorMenu) bool true
@@ -42,14 +53,6 @@ UseLogForWarnings (Print Warnings on log) bool false
 
 #    Ticks per server step, to heal players with the Medic Stand (PvP Section)
 MedicStandTicksRate (Ticks per server step) float 0.3 0.01 1
-
-[Basic]
-
-#    Use the BAS Builtin currency
-UseEngineCurrency (Currency) bool true
-
-#    Use the BAS Builtin Score engine
-UseScoreSystem (Score) bool true
 
 [PvP]
 
