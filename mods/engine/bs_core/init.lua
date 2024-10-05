@@ -429,7 +429,7 @@ function bs.login_menu()
 	"box[0,1.1;9,0.7;#267026]"..
 	"label[0.2,1.45;"..S("Please select a team to join").."]"..
 	"button[0.1,2;8.8,1;red;Red team]"..
-	"button[0.1,3.1;8.8,1;blue;Blue Team]"..
+	"button[0.1,3.1;8.8,1;blue;Blue team]"..
 	"button[0.1,6.4;8.8,1;spect;"..S("No team").."]"..
 	"button[0.1,7.5;8.8,1;autoselect;Auto-select team]"..
 	"button[0.1,8.6;8.8,1;exit;"..S("Disconnect").."]"
