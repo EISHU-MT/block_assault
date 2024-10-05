@@ -118,6 +118,8 @@ bs_match["register_OnEndMatch"] = function(function_to_run) table.insert(bs_matc
 --	maps.new_map()
 --end)
 
+local AlreadyJoinedAPlayer = false
+
 do
 	if core.is_singleplayer() then
 		core.register_on_joinplayer(function(p)
