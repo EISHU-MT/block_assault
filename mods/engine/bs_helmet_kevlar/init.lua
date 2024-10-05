@@ -69,6 +69,19 @@ bs.cbs.register_OnAssignTeam(function(player, team)
 			end
 			return
 		end
+	else
+		if PlayerArmor.Huds[Name(player)] then
+			for _, id in pairs(PlayerArmor.Huds[Name(player)]) do
+				if _ == "txt" then
+					player:hud_change(id, "text", "Armor: 0/100")
+				elseif _ == "bar" then
+					player:hud_change(id, "text", "armor_bar.png")
+				elseif _ == "bg" then
+					player:hud_change(id, "text", "armor_bar_bg.png")
+				end
+			end
+			return
+		end
 	end
 	PlayerArmor.AlreadyArmoredPlayers[Name(player)] = {helmet = false, kevlar = false}
 	PlayerArmor.HeadHPDifference[Name(player)] = 0
