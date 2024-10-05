@@ -101,6 +101,7 @@ function Modes.SetMode(modename_t)
 		if Modes.Modes[modename_t].Functions.BotsLogicEngine then
 			BotsLogicFunction = Modes.Modes[modename_t].Functions.BotsLogicEngine
 		end
+		config.GameClass = Modes.Modes[modename_t].Title
 	end
 end
 
