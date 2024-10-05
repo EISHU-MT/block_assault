@@ -16,48 +16,8 @@ AchievementsApi = {}
 AchievementsDatabase = {
 	storage = core.get_mod_storage("bs_achievements"),
 	add = function(player, achievement)
-		if config.TypeOfStorage == "lua" then
-			local data = core.deserialize(AchievementsDatabase.storage:get_string("players"))
-			if not data then
-				data = {}
-			end
-			if not data[Name(player)] then
-				data[Name(player)] = {}
-			end
-			data[Name(player)][achievement] = true
-			AchievementsDatabase.storage:set_string("players", core.serialize(data))
-		elseif config.TypeOfStorage == "json" then
-			local data = core.parse_json(AchievementsDatabase.storage:get_string("players"))
-			if not data then
-				data = {}
-			end
-			if not data[Name(player)] then
-				data[Name(player)] = {}
-			end
-			data[Name(player)][achievement] = true
-			AchievementsDatabase.storage:set_string("players", core.write_json(data))
-		end
-	end,
-	reset = function(player)
-		if config.TypeOfStorage == "lua" then
-			local data = core.deserialize(AchievementsDatabase.storage:get_string("players"))
-			if not data then
-				data = {}
-			end
-			data[Name(player)] = {}
-			AchievementsDatabase.storage:set_string("players", core.serialize(data))
-		elseif config.TypeOfStorage == "json" then
-			local data = core.parse_json(AchievementsDatabase.storage:get_string("players"))
-			if not data then
-				data = {}
-			end
-			data[Name(player)] = {}
-			AchievementsDatabase.storage:set_string("players", core.write_json(data))
-		end
-	end,
-	get = function(player, achievement)
-		if config.TypeOfStorage == "lua" then
-			if Name(player) then
+		if player:is_player() then
+			if config.TypeOfStorage == "lua" then
 				local data = core.deserialize(AchievementsDatabase.storage:get_string("players"))
 				if not data then
 					data = {}
@@ -65,12 +25,9 @@ AchievementsDatabase = {
 				if not data[Name(player)] then
 					data[Name(player)] = {}
 				end
-				return data[Name(player)]
-			else
-				return {}
-			end
-		elseif config.TypeOfStorage == "json" then
-			if Name(player) then
+				data[Name(player)][achievement] = true
+				AchievementsDatabase.storage:set_string("players", core.serialize(data))
+			elseif config.TypeOfStorage == "json" then
 				local data = core.parse_json(AchievementsDatabase.storage:get_string("players"))
 				if not data then
 					data = {}
@@ -78,10 +35,61 @@ AchievementsDatabase = {
 				if not data[Name(player)] then
 					data[Name(player)] = {}
 				end
-				return data[Name(player)]
-			else
-				return {}
+				data[Name(player)][achievement] = true
+				AchievementsDatabase.storage:set_string("players", core.write_json(data))
 			end
+		end
+	end,
+	reset = function(player)
+		if player:is_player() then
+			if config.TypeOfStorage == "lua" then
+				local data = core.deserialize(AchievementsDatabase.storage:get_string("players"))
+				if not data then
+					data = {}
+				end
+				data[Name(player)] = {}
+				AchievementsDatabase.storage:set_string("players", core.serialize(data))
+			elseif config.TypeOfStorage == "json" then
+				local data = core.parse_json(AchievementsDatabase.storage:get_string("players"))
+				if not data then
+					data = {}
+				end
+				data[Name(player)] = {}
+				AchievementsDatabase.storage:set_string("players", core.write_json(data))
+			end
+		end
+	end,
+	get = function(player, achievement)
+		if player:is_player() then
+			if config.TypeOfStorage == "lua" then
+				if Name(player) then
+					local data = core.deserialize(AchievementsDatabase.storage:get_string("players"))
+					if not data then
+						data = {}
+					end
+					if not data[Name(player)] then
+						data[Name(player)] = {}
+					end
+					return data[Name(player)]
+				else
+					return {}
+				end
+			elseif config.TypeOfStorage == "json" then
+				if Name(player) then
+					local data = core.parse_json(AchievementsDatabase.storage:get_string("players"))
+					if not data then
+						data = {}
+					end
+					if not data[Name(player)] then
+						data[Name(player)] = {}
+					end
+					return data[Name(player)]
+				else
+					return {}
+				end
+			end
+		else
+			return {}
 		end
 	end,
 }
@@ -143,7 +151,7 @@ PvpCallbacks.RegisterFunction(function(data)
 	end
 end, "BA.S Achievements")
 
-if bots then
+if bots and bots.IsLoaded then
 	BotsCallbacks.RegisterOnKillBot(function(self, killer)
 		if killer:is_player() then
 			for name, achievement in pairs(Achievements) do
