@@ -153,14 +153,12 @@ core.register_on_player_receive_fields(function(player, formname, fields)
 		end
 		local list = core.explode_textlist_event(fields.MODE)
 		if list then
-			print(dump(list))
 			if list.type == "CHG" then
 				local idx = list.index
 				local title = Modes.ModesTableTitle[list.index] --Get from cache
 				local tech_name = Modes.ModesSTRING[title]
 				local data = Modes.Modes[tech_name]
 				--print("B"..title.."-"..tech_name.."-"..data.Title)
-				print(tech_name)
 				if data then
 					--print("A")
 					local info = data.Info
@@ -179,7 +177,7 @@ core.register_on_player_receive_fields(function(player, formname, fields)
 			end
 		end
 		if fields.quit and list then
-			if Modes.CurrentlyVoting then
+			if Modes.CurrentlyVoting and Modes.PlayersVoting[player:get_player_name()] then
 				--[[local idx
 				local i = 0
 				for name in pairs(Modes.Modes) do
@@ -188,17 +186,19 @@ core.register_on_player_receive_fields(function(player, formname, fields)
 						
 					end
 				end--]]
-				local idx = list.index
-				local title = Modes.ModesTableTitle[list.index] --Get from cache
-				local tech_name = Modes.ModesSTRING[title]
-				local data = Modes.Modes[tech_name]
-				Modes.Formspecs.ReturnSelectMode(title, info, table.concat(Modes.ModesTableTitle, ","), idx)
+				--local idx = list.index
+				--Modes.PlayersCurrentSelectedMode[player:get_player_name()]
+				--Modes.ModesTableTitle[list.index] --Get from cache
+				print("AH")
+				local data = Modes.Modes[Modes.PlayersCurrentSelectedMode[player:get_player_name()]]
+				core.show_formspec(player:get_player_name(), "MODES:VOTE", Modes.Formspecs.ReturnSelectMode(data.Title, data.Info, table.concat(Modes.ModesTableTitle, ","), list.index))
 			end
 		end
 	end
 end)
 
 function Modes.CommenceMatchWithSelectedMode(MODE__)
+	bs_match.current_modes_rounds = bs_match.modes_rounds
 	Modes.PlayersCurrentSelectedMode = {}
 	Modes.CurrentlyVoting = false
 	Modes.ModesTableTitle = {}
@@ -271,15 +271,25 @@ core.register_globalstep(function(dtime)
 	end
 end)
 
+local FIRST_PLAYER_JOINED = false -- Some players joins his games locally for his nametag, so they wont 
+
 core.register_on_joinplayer(function(player)
 	if Modes.CurrentlyVoting then
 		Modes.PlayersCurrentSelectedMode[player:get_player_name()] = Modes.ModesSTRING[Modes.ModesTableTitle[1]]
 		core.show_formspec(player:get_player_name(), "MODES:VOTE", Modes.Formspecs.ReturnSelectMode(Modes.ModesTableTitle[1], Modes.Modes[Modes.ModesSTRING[Modes.ModesTableTitle[1]]].Info, table.concat(Modes.ModesTableTitle, ","), 1))
 		Modes.PlayersVoting[player:get_player_name()] = 7
 	else
-		local running_mode = Modes.CurrentMode
-		if Modes.Modes[running_mode] and Modes.Modes[running_mode].Functions and Modes.Modes[running_mode].Functions.OnJoinPlayer then
-			Modes.Modes[running_mode].Functions.OnJoinPlayer(player)
+		print(CurrentMode)
+		if (not core.is_singleplayer()) and Modes.CurrentMode ~= "" and not FIRST_PLAYER_JOINED then
+			local running_mode = Modes.CurrentMode
+			if Modes.Modes[running_mode] and Modes.Modes[running_mode].Functions and Modes.Modes[running_mode].Functions.OnJoinPlayer then
+				local bool = Modes.Modes[running_mode].Functions.OnJoinPlayer(player)
+				if not bool then
+					bs.show_menu_and_expire(player)
+				end
+			else
+				bs.show_menu_and_expire(player)
+			end
 		end
 	end
 end)
