@@ -189,7 +189,6 @@ core.register_on_player_receive_fields(function(player, formname, fields)
 				--local idx = list.index
 				--Modes.PlayersCurrentSelectedMode[player:get_player_name()]
 				--Modes.ModesTableTitle[list.index] --Get from cache
-				print("AH")
 				local data = Modes.Modes[Modes.PlayersCurrentSelectedMode[player:get_player_name()]]
 				core.show_formspec(player:get_player_name(), "MODES:VOTE", Modes.Formspecs.ReturnSelectMode(data.Title, data.Info, table.concat(Modes.ModesTableTitle, ","), list.index))
 			end
