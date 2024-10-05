@@ -9,10 +9,14 @@ loaded_bots = {} -- Need to flush when a match starts
 bots.logics = {} -- a, b, c
 
 function bbp.WhileOnPrepareTime(self)
-	local LuaEntity = self.object:get_luaentity()
+	local LuaEntity = self
 	if self and self.bot_name and LuaEntity and LuaEntity.bot_name and bots.data[LuaEntity.bot_name] then
 		-- Check if this script is runned
 		if not loaded_bots[LuaEntity.bot_name] then
+			--Set PlayerKills table
+			if not PlayerKills[self.bot_name] then
+				PlayerKills[self.bot_name] = {kills = 0, deaths = 0, score = 0}
+			end
 			loaded_bots[LuaEntity.bot_name] = true
 			-- Load All Data!
 			local Money = bots.data[LuaEntity.bot_name].money

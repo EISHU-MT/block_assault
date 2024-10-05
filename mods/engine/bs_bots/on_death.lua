@@ -15,6 +15,8 @@ return function(self, killer)
 				--print("DEAD! "..n)
 			end
 		end
+		-- Assign a space for bot.
+		PlayerKills[self.bot_name].deaths = PlayerKills[self.bot_name].deaths + 1
 		local killer_team = bs.get_player_team_css(killer)
 		local killer_name = Name(killer)
 		local killer_weapon = ""
@@ -43,6 +45,8 @@ return function(self, killer)
 					end
 				end
 				bots.data[name].money = bots.data[name].money + 10
+				PlayerKills[bot_info.bot_name].kills = PlayerKills[bot_info.bot_name].kills + 1
+				PlayerKills[bot_info.bot_name].score = PlayerKills[bot_info.bot_name].score + 10
 			end
 		end
 		
@@ -125,6 +129,8 @@ return function(self, killer)
 				--print("DEAD! "..n)
 			end
 		end
+		-- Assign a space for bot.
+		PlayerKills[self.bot_name].deaths = PlayerKills[self.bot_name].deaths + 1
 		if killer:is_player() then
 			killer_weapon = killer:get_wielded_item():get_name()
 			if killer_team ~= bots.data[self.bot_name].team or config.PvpEngine.FriendShoot then
@@ -150,6 +156,8 @@ return function(self, killer)
 					end
 				end
 				bots.data[name].money = bots.data[name].money + 10
+				PlayerKills[bot_info.bot_name].kills = PlayerKills[bot_info.bot_name].kills + 1
+				PlayerKills[bot_info.bot_name].score = PlayerKills[bot_info.bot_name].score + 10
 			end
 		end
 		
