@@ -28,6 +28,7 @@ end
 -- Booleans
 
 local PvpEngine = GetBoolean("PvpEngine", true)
+local EnableBots = GetBoolean("EnableBots", true)
 local BsDebugMode = GetBoolean("BsDebugMode", false)
 local DisableTimer = GetBoolean("DisableTimer", false)
 local UseScoreSystem = GetBoolean("UseScoreSystem", true)
@@ -86,6 +87,7 @@ local TypeOfAnimation = Get("TypeOfAnimation", "bas_default")
 
 -- Proccess
 
+config.EnableBots = EnableBots
 config.BsDebugMode = BsDebugMode
 config.RespawnTimer = RespawnTimer
 config.DisableTimer = DisableTimer
