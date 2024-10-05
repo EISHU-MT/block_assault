@@ -148,7 +148,7 @@ end
 core.register_on_player_receive_fields(function(player, formname, fields)
 	if formname == "MODES:VOTE" then
 		if fields.ABSTAIN then
-			Modes.Votes.Abstains = Modes.PlayersVoting.Abstains + 1
+			Modes.Votes.Abstains = Modes.Votes.Abstains + 1
 			Modes.PlayersVoting[player:get_player_name()] = false
 			return
 		end
