@@ -202,8 +202,8 @@ core.register_globalstep(function(dtime)
 					core.close_formspec(p:get_player_name(), "MAPS:VOTE")
 				end
 				maps.Votes.CurrentlyVoting = false
-				maps.ProceedWithNewMap(maps.Votes.CACHE_FUNC)
-				core.chat_send_all(core.colorize("#00FF81", ">>>> Now playing for the next "..bs_match.rounds.." rounds: ")..core.colorize("#00D5FF", maps.reg_maps[maps.Votes.WinnerMap].name))
+				local map = maps.ProceedWithNewMap(maps.Votes.CACHE_FUNC)
+				core.chat_send_all(core.colorize("#00FF81", ">>>> Now playing for the next "..bs_match.rounds.." rounds: ")..core.colorize("#00D5FF", map))
 			end
 		else
 			time_of_timedout = nil
@@ -313,6 +313,7 @@ function maps.ProceedWithNewMap(func)
 	core.log("action", "Selected Map: "..maps.Votes.WinnerMap)
 	--core.after(0.5, function()
 		local def = maps.reg_maps[maps.Votes.WinnerMap]
+		local to_return = def.name
 		maps.place_map(def)
 		maps.current_map = def
 		maps.update_env()
@@ -364,6 +365,18 @@ function maps.ProceedWithNewMap(func)
 			func()
 		end
 	--end)
+	core.log("action", "Clearing Votes cache...")
+	maps.Votes = {
+		CurrentlyVoting = false,
+		Votes = {},
+		PlayersVoting = {}, -- Explained on cs_modes_registry
+		PlayersVotingInt = 0,
+		CurrentMapData = {}, -- cache
+		WinnerMap = "",
+		CACHE_FUNC = function() end,
+		HasVoted = {},
+	}
+	return to_return
 end
 
 
