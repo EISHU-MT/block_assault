@@ -49,5 +49,6 @@ minetest.register_node(":cs_map_mirage:slope2", {
 local modpath = core.get_modpath(core.get_current_modname())
 maps.register_map("mirage", {
 	name = "Mirage",
+	image = "mirage_maptxre.png",
 	dirname = modpath,
 })
