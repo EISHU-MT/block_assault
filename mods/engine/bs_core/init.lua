@@ -437,7 +437,7 @@ function bs.login_menu()
 end
 
 function bs.send_to_team(team, msg)
-	if bots then
+	if bots and bots.IsLoaded then
 		local players = bs_old.get_team_players(team)
 		for _, player in pairs(players) do
 			core.chat_send_player(bs_old.Name(player), core.colorize(bs.get_team_color(team, "string"), msg))
