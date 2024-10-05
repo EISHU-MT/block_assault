@@ -28,7 +28,7 @@ end
 -- Booleans
 
 local PvpEngine = GetBoolean("PvpEngine", true)
-local BsDebugMode = GetBoolean("BsDebugMode", true)
+local BsDebugMode = GetBoolean("BsDebugMode", false)
 local DisableTimer = GetBoolean("DisableTimer", false)
 local UseScoreSystem = GetBoolean("UseScoreSystem", true)
 local ClearPlayerInv = GetBoolean("ClearPlayerInv", true)
