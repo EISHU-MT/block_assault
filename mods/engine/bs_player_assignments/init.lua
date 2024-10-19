@@ -1,10 +1,13 @@
 function SetTeamSkin(index, team)
-	if config.OverridePlayersSkinForTeams then
+	if (not skinsdb) or config.OverridePlayersSkinForTeams then
 		if team ~= "" then
 			local player = Player(index)
 			if player:get_properties() then
 				local textures = player:get_properties().textures
 				textures[1] = textures[1].."^player_"..team.."_overlay.png"
+				if Modes.Modes[Modes.CurrentMode] and Modes.Modes[Modes.CurrentMode].TeamsSkinsTextures and Modes.Modes[Modes.CurrentMode].TeamsSkinsTextures[team] then
+					textures[1] = textures[1]..Modes.Modes[Modes.CurrentMode].TeamsSkinsTextures[team]
+				end
 				player:set_properties({textures = textures})
 			end
 		end
@@ -17,7 +20,7 @@ local function repeater(dt)
 	for _, player in pairs(core.get_connected_players()) do
 		if config.OverridePlayersSkinForTeams then
 			if skinsdb then
-					player:set_properties({textures = "blank.png"})
+				player:set_properties({textures = "blank.png"})
 			else
 				if bs.get_player_team_css(player) ~= "" and not player:get_properties().textures[1]:match("_overlay") then
 					SetTeamSkin(player, bs.get_team(player))
