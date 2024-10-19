@@ -10,7 +10,8 @@ Modes = {
 				BS_CONFIG = {
 					EnableShopTable = true,
 					AllowPlayersModifyMaps = false,
-					IsDefaultGame = true
+					IsDefaultGame = true,
+					EnableFourTeams = true,
 				}
 			},
 			Functions = {
@@ -31,6 +32,14 @@ Modes = {
 				end,
 				BotsLogicEngine = nil, -- Don't touch it until u want to apply a special func.
 			},
+			--[[
+			TeamsSkinsTextures = {
+				red = ""
+				blue = ""
+				yellow = ""
+				green = ""
+			}
+			--]]
 		},
 	},
 	ModesSTRING = {
@@ -78,6 +87,7 @@ Modes = {
 
 function Modes.SetMode(modename_t)
 	if Modes.Modes[modename_t] then
+		config = Modes.BackupConfig -- Backup all
 		Modes.CurrentMode = modename_t
 		if Modes.Modes[modename_t].Functions.OnSetMode then
 			Modes.Modes[modename_t].Functions.OnSetMode()
@@ -329,3 +339,26 @@ bs_match.register_OnMatchStart(function()
 		end
 	end
 end)
+
+--Backup all configs, that can be overriden by every mode
+Modes.BackupConfig = {}
+core.register_on_mods_loaded(function()
+	Modes.BackupConfig = config
+end)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
