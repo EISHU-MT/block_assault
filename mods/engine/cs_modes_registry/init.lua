@@ -104,7 +104,7 @@ function Modes.SetMode(modename_t)
 			bs_match.rounds = cfg.MATCH_MAX_COUNT
 		end
 		if cfg.BS_CONFIG then
-			for conf, value in pairs(cfg,BS_CONFIG) do
+			for conf, value in pairs(cfg.BS_CONFIG) do
 				config[conf] = value
 			end
 		end
@@ -336,6 +336,15 @@ bs_match.register_OnMatchStart(function()
 	if rm and Modes.Modes[rm] then
 		if Modes.Modes[rm] and Modes.Modes[rm].Functions and Modes.Modes[rm].Functions.OnMatchStart then
 			Modes.Modes[rm].Functions.OnMatchStart()
+		end
+	end
+end)
+
+maps.register_on_load(function()
+	local rm = Modes.CurrentMode
+	if rm and Modes.Modes[rm] then
+		if Modes.Modes[rm] and Modes.Modes[rm].Functions and Modes.Modes[rm].Functions.OnLoadMap then
+			Modes.Modes[rm].Functions.OnLoadMap()
 		end
 	end
 end)
