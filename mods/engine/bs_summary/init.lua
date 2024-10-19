@@ -155,8 +155,7 @@ function summary.OnStep(dt)
 				if controls.aux1 then
 					summary.show_to_player(player)
 				else
-					if summary.shown_players_panel[Name(player)] then
-						player:hud_change(summary.Huds[Name(player)].SubHuds, "text", "blank.png")
+					if summary.shown_players_panel[Name(player)] and summary.Huds[Name(player)] then
 						player:hud_change(summary.Huds[Name(player)].GameClass, "text", "")
 						for _, ID in pairs(summary.Huds[Name(player)].SubHuds) do
 							player:hud_remove(ID)
