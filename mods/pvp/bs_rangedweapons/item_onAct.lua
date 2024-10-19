@@ -399,8 +399,35 @@ core.register_globalstep(on_step)
 core.register_on_mods_loaded(on_load)
 
 
-
-
+--Minetest 5.9.0 versions, doing checks
+rangedweapons.Version590 = false
+core.register_on_mods_loaded(function()
+	if core.features.wallmounted_rotate then
+		rangedweapons.Version590 = true
+	end
+end)
+---
+rangedweapons.AndroidPlayers = {}
+core.register_on_joinplayer(function(player)
+	local info = core.get_player_window_information(player:get_player_name())
+	if rangedweapons.Version590 then
+		if info.touch_controls then
+			rangedweapons.AndroidPlayers[player:get_player_name()] = true
+		elseif info.touch_controls == false then
+			core.chat_send_player(player:get_player_name(), core.colorize("lightred", ">>> Consider upgrading your client! Some features are not supported"))
+			core.log("error", "[TouchScreen Support] Player "..player:get_player_name().." has not supported client")
+			rangedweapons.AndroidPlayers[player:get_player_name()] = false
+		elseif info.touch_controls == nil then
+			if rangedweapons.Version590 then
+				core.chat_send_player(player:get_player_name(), core.colorize("lightred", ">>> Consider upgrading your client! Some features are not supported"))
+				core.log("error", "[TouchScreen Support] Player "..player:get_player_name().." has not supported client | Server has not supported version")
+				rangedweapons.AndroidPlayers[player:get_player_name()] = false
+			else
+				core.log("error", "[TouchScreen Support] Server `Luanti` Version is outdated, consider upgrading it!")
+			end
+		end
+	end
+end)
 
 
 --
