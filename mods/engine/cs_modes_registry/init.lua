@@ -110,6 +110,8 @@ function Modes.SetMode(modename_t)
 		end
 		if Modes.Modes[modename_t].Functions.BotsLogicEngine then
 			BotsLogicFunction = Modes.Modes[modename_t].Functions.BotsLogicEngine
+		else
+			BotsLogicFunction = nil
 		end
 		config.GameClass = Modes.Modes[modename_t].Title
 	end
