@@ -142,6 +142,11 @@ end
 
 function bs.allocate_to_team(to_allocate, teamm, force, use_dead_table, ann) -- Applying this function again to a applied player dont crash
 	if not to_allocate then return false end
+	if teamm == "green" or teamm == "yellow" then
+		if config.EnableFourTeams == false then
+			return false
+		end
+	end
 	if maps.theres_loaded_map or force then
 		
 		local team = ""
@@ -357,7 +362,7 @@ config = {
 	EnableShopTable = true,
 	ResetPlayerMoneyOnEndRounds = true,
 	UseEngineCurrency = true,
-	OverridePlayersSkinForTeams = true,
+	OverridePlayersSkinForTeams = false,
 	UseDefaultMatchEngine = true,
 	UsePvpMatchEngine = {bool = true, func = function() end},
 	AnnouceWinner = true,
@@ -387,6 +392,7 @@ config = {
 	TypeOfPlayerTag = false, -- Classic: true, Modern: false
 	ForceUseOfCraftingTable = false,
 	RespawnTimer = 6,
+	EnableFourTeams = true,
 }
 --[[
 bs.login_menu = function()
@@ -415,7 +421,7 @@ function bs.login_menu()
 	"style[red;bgcolor=red;textcolor=white]"..
 	"style[blue;bgcolor=blue;textcolor=white]"
 	if maps.theres_loaded_map then
-		if C(maps.current_map.teams) > 2 then
+		if (C(maps.current_map.teams) > 2) and config.EnableFourTeams then
 			formspec = formspec.."style[green;bgcolor=green;textcolor=white]style[yellow;bgcolor=yellow;textcolor=white]button[0.1,4.2;8.8,1;green;Green Team]button[0.1,5.3.1;8.8,1;yellow;Yellow Team]"
 		else
 			formspec = formspec.."style[green;bgcolor=gray;textcolor=white]style[yellow;bgcolor=gray;textcolor=white]button[0.1,4.2;8.8,1;green;Green Team (Unavailable)]button[0.1,5.3.1;8.8,1;yellow;Yellow Team (Unavailable)]"
@@ -452,25 +458,42 @@ end
 
 function bs.auto_allocate_team(player)
 	if not bs.is_playing[Name(player)] and bs.spectator[Name(player)] ~= true then
+		local response == false
 		if C(maps.current_map.teams) == 2 then
 			if Name(player) then
 				if bs.team.red.count > bs.team.blue.count then
-					bs.allocate_to_team(player, "red")
+					response = bs.allocate_to_team(player, "red")
 				elseif bs.team.blue.count > bs.team.red.count then
-					bs.allocate_to_team(player, "blue")
+					response = bs.allocate_to_team(player, "blue")
 				elseif bs.team.blue.count == bs.team.red.count then
 					local team = Randomise("", {"red", "blue"})
-					bs.allocate_to_team(player, team)
+					response = bs.allocate_to_team(player, team)
 				end
 			end
 		else
-			if Name(player) then
-				local teams = {"red", "blue", "yellow", "green"}
-				table.sort(teams, function(n1,n2) return bs.team[n1].count > bs.team[n2].count end)
-				bs.allocate_to_team(player, teams[4]) -- The 4th index is the team with less players
+			if config.EnableFourTeams then
+				if Name(player) then
+					local teams = {"red", "blue", "yellow", "green"}
+					table.sort(teams, function(n1,n2) return bs.team[n1].count > bs.team[n2].count end)
+					response = bs.allocate_to_team(player, teams[4]) -- The 4th index is the team with less players
+				end
+			else
+				if bs.team.red.count > bs.team.blue.count then
+					response = bs.allocate_to_team(player, "red")
+				elseif bs.team.blue.count > bs.team.red.count then
+					response = bs.allocate_to_team(player, "blue")
+				elseif bs.team.blue.count == bs.team.red.count then
+					local team = Randomise("", {"red", "blue"})
+					response = bs.allocate_to_team(player, team)
+				end
 			end
 		end
-		core.close_formspec(Name(player) or "", "core:menu")
+		if response then
+			core.close_formspec(Name(player) or "", "core:menu")
+		else
+			core.after(10, bs.auto_allocate_team, Player(player))
+			core.show_formspec(Name(player), "core:menu", bs.login_menu())
+		end
 	end
 end
 
