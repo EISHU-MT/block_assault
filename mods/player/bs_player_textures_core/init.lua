@@ -5,6 +5,5 @@
 --]]
 
 function ResetSkin(player)
-	player:set_properties({textures = {"character.png"}, pointable = true})
 	SetTeamSkin(player, bs.get_team(player))
 end
