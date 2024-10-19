@@ -162,6 +162,8 @@ function bots.find_path_to_F(pos, tpos, width, self)
 	end
 	width = width or 1
 	
+	pos = CheckPos(pos)
+	
 	if vector.distance(pos, tpos) < 10 then
 		return minetest.find_path(pos, tpos, 500, 2, 5, "A*_noprefetch")
 	end
