@@ -15,6 +15,9 @@ end
 
 local function onR(itemstack, placer, pointed_thing)
 	local player = placer
+	if rangedweapons.AndroidPlayers[Name(placer)] then -- do not care
+		return
+	end
 	if rangedweapons.pointing[Name(player)] and bs_match.match_is_started == false then
 		rangedweapons.pointing_weapon[Name(placer)] = nil
 		player:hud_change(scope_huds[Name(placer)], "text", "rangedweapons_empty_icon.png")
@@ -176,6 +179,7 @@ local function on_load()
 			--def.on_rightclick = onR
 			def.on_secondary_use = onR
 			def.on_pickup = Shop.GetWeapon -- Should override everything....
+			def.touch_interaction = "short_dig_long_place"
 			core.registered_tools[name] = def --core.override_item(name, def)
 			
 			if types[name] then
@@ -307,6 +311,12 @@ local function on_step(dt)
 					rangedweapons.already_shot[Name(player)] = false
 				end
 				
+				--Touch screen support
+				if controls.place and rangedweapons.AndroidPlayers[Name(player)] then
+					if player:get_wielded_item():get_definition().RW_gun_capabilities and player:get_wielded_item():get_definition().RW_gun_capabilities.automatic_gun and player:get_wielded_item():get_definition().RW_gun_capabilities.automatic_gun > 0 then
+						rangedweapons_shoot_gun(item, player, typo)
+					end
+				end
 				
 			end
 			do
@@ -404,6 +414,8 @@ rangedweapons.Version590 = false
 core.register_on_mods_loaded(function()
 	if core.features.wallmounted_rotate then
 		rangedweapons.Version590 = true
+	else
+		core.log("error", "[TouchScreen Support] Server `Luanti` Version is outdated, consider upgrading it!")
 	end
 end)
 ---
@@ -414,18 +426,16 @@ core.register_on_joinplayer(function(player)
 		if info.touch_controls then
 			rangedweapons.AndroidPlayers[player:get_player_name()] = true
 		elseif info.touch_controls == false then
-			core.chat_send_player(player:get_player_name(), core.colorize("lightred", ">>> Consider upgrading your client! Some features are not supported"))
+			core.chat_send_player(player:get_player_name(), core.colorize("#FF8236", ">>> Consider upgrading your client! Some features are not supported"))
 			core.log("error", "[TouchScreen Support] Player "..player:get_player_name().." has not supported client")
 			rangedweapons.AndroidPlayers[player:get_player_name()] = false
 		elseif info.touch_controls == nil then
-			if rangedweapons.Version590 then
-				core.chat_send_player(player:get_player_name(), core.colorize("lightred", ">>> Consider upgrading your client! Some features are not supported"))
-				core.log("error", "[TouchScreen Support] Player "..player:get_player_name().." has not supported client | Server has not supported version")
-				rangedweapons.AndroidPlayers[player:get_player_name()] = false
-			else
-				core.log("error", "[TouchScreen Support] Server `Luanti` Version is outdated, consider upgrading it!")
-			end
+			core.chat_send_player(player:get_player_name(), core.colorize("#FF8236", ">>> Consider upgrading your client! Some features are not supported"))
+			core.log("error", "[TouchScreen Support] Player "..player:get_player_name().." has not supported client | Server has not supported version")
+			rangedweapons.AndroidPlayers[player:get_player_name()] = false
 		end
+	elseif core.is_singleplayer() then
+		core.chat_send_player(player:get_player_name(), core.colorize("#FF8236", ">>> Consider upgrading your client! Some features are not supported"))
 	end
 end)
 
