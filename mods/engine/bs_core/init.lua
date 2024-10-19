@@ -3,7 +3,7 @@
 --]]
 local S = core.get_translator("bs_core")
 _OID = S("CS:MT Hunt & Win") -- To be overriden by modes
-_V  = "V5.5"
+_V  = "v6.5"
 _ID = "CS:MT" -- Real engine name
 C = CountTable
 bs = {
@@ -28,7 +28,7 @@ bs = {
 	modpath = core.get_modpath(core.get_current_modname()),
 	died = {},
 	spectator = {},
-	version = 4.5,
+	version = 6.5,
 }
 
 local to_assign_each_team = {
