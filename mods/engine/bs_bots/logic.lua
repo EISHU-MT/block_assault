@@ -10,7 +10,7 @@ bots.logics = {} -- a, b, c
 
 function bbp.WhileOnPrepareTime(self)
 	local LuaEntity = self
-	if self and self.bot_name and LuaEntity and LuaEntity.bot_name and bots.data[LuaEntity.bot_name] then
+	if self and self.bot_name and (self.object and self.object:get_yaw()) and LuaEntity and LuaEntity.bot_name and bots.data[LuaEntity.bot_name] then
 		-- Check if this script is runned
 		if not loaded_bots[LuaEntity.bot_name] then
 			--Set PlayerKills table
