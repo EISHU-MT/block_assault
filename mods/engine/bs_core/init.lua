@@ -458,7 +458,7 @@ end
 
 function bs.auto_allocate_team(player)
 	if not bs.is_playing[Name(player)] and bs.spectator[Name(player)] ~= true then
-		local response == false
+		local response = false
 		if C(maps.current_map.teams) == 2 then
 			if Name(player) then
 				if bs.team.red.count > bs.team.blue.count then
