@@ -55,6 +55,7 @@ function maps.update_cache_maps(func__)
 			table.insert(maps.to_be_used_maps, mapname)
 		end
 	end
+	table.shuffle(maps.to_be_used_maps)
 end
 
 function maps.DoVotes()
@@ -158,7 +159,18 @@ core.register_globalstep(function(dtime)
 						maps.Votes.PlayersVoting[pname] = nil
 						-- Random select
 						local t = {"FirstMap", "SecondMap", "ThirdMap"}
-						local selected_map_number = math.random(1, 3)
+						--Classificate unknown maps
+						for _, d in pairs(maps.Votes.CurrentMapData) do
+							if d.TMN == "" then
+								for __, STR in pairs(t) do
+									if STR == _ then
+										t[__] = nil
+									end
+								end
+							end
+						end
+						--Select map by random
+						local selected_map_number = math.random(1, #t)
 						local selected_typo = t[selected_map_number]
 						local mapdata = maps.Votes.CurrentMapData[selected_typo]
 						local mapname = mapdata.TMN
@@ -178,7 +190,11 @@ core.register_globalstep(function(dtime)
 			-- Check if winner is on cache, or not..
 			if maps.Votes.WinnerMap == "" then
 				local mapss = {}
-				for _, d in pairs(maps.Votes.CurrentMapData) do table.insert(mapss, d.TMN) end
+				for _, d in pairs(maps.Votes.CurrentMapData) do 
+					if d.TMN ~= "" then
+						table.insert(mapss, d.TMN)
+					end
+				end
 				table.sort(mapss, function (n1, n2) return maps.Votes.Votes[n1] > maps.Votes.Votes[n2] end)
 				if mapss[1] then
 					for map__, data in pairs(maps.Votes.CurrentMapData) do
