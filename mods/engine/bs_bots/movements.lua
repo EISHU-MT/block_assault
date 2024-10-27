@@ -25,7 +25,9 @@ local function dist_2d(pos1, pos2)
 end
 
 function bots.CancelPath(self)
-	bots.CancelPathTo[self.bot_name] = true
+	if not bots.CancelPathTo[self.bot_name] then
+		bots.CancelPathTo[self.bot_name] = true
+	end
 end
 
 function bots.is_fordwarding(self)
@@ -83,9 +85,9 @@ function bots.assign_path_to(self, path, speed, force_cancel_direct_walk)
 			return
 		end
 		if path then
+			bots.path_to[self.bot_name].timer = #path
 			bots.path_to[self.bot_name].path = path
 			bots.path_to[self.bot_name].speed = speed
-			bots.path_to[self.bot_name].timer = #path
 		end
 	end
 end
@@ -205,9 +207,9 @@ function bots.MovementFunction(self)
 				end
 				--]]
 				local turn_rate = self.turn_rate or 8
-				if vector.distance(pos, tpos) < width + 2 then
-					turn_rate = turn_rate + 2
-				end
+				--if vector.distance(pos, tpos) < width + 2 then
+				--	turn_rate = turn_rate + 2
+				--end
 				bots.path_to[self.bot_name].timer = bots.path_to[self.bot_name].timer - self.dtime
 				if bots.path_to[self.bot_name].timer <= 0 then
 					bots.CancelPathTo[self.bot_name] = nil
@@ -248,3 +250,18 @@ function bots.MovementFunction(self)
 		bots.direct_walk[self.bot_name] = nil
 	end
 end
+
+bs_match.register_OnEndMatch(function()
+	for name in pairs(bots.data) do
+		bots.path_to[name] = {}
+		DirectWalkTime[name] = nil
+		bots.direct_walk[name] = nil
+		bots.CancelPathTo[name] = nil
+		bots.direct_walk_data[name] = nil
+		bots.last_path_endpoint[name] = nil
+		bots.direct_walk_cancel[name] = nil
+		bots.path_finder_running[name] = {}
+		bots.AbortPathMovementFor[name] = nil
+		bots.DontCareAboutMovements[name] = nil
+	end
+end)
