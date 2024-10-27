@@ -24,9 +24,9 @@ local function QueueCloseForms(int)
 	core.after(int or 2, summary.close_all_forms)
 end
 
-function bs_match.finish_match(winner) -- PlayerKills, it resets every round.
+function bs_match.finish_match(winner, text) -- PlayerKills, it resets every round.
 	if config.AnnouceWinner then
-		annouce.winner(winner)
+		annouce.winner(winner, text)
 	end
 	UpdateRoundsHud(winner)
 	bs_match.current_rounds = bs_match.current_rounds - 1
