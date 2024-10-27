@@ -342,11 +342,20 @@ bs_match.register_OnMatchStart(function()
 	end
 end)
 
-maps.register_on_load(function()
+maps.register_on_load(function(def)
 	local rm = Modes.CurrentMode
 	if rm and Modes.Modes[rm] then
 		if Modes.Modes[rm] and Modes.Modes[rm].Functions and Modes.Modes[rm].Functions.OnLoadMap then
-			Modes.Modes[rm].Functions.OnLoadMap()
+			Modes.Modes[rm].Functions.OnLoadMap(def)
+		end
+	end
+end)
+
+bs_match.register_OnEndMatch(function()
+	local rm = Modes.CurrentMode
+	if rm and Modes.Modes[rm] then
+		if Modes.Modes[rm] and Modes.Modes[rm].Functions and Modes.Modes[rm].Functions.OnEndMatch then
+			Modes.Modes[rm].Functions.OnEndMatch()
 		end
 	end
 end)
