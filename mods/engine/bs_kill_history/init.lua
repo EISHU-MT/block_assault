@@ -26,7 +26,7 @@ local HUD_DEFINITIONS = {
 	{
 		hud_elem_type = "image",
 		position = {x = 0.6, y = 0.3},
-		image_scale = 1.5,
+		image_scale = 1,
 		offset = {x = (MAX_NAME_LENGTH*10) + 28, y = 0},
 		alignment = {x = "center", y = "center"},
 	},
