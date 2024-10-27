@@ -164,12 +164,12 @@ function bots.find_path_to_F(pos, tpos, width, self)
 	
 	pos = CheckPos(pos)
 	
-	if vector.distance(pos, tpos) < 10 then
-		return minetest.find_path(pos, tpos, 500, 2, 5, "A*_noprefetch")
-	end
+	--if vector.distance(pos, tpos) < 10 then
+	--	return minetest.find_path(pos, tpos, 500, 2, 5, "A*_noprefetch")
+	--end
 	
 	if bots.last_path_endpoint[self.bot_name] then
-		if (vector.distance(bots.last_path_endpoint[self.bot_name].endpoint, tpos) < 4) then
+		if (vector.distance(bots.last_path_endpoint[self.bot_name].endpoint, tpos) < 3) then
 			return bots.last_path_endpoint[self.bot_name].path
 		else
 			bots.last_path_endpoint[self.bot_name] = nil
@@ -231,13 +231,13 @@ function bots.find_path_to_F(pos, tpos, width, self)
 				end
 			end
 			-- Reduce Straight Lines
-			if pos1 and pos2 and pos1.x == pos2.x and pos1.z ~= pos2.z and pos1.y == pos2.y then
+			if pos1 and pos2 and pos1.x == pos2.x and pos1.z ~= pos2.z  then
 				if bots.line_of_sight(pos1, pos2) then
 					if can_fit(pos, width) then
 						table.remove(path, i - 1)
 					end
 				end
-			elseif pos1 and pos2 and pos1.x ~= pos2.x and pos1.z == pos2.z and pos1.y == pos2.y then
+			elseif pos1 and pos2 and pos1.x ~= pos2.x and pos1.z == pos2.z  then
 				if bots.line_of_sight(pos1, pos2) then
 					if can_fit(pos, width) then
 						table.remove(path, i - 1)
@@ -264,6 +264,10 @@ end
 
 local max_lengh = 160
 function bots.find_path_to(start_pos, end_pos, len, self)
+	--Sometimes start_pos can be nil so check from self
+	if not start_pos then
+		start_pos = CheckPos(self.object:get_pos())
+	end
 	--check if any node that is walkable is there
 	-- example: door
 	local name = core.get_node(start_pos).name
