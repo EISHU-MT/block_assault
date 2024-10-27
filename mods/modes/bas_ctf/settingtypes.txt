@@ -1,0 +1,11 @@
+[BA CTF Advanced config]
+
+#    Color for player nametag
+#    When a player takes a flag, his nametag turns visible for everyone
+#    and turn his nametag color into the selected color:
+#    Default: #00FFFF (sky blue color)
+bctf_PlayerNameTagColor (Player Nametag Color) string #00FFFF
+
+
+
+

@@ -1,0 +1,2 @@
+the sounds that is with this licenses file is from CTF game
+--> Licensed under: LGPL-2.1-Only

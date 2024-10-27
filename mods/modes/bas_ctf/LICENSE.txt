@@ -1,0 +1,3 @@
+Code License: LGPLv2.1
+Sounds License: LGPLv2.1 (From Capture The Flag game)
+Model/Textures License: LGPLv2.1
