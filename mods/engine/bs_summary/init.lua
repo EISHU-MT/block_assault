@@ -178,7 +178,15 @@ end
 function summary.close_all_forms()
 	for pname, obj in pairs(summary.shown_players_panel) do
 		if Player(pname) then
-			obj:remove()
+			--obj:remove()
+			do
+				local player = Player(pname)
+				player:hud_change(summary.Huds[Name(player)].Background, "text", "blank.png")
+				player:hud_change(summary.Huds[Name(player)].GameClass, "text", "")
+				for _, ID in pairs(summary.Huds[Name(player)].SubHuds) do
+					player:hud_remove(ID)
+				end
+			end
 			summary.shown_players_panel[pname] = nil
 			summary.is_from_match[pname] = nil
 		else
