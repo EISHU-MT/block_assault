@@ -86,6 +86,7 @@ function bots.GetHuntFunction(self)
 					if core.line_of_sight(pos, opos) then
 						bots.assign_direct_walk_to(self, opos, 1.7, Name(bots.hunting[self.bot_name]))
 						do_path_case = false
+						
 					--else
 					--	do_path_case = true
 					end
@@ -118,7 +119,8 @@ PvpCallbacks.RegisterFunction(function(data)
 		if bots.hunter_name_bot[name] then
 			bots.stop_hunter[bots.hunter_name_bot[name].bot_name] = true
 			bots.CancelPathTo[bots.hunter_name_bot[name].bot_name] = true
-			core.after(1, function(name, self)
+			local self = bots.hunter_name_bot[name]
+			--core.after(1, function(name, self)
 				if bs_match.match_is_started then
 					if not bots.hunting[self.bot_name] then
 						if C(maps.current_map.teams) > 2 then
@@ -145,7 +147,7 @@ PvpCallbacks.RegisterFunction(function(data)
 						end
 					end
 				end
-			end, name, bots.hunter_name_bot[name])
+			--end, name, bots.hunter_name_bot[name])
 		end
 	end
 end)
