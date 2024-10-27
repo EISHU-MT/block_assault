@@ -408,6 +408,11 @@ core.register_on_respawnplayer(on_death)
 core.register_globalstep(on_step)
 core.register_on_mods_loaded(on_load)
 
+bs_match.register_OnEndMatch(function()
+	for _, p in pairs(core.get_connected_players()) do
+		on_death(p)
+	end
+end)
 
 --Minetest 5.9.0 versions, doing checks
 rangedweapons.Version590 = false
