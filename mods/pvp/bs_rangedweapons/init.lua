@@ -516,7 +516,16 @@ rangedweapons.process = function(ray, user, look_dir, def)
 				end
 			end
 		elseif hitpoint.type == "object" then
-			hitpoint.ref:punch(user, nil, {damage_groups = def.damage})
+			if Name(hitpoint.ref) then
+				local HitPos = vector.subtract(hitpoint.intersection_point, vector.multiply(look_dir, 0.04))
+				local RefPos = BsEntities.GetStandPos(hitpoint.ref)
+				if HitPos.y >= (RefPos.y + 1) then
+					def.damage.fleshy = def.damage.fleshy + 15
+					hitpoint.ref:punch(user, nil, {damage_groups = def.damage})
+				else
+					hitpoint.ref:punch(user, nil, {damage_groups = def.damage})
+				end
+			end
 		end
 	end
 end
