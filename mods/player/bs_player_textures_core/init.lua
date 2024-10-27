@@ -5,5 +5,8 @@
 --]]
 
 function ResetSkin(player)
+	if not skinsdb then
+		player:set_properties({textures = {"character.png"}})
+	end
 	SetTeamSkin(player, bs.get_team(player))
 end
