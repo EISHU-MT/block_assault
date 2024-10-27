@@ -25,12 +25,13 @@ annouce.huds_turns = {}
 
 function annouce.publish_to_players(msg, colored, ypos)
 	local ID = FormRandomString(10)
+	ypos.imgYscaler = ypos.imgYscaler or 0
 	for ee, player in pairs(core.get_connected_players()) do
 		if player then
 			annouce.huds[Name(player)][ID] = {
 				image = player:hud_add({
 					hud_elem_type = "image",
-					scale = {x = 50, y = 1},
+					scale = {x = 50, y = 1 + ypos.imgYscaler},
 					position = {x = 0.5, y = 0},
 					offset = {x = 0, y = ypos.img},
 					alignment = {x = 0, y = -1},
@@ -68,7 +69,7 @@ function annouce.winner(team, str)
 		core.after(2, make_dissapear_mess, id)
 	elseif team and str then
 		local color = bs.get_team_color(team, "number")
-		local id = annouce.publish_to_players(annouce.transform(team)..str, color, {img = 175, txt = 140})
+		local id = annouce.publish_to_players(annouce.transform(team).."\n"..str, color, {img = 175, txt = 140, imgYscaler = 0.5})
 		core.after(2, make_dissapear_mess, id)
 	end
 end
