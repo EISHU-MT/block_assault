@@ -181,9 +181,9 @@ minetest.register_node("rangedweapons:barrel", {
 	},
 	drawtype = "nodebox",
 	paramtype = "light",
-	groups = {choppy = 3, oddly_breakable_by_hand = 3},
+	groups = {immortal=1},
 	on_blast = function(pos)
-		tnt.boom(pos, {radius = 3})
+		tnt.boom(pos, {radius = 5})
 	end,
 	sounds = default.node_sound_wood_defaults(),
 	node_box = {
