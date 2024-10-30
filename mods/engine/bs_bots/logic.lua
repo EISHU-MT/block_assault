@@ -393,6 +393,10 @@ function Logic.OnStep(self)
 		if not Logic.Clock[self.bot_name] then Logic.Clock[self.bot_name] = 0 end
 		Logic.Clock[self.bot_name] = Logic.Clock[self.bot_name] + self.dtime
 		if Logic.Clock[self.bot_name] >= 0.5 then
+			if Modes.Modes[Modes.CurrentMode] and Modes.Modes[Modes.CurrentMode].TeamsSkinsTextures and Modes.Modes[Modes.CurrentMode].TeamsSkinsTextures[bots.data[self.bot_name].team] then
+				-- Set skins according to mode
+				self.object:set_properties({textures = {Modes.Modes[Modes.CurrentMode].TeamsSkinsTextures[bots.data[self.bot_name].team]}})
+			end
 			if self.id ~= bots.data[self.bot_name].id then
 				self.object:remove()
 			end
