@@ -1,7 +1,9 @@
 cs_nametag = {
 	Objs = {
 		--5g7s9g8s = OBJ
-	}
+	},
+	PlayerNametag = {},
+	OBJ_Name___ = {},
 }
 -- Nametags which can be seen by a certain players
 local def = {
@@ -36,44 +38,83 @@ local def = {
 core.register_entity("cs_object_nametag:obj", def)
 
 function cs_nametag.ApplyNametag(obj, playerslist, text)
-	local ent = obj:get_luaentity()
-	if ent.NametagID and cs_nametag.Objs[ent.NametagID] then
-		cs_nametag.Objs[ent.NametagID]:set_observers(playerslist)
-		if text then
-			cs_nametag.Objs[ent.NametagID]:set_properties({
-				nametag = text
-			})
-		end
-	else
-		local object = core.add_entity(obj:get_pos(), "cs_object_nametag:obj")
-		if object then
-			object:set_observers(playerslist)
-			object:set_properties({
-				nametag = text
-			})
-			-- Adquire a ID
-			local ID = FormRandomString(4)
-			-- Apply a ID to the main object
-			local ent = obj:get_luaentity()
-			if ent then
-				ent.NametagID = ID
+	if rangedweapons.Version590 then
+		local name = Name(obj)
+		if name then
+			if cs_nametag.OBJ_Name___[name] then
+				if cs_nametag.Objs[cs_nametag.OBJ_Name___[name]] and cs_nametag.Objs[cs_nametag.OBJ_Name___[name]]:get_yaw() then
+					cs_nametag.Objs[cs_nametag.OBJ_Name___[name]]:set_observers(playerslist)
+					if text then
+						cs_nametag.Objs[cs_nametag.OBJ_Name___[name]]:set_properties({
+							nametag = text
+						})
+					end
+				else
+					cs_nametag.Objs[cs_nametag.OBJ_Name___[name]] = nil
+					local object = core.add_entity(obj:get_pos(), "cs_object_nametag:obj")
+					if object then
+						object:set_observers(playerslist)
+						object:set_properties({
+							nametag = text
+						})
+						object:set_attach(obj, "", {x=0,y=15,z=0})
+						-- Adquire a ID
+						local ID = FormRandomString(4)
+						-- Apply a ID to the main object
+						if name then
+							cs_nametag.OBJ_Name___[name] = ID
+						else
+							if obj:is_player() then
+								cs_nametag.PlayerNametag[Name(obj)] = ID
+							end
+						end
+						local ent_ = object:get_luaentity()
+						if ent_ then
+							ent_.ID = ID
+						end
+						--Save
+						cs_nametag.Objs[ID] = object
+					end
+				end
+			else
+				local object = core.add_entity(obj:get_pos(), "cs_object_nametag:obj")
+				if object then
+					object:set_observers(playerslist)
+					object:set_properties({
+						nametag = text
+					})
+					object:set_attach(obj, "", {x=0,y=15,z=0})
+					-- Adquire a ID
+					local ID = FormRandomString(4)
+					-- Apply a ID to the main object
+					if name then
+						cs_nametag.OBJ_Name___[name] = ID
+					else
+						if obj:is_player() then
+							cs_nametag.PlayerNametag[Name(obj)] = ID
+						end
+					end
+					local ent_ = object:get_luaentity()
+					if ent_ then
+						ent_.ID = ID
+					end
+					--Save
+					cs_nametag.Objs[ID] = object
+				end
 			end
-			local ent_ = object:get_luaentity()
-			if ent_ then
-				ent_.ID = ID
-			end
-			--Save
-			cs_nametag.Objs[ID] = object
+	
 		end
 	end
 end
 
 function cs_nametag.RemoveNametag(obj)
-	local ent = obj:get_luaentity()
-	if ent.NametagID and cs_nametag.Objs[ent.NametagID] then
-		cs_nametag.Objs[ent.NametagID]:remove()
-		return true
-	else
-		return false
+	if rangedweapons.Version590 then
+		local ent = obj:get_luaentity()
+		if ent.NametagID and cs_nametag.Objs[ent.NametagID] then
+			cs_nametag.Objs[ent.NametagID]:remove()
+			return true
+		else
+			return false
+		end
 	end
 end
