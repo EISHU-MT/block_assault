@@ -44,6 +44,7 @@ return function(self, puncher, _, _, _, damage)
 		else
 			bots.chat(self, "send_warning_to_teammate", Name(puncher))
 		end
+		UpdateNametagOfBot(self.bot_name)
 	else
 		self.object:set_hp(self.object:get_hp() + damage)
 	end
