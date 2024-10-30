@@ -426,22 +426,25 @@ end)
 ---
 rangedweapons.AndroidPlayers = {}
 core.register_on_joinplayer(function(player)
-	local info = core.get_player_window_information(player:get_player_name())
-	if rangedweapons.Version590 then
-		if info.touch_controls then
-			rangedweapons.AndroidPlayers[player:get_player_name()] = true
-		elseif info.touch_controls == false then
+	core.after(0.5, function(player)
+		local info = core.get_player_window_information(player:get_player_name())
+		if rangedweapons.Version590 then
+			if info then
+				if info.touch_controls then
+					rangedweapons.AndroidPlayers[player:get_player_name()] = true
+				elseif info.touch_controls == false then
+					core.log("error", "[TouchScreen Support] Player "..player:get_player_name().." has not supported client")
+					rangedweapons.AndroidPlayers[player:get_player_name()] = false
+				elseif info.touch_controls == nil then
+					core.chat_send_player(player:get_player_name(), core.colorize("#FF8236", ">>> Consider upgrading your client! Some features are not supported"))
+					core.log("error", "[TouchScreen Support] Player "..player:get_player_name().." has not supported client | Server has not supported version")
+					rangedweapons.AndroidPlayers[player:get_player_name()] = false
+				end
+			end
+		elseif core.is_singleplayer() then
 			core.chat_send_player(player:get_player_name(), core.colorize("#FF8236", ">>> Consider upgrading your client! Some features are not supported"))
-			core.log("error", "[TouchScreen Support] Player "..player:get_player_name().." has not supported client")
-			rangedweapons.AndroidPlayers[player:get_player_name()] = false
-		elseif info.touch_controls == nil then
-			core.chat_send_player(player:get_player_name(), core.colorize("#FF8236", ">>> Consider upgrading your client! Some features are not supported"))
-			core.log("error", "[TouchScreen Support] Player "..player:get_player_name().." has not supported client | Server has not supported version")
-			rangedweapons.AndroidPlayers[player:get_player_name()] = false
 		end
-	elseif core.is_singleplayer() then
-		core.chat_send_player(player:get_player_name(), core.colorize("#FF8236", ">>> Consider upgrading your client! Some features are not supported"))
-	end
+	end, player)
 end)
 
 
