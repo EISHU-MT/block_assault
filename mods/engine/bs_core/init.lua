@@ -206,6 +206,8 @@ function bs.allocate_to_team(to_allocate, teamm, force, use_dead_table, ann) -- 
 			if not ann then
 				bs.send_to_team(team, S("### @1 joined on this team!", name))
 			end
+			--cs_nametag.ApplyNametag(player, PlayersObjToNames(bs.get_team_players(team)), core.colorize(team, player:get_player_name().."\n"..player:get_hp().." HP"))
+			ReSetNametags(team)
 			return true
 		else
 			if bs.team[team] and name then
@@ -235,6 +237,8 @@ function bs.allocate_to_team(to_allocate, teamm, force, use_dead_table, ann) -- 
 				if not ann then
 					bs.send_to_team(team, S("### @1 joined on this team!", name))
 				end
+				--cs_nametag.ApplyNametag(player, PlayersObjToNames(bs.get_team_players(team)), core.colorize(team, player:get_player_name().."\n"..player:get_hp().." HP"))
+				ReSetNametags(team)
 				return true
 			end
 		end
@@ -244,6 +248,57 @@ function bs.allocate_to_team(to_allocate, teamm, force, use_dead_table, ann) -- 
 		return false
 	end
 	
+end
+
+function bs.GetRawPlayersOfTeam(team)
+	return bs.team[team].players
+end
+
+bs.StringTo = {}
+bs.PreUpdateNametags = 1.5
+local clock = 0
+core.register_globalstep(function(dtime)
+	clock = clock + dtime
+	if clock >= bs.PreUpdateNametags then
+		if maps.theres_loaded_map then
+			if C(maps.current_map.teams) > 2 then
+				for _, team in pairs({"red","blue"}) do
+					ReSetNametags(team)
+				end
+			else
+				for _, team in pairs({"red","blue","yellow","green"}) do
+					ReSetNametags(team)
+				end
+			end
+		end
+		clock = 0
+	end
+end)
+
+function ReSetNametags(team)
+	local teamps = bs.GetRawPlayersOfTeam(team)
+	for _, obj in pairs(bs.get_team_players(team)) do
+		if obj:is_player() then
+			local str_ = bs.StringTo[Name(obj)] or ""
+			local playerstosee = table.copy(teamps)
+			playerstosee[Name(obj)] = nil --Bugs at camera, so don't add object
+			cs_nametag.ApplyNametag(obj, playerstosee, core.colorize(team, Name(obj).."\n"..obj:get_hp().." HP").."\n"..str_)
+		else
+			if obj:get_yaw() then
+				local str_ = bs.StringTo[Name(obj)] or ""
+				cs_nametag.ApplyNametag(obj, teamps, core.colorize(team, "BOT "..Name(obj).."\n"..obj:get_hp().." HP").."\n"..str_)
+			end
+		end
+	end
+end
+
+function UpdateNametagOf(playername)
+	local team = bs.get_team_force(playername)
+	if team then
+		local teamps = bs.GetRawPlayersOfTeam(team)
+		local str_ = bs.StringTo[playername] or ""
+		cs_nametag.ApplyNametag(Player(playername), teamps, core.colorize(team, playername.."\n"..Player(playername):get_hp().." HP").."\n"..str_)
+	end
 end
 
 function bs.get_team_players(team)
