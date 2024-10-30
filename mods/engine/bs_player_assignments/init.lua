@@ -6,7 +6,7 @@ function SetTeamSkin(index, team)
 				local textures = player:get_properties().textures
 				textures[1] = textures[1].."^player_"..team.."_overlay.png"
 				if Modes.Modes[Modes.CurrentMode] and Modes.Modes[Modes.CurrentMode].TeamsSkinsTextures and Modes.Modes[Modes.CurrentMode].TeamsSkinsTextures[team] then
-					textures[1] = textures[1]..Modes.Modes[Modes.CurrentMode].TeamsSkinsTextures[team]
+					textures[1] = Modes.Modes[Modes.CurrentMode].TeamsSkinsTextures[team]
 				end
 				player:set_properties({textures = textures})
 			end
