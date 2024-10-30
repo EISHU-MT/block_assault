@@ -257,33 +257,44 @@ core.register_entity("bs_bots:nametag", {
 	end
 })
 
-function bots.add_nametag(obj, team, name)
-	-- The hiding nametag is handled by core
-	if bots.data[name].nametag then
-		bots.data[name].nametag:remove()
-		bots.data[name].nametag = nil
+function UpdateNametagOfBot(botname)
+	local team = bots.data[botname].team
+	if team then
+		local teamps = bs.GetRawPlayersOfTeam(team)
+		local str_ = bs.StringTo[botname] or ""
+		cs_nametag.ApplyNametag(Player(botname), teamps, core.colorize(team, "BOT "..botname.."\n"..Player(botname):get_hp().." HP").."\n"..str_)
 	end
-	if not team then return end
-	
-	local entity = core.add_entity(obj:get_pos(), "bs_bots:nametag")
-	if entity then
-		local texture = "tag_bg.png"
-		local x = math.floor(134 - ((name:len() * 11) / 2))
-		local i = 0
-		name:gsub(".", function(char)
-			local n = "_"
-			if char:byte() > 96 and char:byte() < 123 or char:byte() > 47 and char:byte() < 58 or char == "-" then
-				n = char
-			elseif char:byte() > 64 and char:byte() < 91 then
-				n = "U" .. char
-			end
-			texture = texture.."^[combine:84x14:"..(x+i)..",0=W_".. n ..".png"
-			i = i + 11
-		end)
-		texture = texture.."^[colorize:"..bs.get_team_color(team, "string")..":255"
-		entity:set_properties({ textures={texture} })
-		entity:set_attach(obj, "", player_tags.configs.coords, {x=0, y=0, z=0})
-		bots.data[name].nametag = entity
+end
+
+function bots.add_nametag(obj, team, name)
+	if config.ForceUseOfTraditionalNametags or not rangedweapons.Version590 then
+		-- The hiding nametag is handled by core
+		if bots.data[name].nametag then
+			bots.data[name].nametag:remove()
+			bots.data[name].nametag = nil
+		end
+		if not team then return end
+		
+		local entity = core.add_entity(obj:get_pos(), "bs_bots:nametag")
+		if entity then
+			local texture = "tag_bg.png"
+			local x = math.floor(134 - ((name:len() * 11) / 2))
+			local i = 0
+			name:gsub(".", function(char)
+				local n = "_"
+				if char:byte() > 96 and char:byte() < 123 or char:byte() > 47 and char:byte() < 58 or char == "-" then
+					n = char
+				elseif char:byte() > 64 and char:byte() < 91 then
+					n = "U" .. char
+				end
+				texture = texture.."^[combine:84x14:"..(x+i)..",0=W_".. n ..".png"
+				i = i + 11
+			end)
+			texture = texture.."^[colorize:"..bs.get_team_color(team, "string")..":255"
+			entity:set_properties({ textures={texture} })
+			entity:set_attach(obj, "", player_tags.configs.coords, {x=0, y=0, z=0})
+			bots.data[name].nametag = entity
+		end
 	end
 end
 
