@@ -14,6 +14,9 @@ UseScoreSystem (Score) bool true
 #    PopUp the Team Selector when the player joins in the game
 LoadOnLoginMenu (TeamSelectorMenu) bool true
 
+#    Force Use of Traditional nametags (Concatenated textures of letters, like 'Catars' in the nametag of a Player or Bot)
+ForceUseOfTraditionalNametags (Force use of Traditional Nametags) bool false
+
 #    Load the OnLeave script when a player leaves the game, you should make sure before changing this
 #    this might break the game is disabled. Depends on RegisterInitialFunctions
 LoadOnLeaveScript (TeamSelectorMenu On leave) bool true
