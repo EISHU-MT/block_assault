@@ -8,13 +8,13 @@ dofile(modpath.."/bots_ai.lua")
 --Register Mode
 
 Modes.RegisterMode("c4", {
-	Info = "Don't allow reds plant the bomb! Otherwise disable it before it explodes!",
-	Title = "C4",
+	Info = "Don't allow reds plant the bomb! Otherwise disable it before it explodes!\nNot finished yet! Expect some bugs",
+	Title = "C4 <Beta>",
 	ConfigurationDefinition = {
 		PVP_MODE = 1,
 		MATCH_MAX_COUNT = 6,
 		BS_CONFIG = {
-			GameClass = "C4",
+			GameClass = "C4 <Beta>",
 			EnableShopTable = true,
 			AllowPlayersModifyMaps = true,
 			IsDefaultGame = false,
