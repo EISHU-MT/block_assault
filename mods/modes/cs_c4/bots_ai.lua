@@ -47,7 +47,7 @@ if config.EnableBots then
 							if pos2 then
 								--Generate a path to get the bomb
 								if c4.BombData.Obj then
-									if vector.distance(pos, pos2) > 1.5 then
+									if vector.distance(pos, pos2) > 2 then
 										local path = bots.find_path_to(CheckPos(pos), CheckPos(pos2), nil, self)
 										bots.assign_path_to(self, path, 1.8)
 									else
