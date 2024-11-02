@@ -205,3 +205,8 @@ core.register_alias("cs_core:terrorists", "air")
 core.register_alias("cs_core:counters", "air")
 core.register_alias("map_maker:area", "air")
 core.register_alias("csgo:trap", "bas:kill")
+
+-- Hide mapmaker blocks
+
+core.register_alias("c4:a_block", "air")
+core.register_alias("c4:b_block", "air")
