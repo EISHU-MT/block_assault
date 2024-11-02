@@ -104,7 +104,7 @@ function summary.show_to_player(player)
 			player:hud_change(summary.Huds[nameP].GameClass, "text", "CS:MT - "..config.GameClass)
 			--Background
 			player:hud_change(summary.Huds[nameP].Background, "text", "gui_formbg.png")
-			player:hud_change(summary.Huds[nameP].Background, "scale", {x=2,y=((#Players / 4) - (#Players / 10) + 0.1)})
+			player:hud_change(summary.Huds[nameP].Background, "scale", {x=2,y=((#Players / 4) - (#Players / 10))})
 			--List
 			for i, name in ipairs(Players) do
 				if not bots.data[name] then
