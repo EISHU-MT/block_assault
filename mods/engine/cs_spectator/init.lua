@@ -277,7 +277,9 @@ local function update_players_list()
 		local i = 0
 		for _, o in pairs(bs.get_team_players(t)) do
 			i = _
-			players[Name(o)] = true
+			if o and Name(o) then
+				players[Name(o)] = true
+			end
 		end
 		count = count + i
 	end
