@@ -49,8 +49,10 @@ core.register_craftitem("cs_c4:bomb", {
 			c4.BombData.IsDropped = false
 			c4.NotifyPickedBomb(Name(lname))
 			c4.BombData.PlayerName = Name(lname)
+			bs.StringTo[Name(lname)] = core.colorize("orange", "<Bomb>")
+			ReSetNametags("red")
 		end
-		return _
+		return ItemStack("")
 	end,
 })
 
@@ -58,11 +60,22 @@ core.register_craftitem("cs_c4:bomb", {
 core.register_node("cs_c4:c4", {
 	description = S("C4 Node"),
 	tiles = {"cs_media_bomb_texture.png"},
-	groups = {immortal=1, falling_node = 1},
+	groups = {choppy=3, falling_node = 1},
 	drawtype = "mesh",
 	visual_scale = 0.5,
 	paramtype = "light",
 	paramtype2 = "facedir",
 	mesh = "cs_media_bomb.obj",
+	on_dig = function(pos, node, digger)
+		local name = Name(digger)
+		if name then
+			if bs.spectator[name] then return false end
+			if not bs.team.blue.players[name] then
+				return false
+			else
+				bs_match.finish_match("blue", name.." has defused the bomb!")
+			end
+		end
+	end
 })
 

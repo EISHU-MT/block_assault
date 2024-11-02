@@ -97,6 +97,7 @@ function c4.PlantBombAt(pos, pname)
 		c4.StaticData.Pos = pos
 		c4.StaticData.Planted = true
 		c4.StaticData.Player = pname
+		bs.StringTo[pname] = nil
 		c4.BombData = {
 			IsDropped = false,
 			PlayerName = nil,

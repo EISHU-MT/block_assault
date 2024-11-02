@@ -38,8 +38,6 @@ if config.EnableBots then
 								else
 									c4.PlantBombAt(CheckPos(pos), self.bot_name)
 								end
-							else
-								print("sofhbsi")
 							end
 						end
 					else
@@ -101,6 +99,7 @@ if config.EnableBots then
 											secs = 5
 										end
 										bots.CancelPath(self)
+										BsEntities.StopMovement(self)
 										core.after(secs, function(name, pos, obj)
 											if bots.data[name].state == "alive" then
 												if obj:get_yaw() then

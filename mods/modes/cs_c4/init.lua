@@ -18,8 +18,13 @@ Modes.RegisterMode("c4", {
 			EnableShopTable = true,
 			AllowPlayersModifyMaps = true,
 			IsDefaultGame = false,
-			EnableFourTeams = false
+			EnableFourTeams = false,
+			UsePvpMatchEngine = {bool=false, func = function() end}
 		}
+	},
+	TeamsSkinsTextures = {
+		red = "cs_c4_terrorist.1.png",
+		blue = "cs_c4_counter.png"
 	},
 	Functions = {
 		IsCompatibleWithMap = function(mapdef)
@@ -91,12 +96,16 @@ Modes.RegisterMode("c4", {
 						local obj = players[rmd]
 						if obj:is_player() then
 							c4.BombData.PlayerName = Name(obj)
-							Inv(obj):add_item("main", "cs_c4:bomb")
+							if not Inv(obj):contains_item("main", ItemStack("cs_c4:bomb")) then
+								Inv(obj):add_item("main", "cs_c4:bomb")
+							end
 							core.log("action", "Bomb Holder: "..Name(obj))
+							bs.StringTo[Name(obj)] = core.colorize("orange", "<Bomb>")
 						else
 							local n = Name(obj)
 							if n then
 								c4.BombData.PlayerName = n
+								bs.StringTo[n] = core.colorize("orange", "<Bomb>")
 								core.log("action", "Bomb Holder: "..n)
 							end
 						end
@@ -179,6 +188,10 @@ bs.cbs.register_OnAssignTeam(function(player, team)
 				if c4.Huds[Name(player)] then
 					player:hud_remove(c4.Huds[Name(player)])
 				end
+				if c4.BombData.PlayerName then
+					bs.StringTo[c4.BombData.PlayerName] = nil
+				end
+				ReSetNametags("red")
 			end
 		end
 	end
@@ -187,21 +200,47 @@ end)
 if config.EnableBots then
 	BotsCallbacks.RegisterOnKillBot(function(self)
 		local name = self.bot_name
-		if bots.data[name] and bots.data[name].team == "red" then
-			if c4.BombData.PlayerName == name then
-				-- Drop the bomb
-				c4.BombData.IsDropped = true
-				c4.BombData.PlayerName = nil
-				c4.NotifyDroppedBomb(self.object:get_pos(), name)
-				c4.BombData.Obj = core.add_item(self.object:get_pos(), ItemStack("cs_c4:bomb"))
-				c4.BotsSupport.BombHolderSelectedArea = ""
-				c4.BotsSupport.BombHolder = ""
+		if Modes.CurrentMode == "c4" then
+			if bots.data[name] and bots.data[name].team == "red" then
+				if c4.BombData.PlayerName == name then
+					-- Drop the bomb
+					c4.BombData.IsDropped = true
+					c4.NotifyDroppedBomb(self.object:get_pos(), name)
+					c4.BombData.Obj = core.add_item(self.object:get_pos(), ItemStack("cs_c4:bomb"))
+					c4.BotsSupport.BombHolderSelectedArea = ""
+					c4.BotsSupport.BombHolder = ""
+					bs.StringTo[c4.BombData.PlayerName] = nil
+					c4.BombData.PlayerName = nil
+				end
 			end
 		end
 	end)
 end
 
-
+PvpCallbacks.RegisterFunction(function(data)
+	if PvpMode.Mode == 1 and Modes.CurrentMode == "c4" then
+		local players_index = bs.get_team_players_index(data.teams.died)
+		if data.teams.died == "blue" then
+			core.after(0.3, function(data)
+				local players_index = bs.get_team_players_index(data.teams.died)
+				if players_index <= 0 then
+					bs_match.finish_match(GetFirstIndex(bs.enemy_team(data.teams.died)))
+				end
+			end, data)
+		else
+			if c4.StaticData.Planted then
+				bs.send_to_team("blue", ">>>> Find the bomb and defuse it! Before it explodes!")
+			else
+				core.after(0.3, function(data)
+					local players_index = bs.get_team_players_index(data.teams.died)
+					if players_index <= 0 then
+						bs_match.finish_match(GetFirstIndex(bs.enemy_team(data.teams.died)))
+					end
+				end, data)
+			end
+		end
+	end
+end)
 
 
 
