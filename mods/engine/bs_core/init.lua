@@ -197,7 +197,6 @@ function bs.allocate_to_team(to_allocate, teamm, force, use_dead_table, ann) -- 
 			ResetSkin(player)
 			player:hud_set_flags({
 				wielditem = true,
-				crosshair = true,
 				--healthbar = true,
 				--breathbar = true,
 				hotbar = true,
@@ -228,7 +227,6 @@ function bs.allocate_to_team(to_allocate, teamm, force, use_dead_table, ann) -- 
 				ResetSkin(player)
 				player:hud_set_flags({
 					wielditem = true,
-					crosshair = true,
 					--healthbar = true,
 					--breathbar = true,
 					hotbar = true,
@@ -254,8 +252,18 @@ function bs.GetRawPlayersOfTeam(team)
 	return bs.team[team].players
 end
 
+function bs.GetRawPlayersOfTeamNSpectators(team)
+	local teamp = table.copy(bs.team[team].players)
+	for p, n in pairs(bs.spectator) do
+		if Player(p) then
+			teamp[p] = n
+		end
+	end
+	return teamp
+end
+
 bs.StringTo = {}
-bs.PreUpdateNametags = 1.5
+bs.PreUpdateNametags = 1
 local clock = 0
 core.register_globalstep(function(dtime)
 	clock = clock + dtime
@@ -276,7 +284,7 @@ core.register_globalstep(function(dtime)
 end)
 
 function ReSetNametags(team)
-	local teamps = bs.GetRawPlayersOfTeam(team)
+	local teamps = bs.GetRawPlayersOfTeamNSpectators(team)
 	for _, obj in pairs(bs.get_team_players(team)) do
 		if obj:is_player() then
 			local str_ = bs.StringTo[Name(obj)] or ""
@@ -295,7 +303,7 @@ end
 function UpdateNametagOf(playername)
 	local team = bs.get_team_force(playername)
 	if team then
-		local teamps = bs.GetRawPlayersOfTeam(team)
+		local teamps = bs.GetRawPlayersOfTeamNSpectators(team)
 		local str_ = bs.StringTo[playername] or ""
 		cs_nametag.ApplyNametag(Player(playername), teamps, core.colorize(team, playername.."\n"..Player(playername):get_hp().." HP").."\n"..str_)
 	end
