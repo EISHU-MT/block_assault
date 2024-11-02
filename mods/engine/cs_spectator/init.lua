@@ -357,8 +357,34 @@ core.register_globalstep(function(dtime)
 					local look_ = obj:get_look_horizontal()
 					p:set_look_horizontal(look_)
 					p:set_look_vertical(look)
+				elseif Name(obj) then
+					local yaw = obj:get_yaw()
+					if yaw then
+						p:set_look_horizontal(yaw)
+					end
 				else
-					p:set_look_horizontal(obj:get_yaw())--FIX
+					if not Spectator.I_INDEX[Name(p)] then
+						Spectator.I_INDEX[Name(p)] = 1
+					else
+						if not (Spectator.I_INDEX[Name(p)] + 1 > Spectator.ActivePlayersCount) then
+							Spectator.I_INDEX[Name(p)] = Spectator.I_INDEX[Name(p)] + 1
+						end
+					end
+					--proceed to change
+					local players = adjunt_all_players_but(Name(p))
+					local selected_name = ""
+					local i = 0
+					for nameplayer in pairs(players) do
+						i = i + 1
+						if i == Spectator.I_INDEX[Name(p)] then
+							selected_name = nameplayer
+							break
+						end
+					end
+					if Spectator.I_INDEX[Name(p)] >= Spectator.ActivePlayersCount then
+						Spectator.I_INDEX[Name(p)] = 1
+					end
+					Spectator.SetSpectTo(p, Player(selected_name))
 				end
 			end
 		else
