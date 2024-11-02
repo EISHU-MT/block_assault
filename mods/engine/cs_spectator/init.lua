@@ -393,7 +393,7 @@ core.register_globalstep(function(dtime)
 	end
 end)
 
-if bots then
+if bots and bots.IsLoaded then
 	BotsCallbacks.RegisterOnKillBot(function(self)
 		update_players_list()
 		for pname, obj_inst in pairs(Spectator.Players) do
