@@ -120,6 +120,8 @@ function Spectator.UpdateHud(player, direct_delete_hud)
 			player:hud_change(Spectator.PlayersHuds[Name(player)].PlayerHpSub, "scale", {x=ReturnXByStringLengh("HP: "..Player(Spectator.Players[Name(player)]):get_hp()), y=2})
 			player:hud_change(Spectator.PlayersHuds[Name(player)].PlayerHpSub, "text", "subletter.png")
 			Spectator.AlreadyDeletedHud[Name(player)] = false
+		else
+			player:hud_change(Spectator.PlayersHuds[Name(player)].PlayerName, "text", "Press dig button or tap screen\nTo exit spectators press sneak button")
 		end
 	else
 		if not Spectator.AlreadyDeletedHud[Name(player)] then
@@ -303,6 +305,7 @@ core.register_globalstep(function(dtime)
 				else
 					Spectator.UpdateHud(p, true)
 					Spectator.Players[name]=nil
+					p:hud_change(Spectator.PlayersHuds[name].PlayerName, "text", "Press dig button or tap screen\nTo exit spectators press sneak button")
 				end
 			end
 		end
