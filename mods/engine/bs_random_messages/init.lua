@@ -14,7 +14,6 @@ bs_rms = {
 	"Using \"hacks\" will do a permaban",
 	"Enjoy the disasters!",
 	"If you see a hacker, report it!",
-	"Want to join us on Discord? Heres the link!: https://discord.gg/32hc5eRtHT",
 	"Please share this project! That would be a action of love :)",
 	"Remember to kill your enemies, never kill your teammates.",
 	"Also play CTF!", -- Might be removed soon if they dont publish this game too.
@@ -23,6 +22,12 @@ bs_rms = {
 	"Good players don't hack",
 	"To chat only to your team use /t",
 	"When finished a match, remember to buy things befores time runs out!",
+	"When being spectator, press the dig button or tap the screen to view someones gameplay",
+	"You can change your crosshair with the /set_crosshair command!",
+	"This is CS:MT, Formerly BlockAssault",
+	"We're celebrating that this game got 1 year active!",
+	"When you want to exit from viewing someones gameplay, press sneak button",
+	
 }
 local time_to_say = 80
 local rmtime = 0
