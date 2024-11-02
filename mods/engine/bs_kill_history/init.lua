@@ -180,7 +180,7 @@ PvpCallbacks.RegisterFunction(function(data)
 		-- Extreme code beggining
 		if data.killer:is_player() then
 			local hand_item = bs.latest_used_item[Name(data.killer)] or data.killer:get_wielded_item()
-			if hand_item then
+			if hand_item and hand_item:get_name() then
 				local desc = hand_item:get_definition()
 				if desc.RW_gun_capabilities then
 					image = desc.RW_gun_capabilities.gun_icon.."^[transformFX"
