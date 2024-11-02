@@ -283,18 +283,23 @@ core.register_globalstep(function(dtime)
 	end
 end)
 
+bs.TemporalDisableFor = {}
 function ReSetNametags(team)
 	local teamps = bs.GetRawPlayersOfTeamNSpectators(team)
 	for _, obj in pairs(bs.get_team_players(team)) do
 		if obj:is_player() then
-			local str_ = bs.StringTo[Name(obj)] or ""
-			local playerstosee = table.copy(teamps)
-			playerstosee[Name(obj)] = nil --Bugs at camera, so don't add object
-			cs_nametag.ApplyNametag(obj, playerstosee, core.colorize(team, Name(obj).."\n"..obj:get_hp().." HP").."\n"..str_)
-		else
-			if obj:get_yaw() then
+			if not bs.TemporalDisableFor[playername] then 
 				local str_ = bs.StringTo[Name(obj)] or ""
-				cs_nametag.ApplyNametag(obj, teamps, core.colorize(team, "BOT "..Name(obj).."\n"..obj:get_hp().." HP").."\n"..str_)
+				local playerstosee = table.copy(teamps)
+				playerstosee[Name(obj)] = nil --Bugs at camera, so don't add object
+				cs_nametag.ApplyNametag(obj, playerstosee, core.colorize(team, Name(obj).."\n"..obj:get_hp().." HP").."\n"..str_)
+			end
+		else
+			if not bs.TemporalDisableFor[playername] then
+				if obj:get_yaw() then
+					local str_ = bs.StringTo[Name(obj)] or ""
+					cs_nametag.ApplyNametag(obj, teamps, core.colorize(team, "BOT "..Name(obj).."\n"..obj:get_hp().." HP").."\n"..str_)
+				end
 			end
 		end
 	end
@@ -303,9 +308,11 @@ end
 function UpdateNametagOf(playername)
 	local team = bs.get_team_force(playername)
 	if team then
-		local teamps = bs.GetRawPlayersOfTeamNSpectators(team)
-		local str_ = bs.StringTo[playername] or ""
-		cs_nametag.ApplyNametag(Player(playername), teamps, core.colorize(team, playername.."\n"..Player(playername):get_hp().." HP").."\n"..str_)
+		if not bs.TemporalDisableFor[playername] then
+			local teamps = bs.GetRawPlayersOfTeamNSpectators(team)
+			local str_ = bs.StringTo[playername] or ""
+			cs_nametag.ApplyNametag(Player(playername), teamps, core.colorize(team, playername.."\n"..Player(playername):get_hp().." HP").."\n"..str_)
+		end
 	end
 end
 
