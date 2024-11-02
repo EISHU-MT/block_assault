@@ -27,8 +27,9 @@ local function onR(itemstack, placer, pointed_thing)
 		
 		
 		
+		player:hud_change(Crosshair.Huds[Name(player)], "text", Crosshair.GetCrosshair(player))
 		player:hud_set_flags({
-			crosshair = true,
+			crosshair = false,
 			wield_item = true
 		})
 		
@@ -55,6 +56,7 @@ local function onR(itemstack, placer, pointed_thing)
 			player:hud_change(scope_huds[Name(placer)], "text", "rangedweapons_scopehud.png")
 			player:hud_change(scope_huds[Name(placer)], "scale", {x=2,y=2})
 			
+			player:hud_change(Crosshair.Huds[Name(player)], "text", "blank.png")
 			player:hud_set_flags({
 				crosshair = false,
 				wield_item = false,
@@ -63,6 +65,7 @@ local function onR(itemstack, placer, pointed_thing)
 			rangedweapons.pointing_weapon[Name(placer)] = itemstack:get_name()
 			player:hud_change(scope_huds[Name(placer)], "text", "rangedweapons_scopehud_minimal.png")
 			player:hud_change(scope_huds[Name(placer)], "scale", {x=0.15,y=0.15})
+			player:hud_change(Crosshair.Huds[Name(player)], "text", "blank.png")
 			player:hud_set_flags({
 				crosshair = false,
 			})
@@ -94,9 +97,9 @@ local function onR(itemstack, placer, pointed_thing)
 		local physics = player:get_physics_override()
 		
 		
-		
+		player:hud_change(Crosshair.Huds[Name(player)], "text", Crosshair.GetCrosshair(player))
 		player:hud_set_flags({
-			crosshair = true,
+			crosshair = false,
 			wield_item = true
 		})
 		
@@ -124,7 +127,7 @@ local function calculateWeaponPrice(accuracy, dps, velocity)
 	local normalizedDPS = dps / 1000
 	local normalizedVelocity = velocity / 200
 	local weaponPrice = ACCURACY_WEIGHT * normalizedAccuracy + DPS_WEIGHT * normalizedDPS + VELOCITY_WEIGHT * normalizedVelocity
-	weaponPrice = weaponPrice * 200  -- Adjust as needed
+	weaponPrice = weaponPrice * 250  -- Adjust as needed
 	weaponPrice = math.max(1, weaponPrice)
 	return math.floor(weaponPrice)  -- Round down to an integer
 end
@@ -382,9 +385,9 @@ local function on_death(player)
 		local physics = player:get_physics_override()
 		
 		
-		
+		player:hud_change(Crosshair.Huds[Name(player)], "text", "blank.png")
 		player:hud_set_flags({
-			crosshair = true,
+			crosshair = false,
 			wield_item = true
 		})
 		
