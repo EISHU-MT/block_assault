@@ -1,7 +1,7 @@
-![BlockAssaultLogo](menu/header.png)
+![CsmtLogo](menu/header.png)
 CS:MT is a subgame of Minetest, made for playing PvP or PvE. For training PvP, Aim. Made from scratch
 
-This game has [bots](https://github.com/EISHU-MT/bs_bots) feature!
+This game has [bots](https://github.com/EISHU-MT/bs_bots) feature! **Obsolete**
 
 If you find a bug, glitch or crash. Please send to us! You would help us too much **:)**
 # Features
@@ -32,6 +32,16 @@ If you find a bug, glitch or crash. Please send to us! You would help us too muc
 
 - Achievements
 
+- Multiple Modes
+
+- Bots for training
+
+- Spectator mode reworked
+
+- Special crosshairs in game
+
+- And much more!
+
 ## Starting the game
 
 With **GUI**:
@@ -50,9 +60,3 @@ All mods' respective licenses can be found at [`LICENSE.txt`](LICENSE.txt).
 # Mods
 
 All mods stands in [⇒ mods](mods/)
-
-## Join us!
-
- On **Discord**: [Link Is Here!](https://discord.gg/EWRYqfKXP8)
- 
- On **MineTest**: Address: **ehs.minetest.land:54700**
