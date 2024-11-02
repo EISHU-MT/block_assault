@@ -260,9 +260,11 @@ core.register_entity("bs_bots:nametag", {
 function UpdateNametagOfBot(botname)
 	local team = bots.data[botname].team
 	if team then
-		local teamps = bs.GetRawPlayersOfTeamNSpectators(team)
-		local str_ = bs.StringTo[botname] or ""
-		cs_nametag.ApplyNametag(Player(botname), teamps, core.colorize(team, "BOT "..botname.."\n"..Player(botname):get_hp().." HP").."\n"..str_)
+		if not bs.TemporalDisableFor[botname] then
+			local teamps = bs.GetRawPlayersOfTeamNSpectators(team)
+			local str_ = bs.StringTo[botname] or ""
+			cs_nametag.ApplyNametag(Player(botname), teamps, core.colorize(team, "BOT "..botname.."\n"..Player(botname):get_hp().." HP").."\n"..str_)
+		end
 	end
 end
 
@@ -375,7 +377,7 @@ bots.register_bot({
 })
 
 bots.register_bot({
-	name = "Tsar",
+	name = "Mike",
 	team = "blue",
 	favorite_weapons = {hard_weapon = "rangedweapons:scar", hand_weapon = "rangedweapons:luger"},
 	animations = {
@@ -390,7 +392,7 @@ bots.register_bot({
 })
 
 bots.register_bot({
-	name = "Tiago",
+	name = "Chris",
 	team = "red",
 	favorite_weapons = {hard_weapon = "rangedweapons:ak47", hand_weapon = "rangedweapons:m1991"},
 	animations = {
@@ -405,7 +407,7 @@ bots.register_bot({
 })
 
 bots.register_bot({
-	name = "Juan",
+	name = "Chad",
 	team = "blue",
 	favorite_weapons = {hard_weapon = "rangedweapons:g36", hand_weapon = "rangedweapons:makarov"},
 	animations = {
