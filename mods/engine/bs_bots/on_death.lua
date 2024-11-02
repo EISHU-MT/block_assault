@@ -8,6 +8,7 @@ return function(self, killer)
 		bots.direct_walk[self.bot_name] = nil
 		bots.CancelPathTo[self.bot_name] = nil
 		bots.path_finder_running[self.bot_name] = nil
+		bots.last_path_endpoint[self.bot_name] = nil
 		bots.path_to[self.bot_name] = {}
 		for n, d in pairs(bots.direct_walk_data) do
 			if d.end_by_ent and d.end_by_ent == self.bot_name then
@@ -78,7 +79,7 @@ return function(self, killer)
 		local obj = core.add_entity(self.object:get_pos(), "bs_bots:__dead_body")
 		obj:set_yaw(player_look)
 		obj:set_properties({
-			textures = {"character.png^player_"..bots.data[self.bot_name].team.."_overlay.png"}
+			textures = self.object:get_properties().textures
 		})
 		obj:set_animation({x = 162, y = 166}, 15, 0)
 		obj:set_acceleration(vector.new(0,-9.81,0))
@@ -122,6 +123,7 @@ return function(self, killer)
 		bots.direct_walk[self.bot_name] = nil
 		bots.CancelPathTo[self.bot_name] = nil
 		bots.path_finder_running[self.bot_name] = nil
+		bots.last_path_endpoint[self.bot_name] = nil
 		bots.path_to[self.bot_name] = {}
 		for n, d in pairs(bots.direct_walk_data) do
 			if d.end_by_ent and d.end_by_ent == self.bot_name then
@@ -222,6 +224,13 @@ return function(self, killer)
 			SpawnPlayerAtRandomPosition(bots.data[self.bot_name].object, bots.data[self.bot_name].team)
 			bots.data[self.bot_name].object:set_armor_groups({fleshy=100, immortal=0})
 			bots.add_nametag(bots.data[self.bot_name].object, bots.data[self.bot_name].team, self.bot_name)
+			bots.direct_walk_cancel[self.bot_name] = nil
+			bots.direct_walk_data[self.bot_name] = nil
+			bots.direct_walk[self.bot_name] = nil
+			bots.CancelPathTo[self.bot_name] = nil
+			bots.path_finder_running[self.bot_name] = nil
+			bots.path_to[self.bot_name] = {}
+			bots.last_path_endpoint[self.bot_name] = nil
 			UpdateTeamHuds()
 			if bots.dead_body[self.bot_name] then
 				bots.dead_body[self.bot_name]:remove()

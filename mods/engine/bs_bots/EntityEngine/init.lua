@@ -63,6 +63,10 @@ function BsEntities.AnimateEntity(self, anim)
 		self._anim = nil
 	end	
 end
+-- StopMovement: Stop and set 0 to velocity
+function BsEntities.StopMovement(self)
+	self.object:set_velocity(vector.new())
+end
 -- AdvanceHorizontal: Advance on looking direction
 function BsEntities.AdvanceHorizontal(self, speed)
 	local y = self.object:get_velocity().y
