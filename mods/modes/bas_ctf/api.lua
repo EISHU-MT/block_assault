@@ -186,6 +186,7 @@ local function get_flags_of(player)
 end
 
 CtfCallbacks.register_OnTakeFlag(function(player, flag)
+	bs.TemporalDisableFor[Name(player)] = true
 	player:set_properties({
 		nametag = Name(player),
 		nametag_bgcolor = d(return_nametag_color(flag)),
@@ -193,6 +194,7 @@ CtfCallbacks.register_OnTakeFlag(function(player, flag)
 	})
 end)
 CtfCallbacks.register_OnDropFlag(function(player, flag)
+	bs.TemporalDisableFor[Name(player)] = nil
 	player:set_properties({
 		nametag = " ",
 		nametag_bgcolor = {a=0, r=0, g=0, b=0},
@@ -200,6 +202,7 @@ CtfCallbacks.register_OnDropFlag(function(player, flag)
 	})
 end)
 CtfCallbacks.register_OnWinFlag(function(player, flag)
+	bs.TemporalDisableFor[Name(player)] = nil
 	player:set_properties({
 		nametag = " ",
 		nametag_bgcolor = {a=0, r=0, g=0, b=0},

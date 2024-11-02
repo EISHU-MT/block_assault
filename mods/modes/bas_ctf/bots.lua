@@ -176,6 +176,7 @@ if bots and bots.IsLoaded then
 			local name = self.bot_name
 			local team = bots.data[name].team
 			if ctf.team_that_has_bot_to_attack_other[team].botname == name then
+				bs.TemporalDisableFor[name] = nil
 				ctf.drop_flag(self.object, ctf.team_that_has_bot_to_attack_other[team].team)
 				ctf.team_that_has_bot_to_attack_other[team] = {bot=nil,team="",botname=""}
 			end
