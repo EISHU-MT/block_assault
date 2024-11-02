@@ -260,7 +260,7 @@ core.register_entity("bs_bots:nametag", {
 function UpdateNametagOfBot(botname)
 	local team = bots.data[botname].team
 	if team then
-		local teamps = bs.GetRawPlayersOfTeam(team)
+		local teamps = bs.GetRawPlayersOfTeamNSpectators(team)
 		local str_ = bs.StringTo[botname] or ""
 		cs_nametag.ApplyNametag(Player(botname), teamps, core.colorize(team, "BOT "..botname.."\n"..Player(botname):get_hp().." HP").."\n"..str_)
 	end
