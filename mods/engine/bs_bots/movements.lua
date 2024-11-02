@@ -210,7 +210,11 @@ function bots.MovementFunction(self)
 				--if vector.distance(pos, tpos) < width + 2 then
 				--	turn_rate = turn_rate + 2
 				--end
-				bots.path_to[self.bot_name].timer = bots.path_to[self.bot_name].timer - self.dtime
+				
+				
+					--bots.path_to[self.bot_name].timer = bots.path_to[self.bot_name].timer - self.dtime
+				
+				
 				if bots.path_to[self.bot_name].timer <= 0 then
 					bots.CancelPathTo[self.bot_name] = nil
 					bots.path_finder_running[self.bot_name] = false
