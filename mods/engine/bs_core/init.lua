@@ -324,7 +324,7 @@ function bs.get_team_players(team)
 				table.insert(players, Player(name))
 			elseif not Player(name) then
 				core.log("error", "A ghost player have been found on team "..team.." name = "..name)
-				bs.team[name].players[name] = nil
+				bs.team[team].players[name] = nil
 			end
 		end
 		return players
