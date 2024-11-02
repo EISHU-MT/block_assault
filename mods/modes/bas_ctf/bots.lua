@@ -1,6 +1,6 @@
 local BotsTable = {}
 BotsTable.DelayToUpdate = {}
-if bots then
+if bots and bots.IsLoaded then
 	ctf.team_that_has_bot_to_attack_other = {
 		red = {bot=nil,team="",botname=""},
 		blue = {bot=nil,team="",botname=""},
