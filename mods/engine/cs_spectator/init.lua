@@ -36,15 +36,19 @@ function Spectator.SetSpectTo(player, obj)
 	end
 end
 
-function Spectator.DeAttach(player)
+function Spectator.DeAttach(player, no_annouce)
 	if player and Player(player) then
 		if Spectator.Players[Name(player)] then
 			player:set_detach()
 			Spectator.Players[Name(player)] = nil
 			Spectator.UpdateHud(player, true)
-			core.chat_send_player(Name(player), core.colorize("lightgreen", ">>> Not spectating anymore"))
+			if not no_annouce then
+				core.chat_send_player(Name(player), core.colorize("lightgreen", ">>> Not spectating anymore"))
+			end
 		else
-			core.chat_send_player(Name(player), core.colorize("lightgreen", ">>> You are not viewing others gameplay"))
+			if not no_annouce then
+				core.chat_send_player(Name(player), core.colorize("lightgreen", ">>> You are not viewing others gameplay"))
+			end
 		end
 	end
 end
@@ -354,9 +358,11 @@ core.register_globalstep(function(dtime)
 					p:set_look_horizontal(look_)
 					p:set_look_vertical(look)
 				else
-					p:set_look_horizontal(obj:get_yaw())
+					p:set_look_horizontal(obj:get_yaw())--FIX
 				end
 			end
+		else
+			Spectator.DeAttach(p, true)
 		end
 	end
 end)
