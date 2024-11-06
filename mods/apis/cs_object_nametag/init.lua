@@ -38,7 +38,7 @@ local def = {
 core.register_entity("cs_object_nametag:obj", def)
 
 function cs_nametag.ApplyNametag(obj, playerslist, text)
-	if rangedweapons.Version590 then
+	if Versions.Is5100 then
 		local name = Name(obj)
 		if name then
 			if cs_nametag.OBJ_Name___[name] then
